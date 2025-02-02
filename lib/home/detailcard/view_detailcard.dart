@@ -41,7 +41,7 @@ class DetailCardWidget extends StatelessWidget {
 
           SliverToBoxAdapter(
             child: SizedBox(
-              height: 200, // 가로 스크롤할 이미지 높이 설정
+              height: 100, // 가로 스크롤할 이미지 높이 설정
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
                 itemCount: vertextSearchDto.img.length,
@@ -50,7 +50,8 @@ class DetailCardWidget extends StatelessWidget {
                     padding: const EdgeInsets.all(8.0),
                     child: Image.network(
                       vertextSearchDto.img[index] ?? "",
-                      width: 150,
+                      width: 100,
+                      height: 100,
                       fit: BoxFit.cover,
                     ),
                   );

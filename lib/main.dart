@@ -118,7 +118,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
         // Step 3: 본문 내용 추출
         Element? contentElement = document.querySelector('.se-main-container');
-        List<String?> imageUrlList = [];
 
         if (contentElement != null) {
           // 본문 텍스트 정제
@@ -130,18 +129,19 @@ class _MyHomePageState extends State<MyHomePage> {
           print('본문 추출 완료 (길이: ${cleanedText.length})');
 
           // Step 4: 모든 이미지 URL 추출
-          List<Element> imageElements = contentElement.querySelectorAll('img');
+          List<String> extractedUrls = [];
 
-          // 세 번째 이미지 찾기 (인덱스는 2)
-          if (imageElements.isNotEmpty) {
-            for (Element imageElement in imageElements) {
-              imageUrlList.add(imageElement.attributes['src']);
+          List<Element> imageElements = document.querySelectorAll('img.se-image-resource');
+          for (Element image in imageElements) {
+            String? imageUrl = image.attributes['src'];
+            if (imageUrl != null) {
+              extractedUrls.add(imageUrl);
             }
-          } else {
-            print('본문 내 이미지가 3개 이상 존재하지 않습니다.');
+            // 각 imageUrl에 대해 위의 downloadImage()와 유사한 방식으로 다운로드 진행
           }
 
-          return CrawlNaverBlog(desc: cleanedText, img: imageUrlList);
+
+          return CrawlNaverBlog(desc: cleanedText, img: extractedUrls);
         } else {
           print('본문을 찾을 수 없습니다.');
         }
