@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:dateapp/home/detailcard/view_detailcard.dart';
 import 'package:dateapp/service/api/naver/dto/crawl_naver_blog.dart';
 import 'package:dateapp/service/api/naver/dto/search_dto.dart';
 import 'package:dateapp/service/api/naver/naver_api.dart';
@@ -8,16 +9,21 @@ import 'package:dateapp/service/env_service.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_vertexai/firebase_vertexai.dart';
+import 'package:flutter/cupertino.dart' hide Element;
 import 'package:flutter/material.dart' hide Element;
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:html/dom.dart' show Document, Element;
 import 'package:html/parser.dart' as htmlParser;
 
 import 'firebase_options.dart';
 
+InAppLocalhostServer server = InAppLocalhostServer(port: 8080);
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EnvService.init();
+  await server.start();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -34,6 +40,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
+          scaffoldBackgroundColor: Colors.purple[50],
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
@@ -53,7 +60,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  String _data = "";
+
   final List<VertextSearchDto?> responses = [];
 
   final model = FirebaseVertexAI.instance.generativeModel(
@@ -221,81 +228,157 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
 
-    if(_connectionState != ConnectionState.done) {
+    if(_connectionState == ConnectionState.waiting) {
       return Scaffold(
         body: ValueListenableBuilder(
           valueListenable: progressValue,
           builder: (context, value, child) {
-            return CircularProgressIndicator();
+            return Center(child: CircularProgressIndicator());
           }
         ),
       );
     }
 
     return Scaffold(
-      body: ListView.builder(
-        shrinkWrap: true,
-        itemCount: responses.length,
-        itemBuilder: (context, index) {
-          final VertextSearchDto? response = responses[index];
-          return Container(
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.grey),
-              borderRadius: BorderRadius.circular(8),
+      body: Stack(
+        children: [
+          Positioned(
+            child: Container(
+              height: MediaQuery.of(context).size.height / 3,
+              decoration: BoxDecoration(
+                color: Colors.deepPurple,
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(50),
+                  bottomRight: Radius.circular(50),
+                ),
+              ),
             ),
-            margin: const EdgeInsets.all(8),
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    if (response?.img.isNotEmpty ?? false)
-                      Container(
-                        clipBehavior: Clip.hardEdge,
-                        width: 100,
-                        height: 100,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          border: Border.all(color: Colors.black45),
-                        ),
-                        child: Image.network(response!.img.first!, fit: BoxFit.cover,),
+          ),
+          ListView.builder(
+            shrinkWrap: true,
+            itemCount: responses.length,
+            itemBuilder: (context, index) {
+              final VertextSearchDto? response = responses[index];
+              return Stack(
+                alignment: Alignment.topLeft,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      if(response == null) {
+                        return;
+                      }
+                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => DetailCardWidget(vertextSearchDto : response)));
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        // border: Border.all(color: Colors.grey),
+                        borderRadius: BorderRadius.circular(24),
+                        color: Colors.white
                       ),
-                    Expanded(
+                      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 25),
+                      padding: const EdgeInsets.symmetric(horizontal: 13.0, vertical: 30),
                       child: Column(
-
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Align(
-                            alignment: Alignment.centerRight,
-                            child: Text(
-                              response?.postdate ?? "날짜 없음",
+                          // Align(
+                          //   alignment: Alignment.centerRight,
+                          //   child: Text(
+                          //     response?.postdate ?? "날짜 없음",
+                          //   ),
+                          // ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              if (response?.img.isNotEmpty ?? false)
+                                Container(
+                                  clipBehavior: Clip.hardEdge,
+                                  width: 100,
+                                  height: 100,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20),
+                                    border: Border.all(color: Colors.grey[50]!),
+                                  ),
+                                  child: Image.network(response!.img.first!, fit: BoxFit.cover,),
+                                ),
+                              Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                                  child: Text(
+                                    response?.title ?? "제목 없음",
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+
+                          const SizedBox(height: 5,),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10.0),
+                            child: Row(
+                              children: [
+                                Icon(CupertinoIcons.hand_thumbsup_fill, color: Colors.greenAccent),
+                                Text(
+                                  " 추천하고 싶은 사람",
+                                ),
+                              ],
                             ),
                           ),
-                          Text(
-                            response?.title ?? "제목 없음",
+
+                          Container(
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: Colors.grey[200],
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Text(
+                              response?.recommend ?? "추천 없음",
+                            ),
                           ),
+
+                          Padding(
+                            padding: const EdgeInsets.only(top: 15.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Spacer(),
+                                Icon(Icons.location_on, color: Colors.grey[400],),
+                                Flexible(
+                                  child: Text(
+                                    response?.location ?? "장소 없음",
+                                    style: TextStyle(
+                                      color: Colors.grey[500],
+                                    ),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          // Text(
+                          //   response?.desc ?? "내용 없음",
+                          // ),
                         ],
                       ),
                     ),
-                  ],
-                ),
-
-
-
-                Text(
-                  response?.location ?? "장소 없음",
-                ),
-                Text(
-                  response?.recommend ?? "추천 없음",
-                ),
-                Text(
-                  response?.desc ?? "내용 없음",
-                ),
-              ],
-            ),
-          );
-        },
+                  ),
+                  Container(
+                    height: 50,
+                    child: Center(
+                      child: Icon(Icons.location_on_outlined, size: 30, color: Colors.black54,),
+                    ),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.tealAccent
+                    ),
+                  )
+                ],
+              );
+            },
+          ),
+        ],
       ),
     );
   }
