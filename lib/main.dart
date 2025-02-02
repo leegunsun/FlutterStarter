@@ -180,6 +180,7 @@ class _MyHomePageState extends State<MyHomePage> {
       _result = VertextSearchDto.fromJson(_encode!)
         ..blogMobileLink = item.blogMobileLink!
         ..postdate = item.postdate
+        ..desc = _encode["desc"].replaceAll(".", '.\n\n')
         ..img.addAll(_getBlogContent.img)
         ..title ??= item.title;
     } catch (e) {

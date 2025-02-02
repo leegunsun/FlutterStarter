@@ -22,7 +22,7 @@ class VertextSearchDto {
   final String? recommend;
 
   @JsonKey(fromJson: validateNonEmptyString, toJson: identityFunction)
-  final String? desc;
+  String? desc;
 
   VertextSearchDto({
     required this.title,
