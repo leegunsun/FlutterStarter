@@ -35,23 +35,36 @@ class NaverApiBlogSearchDto {
 /// bloggerlink : "blog.naver.com/wolf002"
 /// postdate : "20250131"
 
+
 @JsonSerializable()
 class BlogSearchItems {
- final String title;
- final String link;
- final String description;
- final String bloggername;
- final String bloggerlink;
- final String postdate;
+  final String title;
 
- BlogSearchItems({
+  final String link;
+
+  @JsonKey(ignore: true)
+  String? blogMobileLink;
+
+  bool get isNaverBlog => blogMobileLink?.contains("m.blog.naver.com") == true;
+
+  final String description;
+  final String bloggername;
+  final String bloggerlink;
+  final String postdate;
+
+  BlogSearchItems({
     required this.title,
     required this.link,
     required this.description,
     required this.bloggername,
     required this.bloggerlink,
-    required this.postdate,});
+    required this.postdate,
+  }) {
+    blogMobileLink = link.replaceFirst("blog.naver.com", "m.blog.naver.com");
+  }
 
- Map<String,dynamic> toJson () => _$BlogSearchItemsToJson(this);
- factory BlogSearchItems.fromJson (Map<String,dynamic> json) => _$BlogSearchItemsFromJson(json);
+  factory BlogSearchItems.fromJson(Map<String, dynamic> json) =>
+      _$BlogSearchItemsFromJson(json);
+
+  Map<String, dynamic> toJson() => _$BlogSearchItemsToJson(this);
 }

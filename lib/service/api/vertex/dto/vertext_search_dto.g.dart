@@ -1,0 +1,30 @@
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
+part of 'vertext_search_dto.dart';
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+VertextSearchDto _$VertextSearchDtoFromJson(Map<String, dynamic> json) =>
+    VertextSearchDto(
+      title: VertextSearchDto.validateNonEmptyString(json['title'] as String?),
+      blogMobileLink: json['blogMobileLink'] as String?,
+      postdate:
+          VertextSearchDto.validateNonEmptyString(json['postdate'] as String?),
+      location:
+          VertextSearchDto.validateNonEmptyString(json['location'] as String?),
+      recommend:
+          VertextSearchDto.validateNonEmptyString(json['recommend'] as String?),
+      desc: VertextSearchDto.validateNonEmptyString(json['desc'] as String?),
+    );
+
+Map<String, dynamic> _$VertextSearchDtoToJson(VertextSearchDto instance) =>
+    <String, dynamic>{
+      'title': VertextSearchDto.identityFunction(instance.title),
+      'blogMobileLink': instance.blogMobileLink,
+      'postdate': VertextSearchDto.identityFunction(instance.postdate),
+      'location': VertextSearchDto.identityFunction(instance.location),
+      'recommend': VertextSearchDto.identityFunction(instance.recommend),
+      'desc': VertextSearchDto.identityFunction(instance.desc),
+    };
