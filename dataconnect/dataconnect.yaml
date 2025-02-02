@@ -1,0 +1,12 @@
+specVersion: "v1beta"
+serviceId: "dateapp"
+location: "asia-south1"
+schema:
+  source: "./schema"
+  datasource:
+    postgresql:
+      database: "postgres"
+      cloudSql:
+        instanceId: "recproject-fdc"
+      # schemaValidation: "COMPATIBLE"
+connectorDirs: ["./connector"]
