@@ -26,8 +26,12 @@ module.exports = {
     "import",
   ],
   rules: {
-    "quotes": ["error", "double"],
-    "import/no-unresolved": 0,
-    "indent": ["error", 2],
+    "no-restricted-globals": ["error", "name", "length"],
+    "prefer-arrow-callback": "error",
+    "quotes": ["error", "double", {"allowTemplateLiterals": true}],
+    "max-len": "off",
+    "comma-spacing": "off",
+    "comma-dangle": "off",
+    "indent": "off",
   },
 };
