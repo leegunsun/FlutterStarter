@@ -45,6 +45,7 @@ dependencies:
   html: ^0.15.5
   firebase_vertexai: ^1.1.1
   flutter_inappwebview: ^6.1.5
+  flutter_native_splash: ^2.4.4
 
 dev_dependencies:
   flutter_test:
@@ -99,3 +100,18 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+flutter_native_splash:
+  color: "#42a5f5" # 배경색
+  image: assets/splash.png # 스플래시 이미지
+  color_dark: "#042a49" # 다크 모드 배경색
+  image_dark: assets/splash-invert.png # 다크 모드 이미지
+
+  android_12:
+    image: assets/android12splash.png
+    color: "#42a5f5"
+    icon_background_color: "#111111"
+    image_dark: assets/android12splash-invert.png
+    color_dark: "#042a49"
+    icon_background_color_dark: "#eeeeee"
+
+  android_gravity: fill

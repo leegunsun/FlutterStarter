@@ -14,9 +14,9 @@ class NaverAPI extends BaseApiService {
   NaverAPI._internal() : super(dio: Dio(
     BaseOptions(
       baseUrl: "https://openapi.naver.com/",
-      connectTimeout: const Duration(milliseconds: 10000),
-      receiveTimeout: const Duration(milliseconds: 10000),
-      sendTimeout: const Duration(milliseconds: 10000),
+      connectTimeout: const Duration(milliseconds: 60000),
+      receiveTimeout: const Duration(milliseconds: 60000),
+      sendTimeout: const Duration(milliseconds: 60000),
       responseType: ResponseType.json,
       headers: {
         "X-Naver-Client-Id" : dotenv.env["NAVER_CLIENT_ID"],
