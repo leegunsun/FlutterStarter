@@ -32,6 +32,12 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
+          pageTransitionsTheme: const PageTransitionsTheme(
+            builders: {
+              TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+              TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+            },
+          ),
           scaffoldBackgroundColor: Colors.purple[50],
           appBarTheme: AppBarTheme(
             backgroundColor: Colors.deepPurple,
