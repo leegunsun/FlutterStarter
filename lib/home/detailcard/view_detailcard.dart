@@ -26,6 +26,8 @@ class _DetailCardWidgetState extends State<DetailCardWidget> {
   void dispose() {
     // TODO: implement dispose
     _scrollController.dispose();
+    _imageKeys.clear();  // GlobalKey 리스트 정리
+    _imageWidths.clear(); // 이미지 너비 리스트 정리
     super.dispose();
   }
 
@@ -58,7 +60,9 @@ class _DetailCardWidgetState extends State<DetailCardWidget> {
     if (_imageWidths.isEmpty) return;
 
     int nextIndex = (currentIndex + 1) % _filterImg.length;
-    double scrollOffset = _imageWidths.sublist(0, nextIndex).fold(0, (sum, width) => sum + width + 16);
+    double scrollOffset = _imageWidths
+        .take(nextIndex)
+        .fold(0, (sum, width) => sum + width + 16);
 
     _scrollController.animateTo(
       scrollOffset,
@@ -75,7 +79,9 @@ class _DetailCardWidgetState extends State<DetailCardWidget> {
     int prevIndex = (currentIndex == 0) ? _filterImg.length - 1 : currentIndex - 1;
 
     // 이전 인덱스까지의 모든 이미지 넓이의 합을 계산
-    double scrollOffset = _imageWidths.sublist(0, prevIndex).fold(0, (sum, width) => sum + width + 16);
+    double scrollOffset = _imageWidths
+        .take(prevIndex)
+        .fold(0, (sum, width) => sum + width + 16);
 
     _scrollController.animateTo(
       scrollOffset,
