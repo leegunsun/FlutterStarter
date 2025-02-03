@@ -2,7 +2,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-import '../../base_api_service.dart';
+import '../base_api_service.dart';
 import 'blog_search.dart';
 
 class NaverAPI extends BaseApiService {

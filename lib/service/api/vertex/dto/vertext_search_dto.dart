@@ -21,6 +21,8 @@ class VertextSearchDto {
   @JsonKey(fromJson: validateNonEmptyString, toJson: identityFunction)
   final String? recommend;
 
+  final List<String?> tag = [];
+
   @JsonKey(fromJson: validateNonEmptyString, toJson: identityFunction)
   String? desc;
 
@@ -30,7 +32,7 @@ class VertextSearchDto {
     required this.postdate,
     required this.location,
     required this.recommend,
-    required this.desc
+    required this.desc,
   });
 
   // 공백 및 빈 문자열을 검증하는 함수

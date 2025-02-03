@@ -11,14 +11,37 @@ class BaseWebview extends StatefulWidget {
 }
 
 class _BaseWebviewState extends State<BaseWebview> {
+
+  InAppWebViewController? webViewController;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text("Platform WebView")),
       body: InAppWebView(
-        initialUrlRequest: URLRequest(
-          url: WebUri(widget.url),
+        initialUrlRequest: URLRequest(url: WebUri(widget.url)),
+        initialSettings: InAppWebViewSettings(
+          javaScriptEnabled: true, // JavaScript 활성화
+          supportZoom: true,       // 줌 기능 지원
         ),
+        onWebViewCreated: (controller) {
+          webViewController = controller;
+        },
+        onLoadStart: (controller, url) {
+          setState(() {
+            // widget.url = url?.toString() ?? "Loading...";
+          });
+        },
+        onLoadStop: (controller, url) {
+          setState(() {
+            // this.url = url?.toString() ?? "Finished Loading";
+          });
+        },
+        onProgressChanged: (controller, progress) {
+          setState(() {
+            // this.progress = progress.toDouble();
+          });
+        },
       ),
     );
   }
