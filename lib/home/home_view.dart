@@ -1,7 +1,8 @@
-
+import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../service/api/naver/dto/crawl_naver_blog.dart';
 import '../service/api/vertex/dto/vertext_search_dto.dart';
 import 'detailcard/view_detailcard.dart';
 import 'home_controller.dart';
@@ -69,6 +70,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ),
           ListView.builder(
+
             shrinkWrap: true,
             itemCount: controller.responses.length,
             itemBuilder: (context, index) {
@@ -78,12 +80,14 @@ class _MyHomePageState extends State<MyHomePage> {
                 return SizedBox.shrink();
               }
 
+              final List<CrawlContent?> _crawlContent = response.crawlContent.where((CrawlContent? ele) => ele?.contentType == ContentType.image).toList();
+
               return Stack(
                 alignment: Alignment.topLeft,
                 children: [
                   GestureDetector(
                     onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => DetailCardWidget(vertextSearchDto : response)));
+                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => DetailCardWidget(vertextSearchDto : response, crawlContentList: response.crawlContent,)));
                     },
                     child: Container(
                       decoration: BoxDecoration(
@@ -133,16 +137,16 @@ class _MyHomePageState extends State<MyHomePage> {
                             child: LayoutBuilder(
                               builder: (context, constraints) {
                                 double parentWidth = constraints.maxWidth;
+
                                 return CustomScrollView(
                                   scrollDirection: Axis.horizontal,
                                   slivers: [
                                     SliverList(
                                       delegate: SliverChildBuilderDelegate(
                                             (context, index) {
-                                          final imgUrl = response.img[index] ?? "";
-
-                                          return Padding(
-                                            padding: index + 1 == response.img.length ? EdgeInsets.zero : const EdgeInsets.only(right: 10), // 이미지 사이 간격 추가
+                                              final String imgUrl = _crawlContent[index]?.contentValue ?? "";
+                                            return Padding(
+                                            padding: index + 1 == _crawlContent.length ? EdgeInsets.zero : const EdgeInsets.only(right: 10), // 이미지 사이 간격 추가
                                             child: ClipRRect(
                                               borderRadius: BorderRadius.circular(10),
                                               child: Image.network(
@@ -151,9 +155,9 @@ class _MyHomePageState extends State<MyHomePage> {
                                                 width: parentWidth, // 부모 컨테이너의 너비만큼 설정
                                               ),
                                             ),
-                                          );
+                                                                                      );
                                         },
-                                        childCount: response.img.length,
+                                        childCount: _crawlContent.length,
                                       ),
                                     ),
                                   ],
@@ -202,14 +206,14 @@ class _MyHomePageState extends State<MyHomePage> {
                             child: ListView.builder(
                               scrollDirection: Axis.horizontal,
                               shrinkWrap: true,
-                              itemCount: response?.tag.length ?? 0,
+                              itemCount: response.tag.length ?? 0,
                               itemBuilder: (context, index) {
                                 return Align(
                                   alignment: Alignment.bottomCenter,
                                   child: Padding(
                                     padding: const EdgeInsets.symmetric(horizontal: 5.0),
                                     child: Text(
-                                        "#${response?.tag[index]}",
+                                        "#${response.tag[index]}",
                                         style: TextStyle(
                                           color: Colors.grey[600],)
                                     ),
@@ -246,14 +250,17 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
                     ),
                   ),
-                  Container(
-                    height: 50,
-                    child: Center(
-                      child: Icon(Icons.location_on_outlined, size: 30, color: Colors.black54,),
-                    ),
-                    decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.tealAccent
+                  Hero(
+                    tag: response.title ?? DateTime.now().toString(),
+                    child: Container(
+                      height: 50,
+                      child: Center(
+                        child: Icon(Icons.location_on_outlined, size: 30, color: Colors.black54,),
+                      ),
+                      decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.tealAccent
+                      ),
                     ),
                   )
                 ],

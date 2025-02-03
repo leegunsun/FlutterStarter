@@ -33,7 +33,7 @@ class BlogGenerationService {
               ),
               'location': Schema.string(
                   description:
-                  "글에서 설명하는 장소의 위치를 나타냅니다. 특정한 장소를 언급하는 경우, 지역명이나 주소 형식으로 작성될 수 있습니다."),
+                  "글에서 설명하는 장소의 위치를 나타냅니다. 한국의 주소 체계를 따르는 주소를 생성해 주세요. 주소 형식은 \'[광역시/도] [시/군/구] [도로명] [건물번호]\' 형태로 구성해 주세요. 도로명 주소를 기반으로 하고, 한국에서 일반적으로 사용되는 실제적인 형태의 주소를 출력해 주세요."),
               'recommend': Schema.string(
                   description:
                   "이 글이 어떤 독자에게 유용한 정보를 제공하는지 나타냅니다. 예를 들어, 음식점 리뷰라면 \"맛집을 찾는 사람\" 혹은 \"현지 음식을 경험하고 싶은 여행객\" 등이 될 수 있습니다."),
@@ -85,8 +85,11 @@ class BlogGenerationService {
         ..blogMobileLink = item.blogMobileLink!
         ..postdate = item.postdate
         ..tag.addAll(_tag)
-        ..desc = _encode["desc"].replaceAll(".", '.\n\n')
-        ..img.addAll(blogContent.img)
+        ..desc = _encode["desc"].replaceAllMapped(
+            RegExp(r'([!@.?])'), // 특수 문자 패턴
+                (match) => '${match.group(1)}\n\n' // 특수 문자 유지 + 개행 추가
+        )
+        ..crawlContent.addAll(blogContent.contents)
         ..title ??= item.title;
     } catch (e) {
       print('JSON 디코딩 오류: $e');

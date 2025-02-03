@@ -2,14 +2,18 @@ import 'package:dateapp/service/env_service.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'firebase_options.dart';
 import 'home/home_view.dart';
 
+InAppLocalhostServer server = InAppLocalhostServer(port: 8080);
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EnvService.init();
+  await server.start();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -27,6 +31,9 @@ class MyApp extends StatelessWidget {
         title: 'Flutter Demo',
         theme: ThemeData(
           scaffoldBackgroundColor: Colors.purple[50],
+          appBarTheme: AppBarTheme(
+            backgroundColor: Colors.deepPurple,
+          ),
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),

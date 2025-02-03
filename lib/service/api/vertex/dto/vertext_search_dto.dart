@@ -1,5 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 
+import '../../naver/dto/crawl_naver_blog.dart';
+
 part 'vertext_search_dto.g.dart';
 
 @JsonSerializable(explicitToJson: true)
@@ -13,7 +15,7 @@ class VertextSearchDto {
   @JsonKey(fromJson: validateNonEmptyString, toJson: identityFunction)
   String? postdate;
 
-  final List<String?> img = [];
+  final List<CrawlContent?> crawlContent = [];
 
   @JsonKey(fromJson: validateNonEmptyString, toJson: identityFunction)
   final String? location;

@@ -14,7 +14,7 @@ class HomeController {
     connectionState(ConnectionState.waiting);
 
     // 네이버 블로그 검색
-    NaverApiBlogSearchDto _result = await _blogGenerationService.searchBlogs("송파+데이트");
+    NaverApiBlogSearchDto _result = await _blogGenerationService.searchBlogs("문정역+맛집");
 
     for (BlogSearchItems item in _result.items.where((item) => item.isNaverBlog)) {
       VertextSearchDto? generatedContent = await _blogGenerationService.generateContentFromBlog(item);
