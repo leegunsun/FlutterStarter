@@ -28,19 +28,13 @@ class _BaseWebviewState extends State<BaseWebview> {
           webViewController = controller;
         },
         onLoadStart: (controller, url) {
-          setState(() {
-            // widget.url = url?.toString() ?? "Loading...";
-          });
+
         },
         onLoadStop: (controller, url) {
-          setState(() {
-            // this.url = url?.toString() ?? "Finished Loading";
-          });
+
         },
         onProgressChanged: (controller, progress) {
-          setState(() {
-            // this.progress = progress.toDouble();
-          });
+
         },
       ),
     );

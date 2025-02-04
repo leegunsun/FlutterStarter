@@ -20,7 +20,7 @@ class _BlogSearchRestClient implements BlogSearchRestClient {
   @override
   Future<NaverApiBlogSearchDto> getBlogSearch({
     String? query,
-    int display = 2,
+    int display = 50,
   }) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{

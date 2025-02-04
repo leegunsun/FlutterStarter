@@ -80,12 +80,13 @@ class BlogGenerationService {
       }
 
       List<String?> _tag = (_encode?["tag"] as String).split(",").toList();
+      String _desc = _encode?["desc"];
 
       _result = VertextSearchDto.fromJson(_encode!)
         ..blogMobileLink = item.blogMobileLink!
         ..postdate = item.postdate
         ..tag.addAll(_tag)
-        ..desc = _encode["desc"].replaceAllMapped(
+        ..desc = _desc.replaceAllMapped(
             RegExp(r'([!@.?])'), // 특수 문자 패턴
                 (match) => '${match.group(1)}\n\n' // 특수 문자 유지 + 개행 추가
         )
