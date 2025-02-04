@@ -44,26 +44,25 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  final remoteConfig = FirebaseRemoteConfig.instance;
-
   void initialization() async {
     // This is where you can initialize the resources needed by your app while
     // the splash screen is displayed.  Remove the following example because
     // delaying the user experience is a bad design practice!
     // ignore_for_file: avoid_print
 
-    await remoteConfig.setConfigSettings(
+    await controller.remoteConfig.setConfigSettings(
       RemoteConfigSettings(
         fetchTimeout: const Duration(seconds: 10), // 원격 데이터 가져오기 제한 시간
         minimumFetchInterval: const Duration(minutes: 1), // 최소 업데이트 간격
       ),
     );
 
-    await remoteConfig.setDefaults(const <String, dynamic>{
+    await controller.remoteConfig.setDefaults(const <String, dynamic>{
       "home_sub_title": "👋 좋아요 ",
+      "close_server": "false",
     });
 
-    await remoteConfig.fetchAndActivate();
+    await controller.remoteConfig.fetchAndActivate();
 
     print('ready in 3...');
     await Future.delayed(const Duration(seconds: 1));
@@ -133,7 +132,7 @@ class _MyHomePageState extends State<MyHomePage> {
             child: const SizedBox(height: 40,),
           ),
           SliverToBoxAdapter(
-            child: CustomTitle.bottom(title: remoteConfig.getString("home_sub_title")),
+            child: CustomTitle.bottom(title: controller.remoteConfig.getString("home_sub_title")),
           ),
           SliverListNaverCard(controller: controller),
         ],

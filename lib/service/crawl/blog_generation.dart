@@ -40,6 +40,14 @@ class BlogGenerationService {
               'desc': Schema.string(
                   description:
                   "글의 주요 내용을 설명하는 부분입니다. 답변을 격식있는 말투로 작성하지 마세요. 글쓴이의 말투를 유지해야합니다. 글의 흐름을 자연스럽게 이어가며 본문의 내용을 포함해야 합니다."),
+              'category': Schema.enumString(
+                enumValues: [
+                  'FOOD', 'CAFE', 'DATE', 'TRAVEL', 'ACTIVITY',
+                  'CULTURE', 'NIGHTLIFE', 'OUTDOOR', 'SHOPPING',
+                  'STAY', 'EVENT', 'PET_FRIENDLY', 'LUXURY', 'BUDGET'
+                ],
+                description: "AI가 생성한 글의 카테고리를 나타냅니다. 카테고리 분류는 '생성한 글의 내용'과 '생성한 태그'로 판단해야 합니다.",
+              ),
             },
             optionalProperties: [
               'title',

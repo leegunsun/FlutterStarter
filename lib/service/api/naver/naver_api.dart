@@ -6,7 +6,6 @@ import '../base_api_service.dart';
 import 'blog_search.dart';
 
 class NaverAPI extends BaseApiService {
-
   static final NaverAPI _instance = NaverAPI._internal();
 
   factory NaverAPI() => _instance;

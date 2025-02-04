@@ -17,6 +17,7 @@ VertextSearchDto _$VertextSearchDtoFromJson(Map<String, dynamic> json) =>
       recommend:
           VertextSearchDto.validateNonEmptyString(json['recommend'] as String?),
       desc: VertextSearchDto.validateNonEmptyString(json['desc'] as String?),
+      category: $enumDecode(_$BlogCategoryEnumMap, json['category']),
     );
 
 Map<String, dynamic> _$VertextSearchDtoToJson(VertextSearchDto instance) =>
@@ -27,4 +28,22 @@ Map<String, dynamic> _$VertextSearchDtoToJson(VertextSearchDto instance) =>
       'location': VertextSearchDto.identityFunction(instance.location),
       'recommend': VertextSearchDto.identityFunction(instance.recommend),
       'desc': VertextSearchDto.identityFunction(instance.desc),
+      'category': _$BlogCategoryEnumMap[instance.category]!,
     };
+
+const _$BlogCategoryEnumMap = {
+  BlogCategory.FOOD: 'FOOD',
+  BlogCategory.CAFE: 'CAFE',
+  BlogCategory.DATE: 'DATE',
+  BlogCategory.TRAVEL: 'TRAVEL',
+  BlogCategory.ACTIVITY: 'ACTIVITY',
+  BlogCategory.CULTURE: 'CULTURE',
+  BlogCategory.NIGHTLIFE: 'NIGHTLIFE',
+  BlogCategory.OUTDOOR: 'OUTDOOR',
+  BlogCategory.SHOPPING: 'SHOPPING',
+  BlogCategory.STAY: 'STAY',
+  BlogCategory.EVENT: 'EVENT',
+  BlogCategory.PET_FRIENDLY: 'PET_FRIENDLY',
+  BlogCategory.LUXURY: 'LUXURY',
+  BlogCategory.BUDGET: 'BUDGET',
+};

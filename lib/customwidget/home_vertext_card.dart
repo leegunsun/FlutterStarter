@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -38,7 +39,14 @@ class VertexCarousel extends StatelessWidget {
               alignment: Alignment.topLeft,
               children: [
                 GestureDetector(
-                  onTap: () {
+                  onTap: () async {
+
+                    try {
+                      await FirebaseAnalytics.instance.logEvent(name: 'click_test',parameters: {"event_name" : "true"});
+                    } catch (e) {
+                      print(e);
+                    }
+
                     Navigator.of(context).push(MaterialPageRoute(builder: (context) => DetailCardWidget(vertextSearchDto : response, crawlContentList: response.crawlContent,)));
                   },
                   child: Container(
@@ -217,7 +225,7 @@ class VertexCarousel extends StatelessWidget {
                   child: Container(
                     height: 50,
                     child: Center(
-                      child: Icon(Icons.location_on_outlined, size: 30, color: CustomThemeColor.icon,),
+                      child: Icon(response.category.icon, size: 30, color: CustomThemeColor.icon,),
                     ),
                     decoration: BoxDecoration(
                         shape: BoxShape.circle,

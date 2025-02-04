@@ -1,3 +1,4 @@
+import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/material.dart' hide Element;
 
 import '../service/api/naver/dto/search_dto.dart';
@@ -10,6 +11,8 @@ class HomeController {
   final List<BlogSearchItems?> blogResponses = [];
   // final BlogCrawlerService _blogCrawlerService = BlogCrawlerService();
   final BlogGenerationService _blogGenerationService = BlogGenerationService();
+
+  final remoteConfig = FirebaseRemoteConfig.instance;
 
   Future<void> fetchBlogSearchResults(void Function() setState, void Function(ConnectionState) connectionState) async {
     connectionState(ConnectionState.waiting);

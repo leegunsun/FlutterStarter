@@ -33,6 +33,7 @@ void main() async {
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
+  static GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -65,6 +66,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return ProviderScope(
       child: MaterialApp(
+        navigatorKey: MyApp.navigatorKey,
         title: 'Flutter Demo',
         theme: ThemeData(
           pageTransitionsTheme: const PageTransitionsTheme(

@@ -1,6 +1,7 @@
 import 'package:dateapp/home/home_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'dart:math' as math;
 
 import '../helper/custom_helper.dart';
 import '../service/api/naver/dto/search_dto.dart';
@@ -38,75 +39,115 @@ class _SliverListNaverCardState extends State<SliverListNaverCard> {
             return SizedBox.shrink();
           }
 
-          return GestureDetector(
-            onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => BaseWebview(url: _item.link)));
-            },
-            child: Container(
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(13),
-                  color: Colors.white,
-                  boxShadow: CustomThemeColor.cardBoxShadow
-              ),
-              margin: const EdgeInsets.all(20),
-              child: Column(
-                children: [
-                  SizedBox(height: 20,),
-                  Text(CustomHelper.stripHtml(_item.title), style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 24
-                  ),),
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
-                    child: Container(
-                      margin: const EdgeInsets.only(top: 30, bottom: 10),
-                      height: 190,
-                      color: Colors.redAccent,
-                    ),
+          return Stack(
+            clipBehavior: Clip.none,
+            children: [
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => BaseWebview(url: _item.link)));
+                },
+                child: Container(
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(13),
+                      color: Colors.white,
+                      boxShadow: CustomThemeColor.cardBoxShadow
                   ),
-                  // Text(_item.bloggerlink),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: RichText(text: TextSpan(
-                        style: TextStyle(
-                            color: CustomThemeColor.cardSecondFont
-                        ),
-                        children: [
-                          TextSpan(
-                            text: _item.postdate,
-                          ),
-                          TextSpan(
-                              text: " · "
-                          ),
-                          TextSpan(
-                            text: _item.bloggername,
-                          ),
-                        ]
-                    )),
-                  ),
-                  SizedBox(height: 30),
-                  Container(
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: CustomThemeColor.cardRecommendBackground,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                      child: Text(CustomHelper.stripHtml(_item.description),
-                      ),),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
+                  margin: const EdgeInsets.all(20),
+                  child: Column(
                     children: [
-                      IconButton(onPressed: () {
-                        _selectIcon = !_selectIcon;
-                        setState(() {});
-                      }, icon: _showIcon())
+                      const SizedBox(height: 40,),
+                      Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: Container(
+                          color: Colors.grey[100],
+                          child: Align(
+                            alignment: Alignment.bottomCenter,
+                            heightFactor: 0.3,
+                            child: Text(
+                              CustomHelper.stripHtml(_item.title),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                fontSize: 23,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: Container(
+                          margin: const EdgeInsets.only(top: 30, bottom: 10),
+                          height: 190,
+                          color: Colors.redAccent,
+                        ),
+                      ),
+                      // Text(_item.bloggerlink),
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: RichText(text: TextSpan(
+                            style: TextStyle(
+                                color: CustomThemeColor.cardSecondFont
+                            ),
+                            children: [
+                              TextSpan(
+                                text: _item.postdate,
+                              ),
+                              TextSpan(
+                                  text: " · "
+                              ),
+                              TextSpan(
+                                text: _item.bloggername,
+                              ),
+                            ]
+                        )),
+                      ),
+                      SizedBox(height: 30),
+                      Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: CustomThemeColor.cardRecommendBackground,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                          child: Text(CustomHelper.stripHtml(_item.description),
+                          ),),
+                      SizedBox(height: 15),
+                      // Text(_item.link),
                     ],
-                  )
-                  // Text(_item.link),
-                ],
+                  ),
+                ),
               ),
-            ),
+              Positioned(
+                top: 0,
+                right: 0,
+                left: 0,
+                child: Container(
+                  margin: const EdgeInsets.only(right: 10),
+                  decoration: BoxDecoration(
+                    color: CustomThemeColor.underlineTop,
+                    shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black12,
+                        blurRadius: 1,
+                        // spreadRadius: 1,
+                        offset: Offset(2, 2)
+                      )
+                    ]
+                  ),
+                  child: IconButton(
+                    highlightColor: Colors.transparent,
+                    onPressed: () {
+                      _selectIcon = !_selectIcon;
+                      setState(() {});
+                    },
+                    icon: _showIcon(),
+                  ),
+                ),
+              )
+            ],
           );
         });
   }
