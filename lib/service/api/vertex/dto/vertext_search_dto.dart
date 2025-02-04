@@ -38,7 +38,8 @@ class VertextSearchDto {
   @JsonKey(fromJson: validateNonEmptyString, toJson: identityFunction)
   String? postdate;
 
-  final List<CrawlContent?> crawlContent = [];
+  @JsonKey(defaultValue: [], toJson: _crawlContentToJson) // 추가
+  final List<CrawlContent?> crawlContent;
 
   @JsonKey(fromJson: validateNonEmptyString, toJson: identityFunction)
   final String? location;
@@ -46,7 +47,8 @@ class VertextSearchDto {
   @JsonKey(fromJson: validateNonEmptyString, toJson: identityFunction)
   final String? recommend;
 
-  final List<String?> tag = [];
+  @JsonKey(defaultValue: [])  // 누락 방지
+  final List<String?> tag;
 
   @JsonKey(fromJson: validateNonEmptyString, toJson: identityFunction)
   String? desc;
@@ -61,7 +63,12 @@ class VertextSearchDto {
     required this.recommend,
     required this.desc,
     required this.category,
+    this.tag = const [],  // 기본값 설정
+    this.crawlContent = const [], // 기본값 설정
   });
+
+  static List<Map<String, dynamic>> _crawlContentToJson(List<CrawlContent?> list) =>
+      list.where((e) => e != null).map((e) => e!.toJson()).toList();
 
   // 공백 및 빈 문자열을 검증하는 함수
   static String? identityFunction(String? value) => value;

@@ -1,4 +1,8 @@
+import 'dart:convert';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart' hide Element;
 
 import '../service/api/naver/dto/search_dto.dart';
@@ -9,12 +13,14 @@ import '../service/crawl/blog_generation.dart';
 class HomeController {
   final List<VertextSearchDto?> aiResponses = [];
   final List<BlogSearchItems?> blogResponses = [];
+
   // final BlogCrawlerService _blogCrawlerService = BlogCrawlerService();
   final BlogGenerationService _blogGenerationService = BlogGenerationService();
 
   final remoteConfig = FirebaseRemoteConfig.instance;
 
-  Future<void> fetchBlogSearchResults(void Function() setState, void Function(ConnectionState) connectionState) async {
+  Future<void> fetchBlogSearchResults(void Function() setState,
+      void Function(ConnectionState) connectionState) async {
     connectionState(ConnectionState.waiting);
 
     // 네이버 블로그 검색
@@ -32,6 +38,16 @@ class HomeController {
     } catch (e) {
       // 예외 발생 시 로그 남기기 (필요하면 예외 처리 방식 추가)
       print("블로그 컨텐츠 생성 중 오류 발생: $e");
+    }
+
+    try {
+      for (VertextSearchDto item in aiResponses.whereType<VertextSearchDto>()) {
+        String safeDocId = base64Encode(utf8.encode(item.blogMobileLink!)); // Base64 인코딩
+        FirebaseFirestore.instance.collection("aiParserData").doc(safeDocId).set(item.toJson());
+      }
+      print("");
+    } catch (e) {
+      print(e);
     }
 
     connectionState(ConnectionState.done);
