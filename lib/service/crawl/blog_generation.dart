@@ -39,7 +39,7 @@ class BlogGenerationService {
                   "이 글이 어떤 독자에게 유용한 정보를 제공하는지 나타냅니다. 예를 들어, 음식점 리뷰라면 \"맛집을 찾는 사람\" 혹은 \"현지 음식을 경험하고 싶은 여행객\" 등이 될 수 있습니다."),
               'desc': Schema.string(
                   description:
-                  "글의 주요 내용을 설명하는 부분입니다. 답변을 격식있는 말투로 작성하지 마세요. 글쓴이의 말투를 유지해야합니다. 글의 흐름을 자연스럽게 이어가며 본문의 내용을 포함해야 합니다."),
+                  "글의 주요 내용을 설명하는 부분입니다. 답변을 격식있는 말투로 작성하지 마세요. 글의 흐름을 자연스럽게 이어가며 본문의 내용을 포함해야 합니다."),
               'category': Schema.enumString(
                 enumValues: [
                   'FOOD', 'CAFE', 'DATE', 'TRAVEL', 'ACTIVITY',
@@ -89,7 +89,7 @@ class BlogGenerationService {
 
       List<String?> _tag = (_encode?["tag"] as String).split(",").toList();
       String _desc = _encode?["desc"];
-      _encode?["crawlContent"] = blogContent.contents.map((e) => e.toJson()).toList();
+      _encode?["crawlContent"] = blogContent.imgContents.map((e) => e.toJson()).toList();
 
       _result = VertextSearchDto.fromJson(_encode!)
         ..blogMobileLink = item.blogMobileLink!

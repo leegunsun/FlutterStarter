@@ -32,7 +32,8 @@ class BlogCrawlerService {
     Element? contentElement = document.querySelector('.se-main-container');
     if (contentElement == null) return null;
 
-    List<CrawlContent> contents = [];
+    List<CrawlContent> textContents = [];
+    List<CrawlContent> imgContents = [];
 
     // 재귀 함수를 통해 노드 순회 (깊이 우선 탐색)
     void traverse(Node node) {
@@ -40,16 +41,17 @@ class BlogCrawlerService {
       if (node.nodeType == Node.TEXT_NODE) {
         String text = node.text?.trim() ?? '';
         if (text.isNotEmpty) {
-          contents.add(CrawlContent(contentType: ContentType.text, contentValue: text));
+          textContents.add(CrawlContent(contentType: ContentType.text, contentValue: text));
         }
       }
       // 2단계: Element 처리
-      else if (node is Element) {
+      else
+        if (node is Element) {
         // 이미지 요소 처리
         if (node.localName == 'img' && node.attributes.containsKey('data-lazy-src')) {
           String imageUrl = node.attributes['data-lazy-src'] ?? '';
           if (imageUrl.isNotEmpty) {
-            contents.add(CrawlContent(contentType: ContentType.image, contentValue: imageUrl));
+            imgContents.add(CrawlContent(contentType: ContentType.image, contentValue: imageUrl));
           }
         }
         // 이미지 외의 요소는 자식 노드를 순회
@@ -65,14 +67,14 @@ class BlogCrawlerService {
     traverse(contentElement);
 
     // 추출된 텍스트들을 하나의 정리된 문자열로 결합
-    String cleanedText = contents
+    String cleanedText = textContents
         .where((item) => item.contentType == ContentType.text)
         .map((item) => item.contentValue)
         .join(' ')
         .replaceAll(RegExp(r'\s+'), ' ')
         .trim();
 
-    return CrawlNaverBlog(contents: contents, desc: cleanedText);
+    return CrawlNaverBlog(imgContents: imgContents, desc: cleanedText);
   }
 
 }

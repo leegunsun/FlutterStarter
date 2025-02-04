@@ -8,7 +8,7 @@ part of 'crawl_naver_blog.dart';
 
 CrawlNaverBlog _$CrawlNaverBlogFromJson(Map<String, dynamic> json) =>
     CrawlNaverBlog(
-      contents: (json['contents'] as List<dynamic>)
+      imgContents: (json['contents'] as List<dynamic>)
           .map((e) => CrawlContent.fromJson(e as Map<String, dynamic>))
           .toList(),
       desc: json['desc'] as String,
@@ -16,7 +16,7 @@ CrawlNaverBlog _$CrawlNaverBlogFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$CrawlNaverBlogToJson(CrawlNaverBlog instance) =>
     <String, dynamic>{
-      'contents': instance.contents.map((e) => e.toJson()).toList(),
+      'contents': instance.imgContents.map((e) => e.toJson()).toList(),
       'desc': instance.desc,
     };
 

@@ -7,10 +7,10 @@ enum ContentType { text, image }
 @JsonSerializable(explicitToJson: true)
 class CrawlNaverBlog {
 
-  final List<CrawlContent> contents;
+  final List<CrawlContent> imgContents;
   final String desc;
 
-  CrawlNaverBlog({required this.contents, required this.desc});
+  CrawlNaverBlog({required this.imgContents, required this.desc});
 
     Map<String,dynamic> toJson () => _$CrawlNaverBlogToJson(this);
     factory CrawlNaverBlog.fromJson (Map<String,dynamic> json) => _$CrawlNaverBlogFromJson(json);
