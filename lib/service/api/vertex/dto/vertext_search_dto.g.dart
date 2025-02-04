@@ -18,14 +18,13 @@ VertextSearchDto _$VertextSearchDtoFromJson(Map<String, dynamic> json) =>
           VertextSearchDto.validateNonEmptyString(json['recommend'] as String?),
       desc: VertextSearchDto.validateNonEmptyString(json['desc'] as String?),
       category: $enumDecode(_$BlogCategoryEnumMap, json['category']),
-      tag: (json['tag'] as List<dynamic>?)?.map((e) => e as String?).toList() ??
-          [],
-      crawlContent: (json['crawlContent'] as List<dynamic>?)
-              ?.map((e) => e == null
-                  ? null
-                  : CrawlContent.fromJson(e as Map<String, dynamic>))
-              .toList() ??
-          [],
+      tag: json['tag'] == null
+          ? const []
+          : VertextSearchDto._crawlTagFromJson(json['tag'] as String?),
+      crawlContent: json['crawlContent'] == null
+          ? const []
+          : VertextSearchDto._crawlContentFromJson(
+              json['crawlContent'] as List<Map<String, dynamic>?>),
     );
 
 Map<String, dynamic> _$VertextSearchDtoToJson(VertextSearchDto instance) =>
@@ -37,7 +36,7 @@ Map<String, dynamic> _$VertextSearchDtoToJson(VertextSearchDto instance) =>
           VertextSearchDto._crawlContentToJson(instance.crawlContent),
       'location': VertextSearchDto.identityFunction(instance.location),
       'recommend': VertextSearchDto.identityFunction(instance.recommend),
-      'tag': instance.tag,
+      'tag': VertextSearchDto._crawlTagToJson(instance.tag),
       'desc': VertextSearchDto.identityFunction(instance.desc),
       'category': _$BlogCategoryEnumMap[instance.category]!,
     };

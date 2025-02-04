@@ -89,6 +89,7 @@ class BlogGenerationService {
 
       List<String?> _tag = (_encode?["tag"] as String).split(",").toList();
       String _desc = _encode?["desc"];
+      _encode?["crawlContent"] = blogContent.contents.map((e) => e.toJson()).toList();
 
       _result = VertextSearchDto.fromJson(_encode!)
         ..blogMobileLink = item.blogMobileLink!
@@ -98,7 +99,6 @@ class BlogGenerationService {
             RegExp(r'([!@.?])'), // 특수 문자 패턴
                 (match) => '${match.group(1)}\n\n' // 특수 문자 유지 + 개행 추가
         )
-        ..crawlContent.addAll(blogContent.contents)
         ..title ??= item.title;
     } catch (e) {
       print('JSON 디코딩 오류: $e');
