@@ -1,6 +1,8 @@
 
+import 'package:appsflyer_sdk/appsflyer_sdk.dart';
 import 'package:dateapp/service/api/fcm/fcm_get_token.dart';
 import 'package:dateapp/service/env_service.dart';
+import 'package:dateapp/service/onelink/appsflyer_controller.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -21,6 +23,7 @@ void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   await EnvService.init();
+  AppsflyerController.init();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -40,27 +43,39 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+  AndroidNotificationChannel channel = AndroidNotificationChannel(
+    'alert_channel_00', // id
+    'Alert Notifications', // title.
+    description: 'This channel is used for alert notifications.', // description
+    importance: Importance.max,
+  );
 
   // This widget is the root of your application.
-
-  void aa () {
-    FirebaseMessaging.onMessage.listen((RemoteMessage? message) {
-      if (message != null) {
-        if (message.notification != null) {
-          print(message.notification!.title);
-          print(message.notification!.body);
-        }
-      }
-    });
-  }
 
   @override
   void initState() {
     // TODO: implement initState
+    TestC().initMessaging();
+    AppsflyerController.afStart(
+      onGcdUpdate: (gcd) {
+        setState(() {
+          _gcd = gcd;
+        });
+      },
+      onDeepLinkUpdate: (deepLinkData) {
+        setState(() {
+          _deepLinkData = deepLinkData;
+        });
+      },
+    );
     WidgetsBinding.instance.addPostFrameCallback((_) => FcmTokenManager.init(context));
-    aa();
     super.initState();
   }
+
+  Map _deepLinkData = {};
+  Map _gcd = {};
+
 
   @override
   Widget build(BuildContext context) {
@@ -86,4 +101,71 @@ class _MyAppState extends State<MyApp> {
       ),
     );
   }
+}
+
+class TestC {
+
+  final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+
+  AndroidNotificationChannel channel = AndroidNotificationChannel(
+    'high_importance_channel', // id
+    'High Importance Notifications', // title.
+    description: 'This channel is used for alert notifications.', // description
+    importance: Importance.max,
+  );
+
+  Future<void> initMessaging() async {
+
+    await flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<
+        AndroidFlutterLocalNotificationsPlugin>()
+        ?.createNotificationChannel(channel);
+
+    await FirebaseMessaging.instance.requestPermission(
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+      sound: true,
+    );
+
+    //iOS foreground 알림표시.
+    await FirebaseMessaging.instance
+        .setForegroundNotificationPresentationOptions(
+      alert: true, // Required to display a heads up notification
+      badge: true,
+      sound: true,
+    );
+
+    FirebaseMessaging.onMessage.listen((message) {
+      if (message != null) {
+        if (message.notification != null) {
+          print("init Msg");
+          print(message.notification!.title);
+          print(message.notification!.body);
+
+          flutterLocalNotificationsPlugin.show(
+              hashCode,
+              message.notification!.title,
+              message.notification!.body,
+              NotificationDetails(
+                android: AndroidNotificationDetails(
+                  channel.id,
+                  channel.name,
+                  channelDescription: channel.description,
+                  icon: '@mipmap/ic_launcher',
+                  // other properties...
+                ),
+              ));
+        }
+      }
+    });
+    FirebaseMessaging.onMessageOpenedApp.listen((event) {
+      print("onMessageOpenedApp : $event");
+    });
+
+  }
+
 }

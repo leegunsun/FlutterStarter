@@ -1,3 +1,4 @@
+import 'package:dateapp/service/onelink/appsflyer_controller.dart';
 import 'package:flutter/material.dart';
 
 import '../search/search_view.dart';
@@ -9,9 +10,19 @@ class CustomSearchBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => SearchView()),
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(builder: (context) => SearchView()),
+        // );
+
+        AppsflyerController.appsflyerSdk.startSDK(
+          onSuccess: () {
+            print("AppsFlyer SDK initialized successfully.");
+          },
+          onError: (int errorCode, String errorMessage) {
+            print(
+                "Error initializing AppsFlyer SDK: Code $errorCode - $errorMessage");
+          },
         );
       },
       child: Container(
