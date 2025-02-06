@@ -1,13 +1,15 @@
 import 'dart:convert';
 
 import 'package:appsflyer_sdk/appsflyer_sdk.dart';
+import 'package:dateapp/home/home_controller.dart';
 import 'package:dateapp/service/onelink/appsflyer_controller.dart';
 import 'package:flutter/material.dart';
 
 import '../search/search_view.dart';
 
 class CustomSearchBar extends StatelessWidget {
-  const CustomSearchBar({super.key});
+  final HomeController controller;
+  const CustomSearchBar({super.key, required this.controller});
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +17,7 @@ class CustomSearchBar extends StatelessWidget {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => SearchView()),
+          MaterialPageRoute(builder: (context) => SearchView<HomeController>(controller: controller)),
         );
 
         // AppsflyerController.appsflyerSdk.setOneLinkCustomDomain(["invite.mydomain.com"]);

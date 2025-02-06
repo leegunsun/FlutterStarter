@@ -96,11 +96,11 @@ class _MyHomePageState extends State<MyHomePage> {
     }
 
     return Scaffold(
-      appBar: CustomAppBar(),
+      appBar: CustomAppBar(controller: controller),
       body: CustomScrollView(
         slivers: [
           SliverToBoxAdapter(
-            child: CustomSearchBar(),
+            child: CustomSearchBar(controller : controller),
           ),
           SliverToBoxAdapter(
             child: Stack(

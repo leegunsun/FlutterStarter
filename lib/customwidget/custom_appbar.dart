@@ -1,11 +1,12 @@
 
+import 'package:dateapp/home/home_controller.dart';
 import 'package:flutter/material.dart';
 
 import '../search/search_view.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
-
-  const CustomAppBar({super.key});
+  final HomeController controller;
+  const CustomAppBar({super.key, required this.controller});
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +33,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 IconButton(onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => SearchView()),
+                    MaterialPageRoute(builder: (context) => SearchView<HomeController>(controller: controller,)),
                   );
                 }, icon: Icon(Icons.search, color: Colors.white, size: 30,))
               ],

@@ -179,6 +179,9 @@ class _DetailCardWidgetState extends State<DetailCardWidget> {
                                       _filterImg[index]?.contentValue ?? "",
                                       fit: BoxFit.cover,
                                       key: _imageKeys[index], // 크기 측정용 key 추가
+                                      errorBuilder: (context, _, StackTrace? stackTrace,) {
+                                        return Image.network("https://blog.kakaocdn.net/dn/zaHVf/btsCUzDyFK6/zLwkbqViX9RYEST5DwRJmK/img.png", fit: BoxFit.cover,);
+                                      },
                                     ),
                                   ),
                                 ),

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dateapp/abs/abs_tc.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart' hide Element;
@@ -11,9 +12,12 @@ import '../service/api/vertex/dto/vertext_search_dto.dart';
 import '../service/crawl/blog_crawler.dart';
 import '../service/crawl/blog_generation.dart';
 
-class HomeController {
+class HomeController extends BaseTextController {
   final List<VertextSearchDto?> aiResponses = [];
   final List<BlogSearchItems?> blogResponses = [];
+
+  @override
+  final TextEditingController textEditingController = TextEditingController(text: "문정역 맛집");
 
   // final BlogCrawlerService _blogCrawlerService = BlogCrawlerService();
   final BlogGenerationService _blogGenerationService = BlogGenerationService();
@@ -69,7 +73,8 @@ class HomeController {
     connectionState(ConnectionState.waiting);
 
     // 네이버 블로그 검색
-    NaverApiBlogSearchDto _result = await _blogGenerationService.searchBlogs("문정역+맛집");
+    String _qury = textEditingController.text.replaceAll(" ", "+");
+    NaverApiBlogSearchDto _result = await _blogGenerationService.searchBlogs(_qury);
     // ImgSearchDto _a = await _naverAPI.blogSearch.getBlogImgSearch(query:"테스트");
 
     blogResponses.addAll(_result.items);
