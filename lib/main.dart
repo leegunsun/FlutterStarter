@@ -116,9 +116,7 @@ class TestC {
 
   Future<void> initMessaging() async {
 
-    await flutterLocalNotificationsPlugin
-        .resolvePlatformSpecificImplementation<
-        AndroidFlutterLocalNotificationsPlugin>()
+    await flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
         ?.createNotificationChannel(channel);
 
     await FirebaseMessaging.instance.requestPermission(
@@ -132,8 +130,7 @@ class TestC {
     );
 
     //iOS foreground 알림표시.
-    await FirebaseMessaging.instance
-        .setForegroundNotificationPresentationOptions(
+    await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
       alert: true, // Required to display a heads up notification
       badge: true,
       sound: true,

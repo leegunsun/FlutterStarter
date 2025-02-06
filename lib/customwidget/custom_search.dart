@@ -13,10 +13,10 @@ class CustomSearchBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // Navigator.push(
-        //   context,
-        //   MaterialPageRoute(builder: (context) => SearchView()),
-        // );
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => SearchView()),
+        );
 
         // AppsflyerController.appsflyerSdk.setOneLinkCustomDomain(["invite.mydomain.com"]);
 

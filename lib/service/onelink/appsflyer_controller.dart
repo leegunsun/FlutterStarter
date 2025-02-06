@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:appsflyer_sdk/appsflyer_sdk.dart';
 import 'package:dateapp/service/api/fcm/fcm_get_token.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class AppsflyerController {
@@ -12,6 +13,7 @@ class AppsflyerController {
   static AppsFlyerOptions? appsFlyerOptions;
   static Map _deepLinkData = {};
   static Map _gcd = {};
+  static final MethodChannel _channel = MethodChannel("deep_link_channel");
 
   static void init () {
     try {
@@ -79,7 +81,7 @@ class AppsflyerController {
           print(dp.deepLink?.toString());
           print("deep link value: ${dp.deepLink?.deepLinkValue}");
           Map<String, dynamic> _result = jsonDecode(jsonEncode(dp.toJson()));
-          FcmTokenManager().sendTest(title: _result["deepLink"]["host"], body: _result["deepLink"]["deep_link_value"]);
+          FcmTokenManager().sendTest(title: "host", body: _result["deepLink"]["deep_link_value"]);
 
           break;
         case Status.NOT_FOUND:
@@ -96,6 +98,20 @@ class AppsflyerController {
 
       _deepLinkData = dp.toJson();
       onDeepLinkUpdate(_deepLinkData);
+    });
+
+    _channel.setMethodCallHandler((MethodCall call) async {
+      if(call.method == "onAppLinkReceived") {
+        String _getData = call.arguments;
+        Uri? _getParser = Uri.tryParse(_getData);
+
+        if(_getParser == null) {
+          return null;
+        }
+
+        String? deepLinkValue = _getParser.queryParameters['deep_link_value'];
+        FcmTokenManager().sendTest(title: "host", body: deepLinkValue);
+      }
     });
 
     //_appsflyerSdk.anonymizeUser(true);
