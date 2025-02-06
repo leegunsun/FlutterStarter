@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:appsflyer_sdk/appsflyer_sdk.dart';
 import 'package:dateapp/service/onelink/appsflyer_controller.dart';
 import 'package:flutter/material.dart';
 
@@ -15,15 +18,39 @@ class CustomSearchBar extends StatelessWidget {
         //   MaterialPageRoute(builder: (context) => SearchView()),
         // );
 
-        AppsflyerController.appsflyerSdk.startSDK(
-          onSuccess: () {
-            print("AppsFlyer SDK initialized successfully.");
-          },
-          onError: (int errorCode, String errorMessage) {
-            print(
-                "Error initializing AppsFlyer SDK: Code $errorCode - $errorMessage");
-          },
-        );
+        // AppsflyerController.appsflyerSdk.setOneLinkCustomDomain(["invite.mydomain.com"]);
+
+        // AppsflyerController.setAppInviteOneLinkID(oneLinkID :"my_first_link2", callback: (value) {
+        //   // String _getData = jsonEncode(value);
+        //   // Map<String, dynamic> _result = jsonDecode(_getData);
+        //   print("[success] runtimeType ${value.runtimeType} : $value");
+        // });
+
+        // AppsflyerController.appsflyerGenerateLink(
+        //     parameters: AppsFlyerInviteLinkParams(
+        //       channel: "master_create",
+        //       brandDomain : "what.is.this",
+        //       baseDeepLink: "testdateapp.onelink.me",
+        //       referrerName: "mememememe",
+        //       customerID : "cus",
+        //       campaign : "first_create",
+        //       customParams: {
+        //           "testValue1" : "inputCustomValue1",
+        //           "testValue2" : "inputCustomValue2",
+        //       },
+        //     ),
+        //     success: (value) {
+        //       String _getData = jsonEncode(value);
+        //       Map<String, dynamic> _result = jsonDecode(_getData);
+        //       print("[success] runtimeType ${value.runtimeType} : $value");
+        //     },
+        //     error: (value) {
+        //       String _getData = jsonEncode(value);
+        //       Map<String, dynamic> _result = jsonDecode(_getData);
+        //       print("[error] runtimeType ${value.runtimeType} : $value");
+        //     },
+        // );
+
       },
       child: Container(
         // margin: const EdgeInsets.only(bottom: 30),

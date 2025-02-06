@@ -51,7 +51,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyBvHGIPPqgHDWvB3JiiHg9FtH2m5nZMR2k',
-    appId: '1:25194491712:android:6eeb59a88e88e081d8d4a5',
+    appId: '1:25194491712:android:18a1032815b1cd62d8d4a5',
     messagingSenderId: '25194491712',
     projectId: 'mytestf-6c08c',
     databaseURL: 'https://mytestf-6c08c-default-rtdb.asia-southeast1.firebasedatabase.app',
@@ -69,4 +69,5 @@ class DefaultFirebaseOptions {
     iosClientId: '25194491712-g0idndiub95kjphsr7asuba0gr9n8ife.apps.googleusercontent.com',
     iosBundleId: 'com.example.dateapp',
   );
+
 }

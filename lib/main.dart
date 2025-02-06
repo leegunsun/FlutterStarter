@@ -56,6 +56,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     // TODO: implement initState
+    super.initState();
     TestC().initMessaging();
     AppsflyerController.afStart(
       onGcdUpdate: (gcd) {
@@ -70,7 +71,6 @@ class _MyAppState extends State<MyApp> {
       },
     );
     WidgetsBinding.instance.addPostFrameCallback((_) => FcmTokenManager.init(context));
-    super.initState();
   }
 
   Map _deepLinkData = {};
@@ -142,10 +142,6 @@ class TestC {
     FirebaseMessaging.onMessage.listen((message) {
       if (message != null) {
         if (message.notification != null) {
-          print("init Msg");
-          print(message.notification!.title);
-          print(message.notification!.body);
-
           flutterLocalNotificationsPlugin.show(
               hashCode,
               message.notification!.title,

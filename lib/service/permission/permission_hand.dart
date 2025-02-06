@@ -19,13 +19,17 @@ class PerMissionHandle {
     final PermissionStatus status = await Permission.notification.request();
 
     if (status.isGranted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("알림 권한이 허용되었습니다.")),
-      );
+      try {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("알림 권한이 허용되었습니다.")),);
+      } catch (e) {
+        print(e);
+      }
     } else if (status.isDenied) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("알림 권한이 거부되었습니다.")),
-      );
+      try {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("알림 권한이 거부되었습니다.")),);
+      } catch (e) {
+        print(e);
+      }
     } else if (status.isPermanentlyDenied) {
       openAppSettings();
     }

@@ -1,6 +1,9 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:appsflyer_sdk/appsflyer_sdk.dart';
+import 'package:dateapp/service/api/fcm/fcm_get_token.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class AppsflyerController {
@@ -14,7 +17,7 @@ class AppsflyerController {
     try {
       appsFlyerOptions = AppsFlyerOptions(
               afDevKey: dotenv.env["APPS_FLYER_DEV_KEY"]!,
-              appId: "com.example.dateapp",
+              appId: "com.ddate.dateapp",
               showDebug: true,
               timeToWaitForATTUserAuthorization: 15,
               manualStart: true);
@@ -63,10 +66,10 @@ class AppsflyerController {
     });
 
     // App open attribution callback
-    appsflyerSdk.onAppOpenAttribution((res) {
+    AppsflyerController.appsflyerSdk.onAppOpenAttribution((res) {
       print("onAppOpenAttribution res: " + res.toString());
-      _deepLinkData = res;
-      onDeepLinkUpdate(_deepLinkData);
+      // _deepLinkData = res;
+      // onDeepLinkUpdate(_deepLinkData);
     });
 
     // Deep linking callback
@@ -75,6 +78,9 @@ class AppsflyerController {
         case Status.FOUND:
           print(dp.deepLink?.toString());
           print("deep link value: ${dp.deepLink?.deepLinkValue}");
+          Map<String, dynamic> _result = jsonDecode(jsonEncode(dp.toJson()));
+          FcmTokenManager().sendTest(title: _result["deepLink"]["host"], body: _result["deepLink"]["deep_link_value"]);
+
           break;
         case Status.NOT_FOUND:
           print("deep link not found");
@@ -87,6 +93,7 @@ class AppsflyerController {
           break;
       }
       print("onDeepLinking res: " + dp.toString());
+
       _deepLinkData = dp.toJson();
       onDeepLinkUpdate(_deepLinkData);
     });
@@ -108,4 +115,20 @@ class AppsflyerController {
     return logResult;
   }
 
+  static void appsflyerGenerateLink ({
+    required AppsFlyerInviteLinkParams? parameters,
+    required void Function(dynamic) success,
+    required void Function(dynamic) error}) {
+
+    appsflyerSdk.generateInviteLink(parameters, success, error);
+
+  }
+
+  static void setAppInviteOneLinkID ({
+    required String oneLinkID,
+    required void Function(dynamic) callback}) {
+
+    appsflyerSdk.setAppInviteOneLinkID(oneLinkID, callback);
+
+  }
 }

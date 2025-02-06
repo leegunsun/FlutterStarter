@@ -1,144 +1,15 @@
 {
-  "platform_extension_v2": {
-    "platform": "android_flutter",
-    "version": "6.15.1"
-  },
-  "country": "KR",
-  "af_timestamp": "1738719581290",
-  "appsflyerKey": "F********************n",
-  "isFirstCall": "true",
-  "registeredUninstall": false,
-  "targetSDKver": 35,
-  "kef6462": "85f0adbac0bb77fd48191f1b0c531a0d591a120d5a1f1f",
-  "operator": "T-Mobile",
-  "app_version_code": "1",
-  "model": "sdk_gphone64_arm64",
-  "brand": "google",
-  "sbid": "R\u0002\u0001\u0001\u0005\u0003\u0000\u0007",
-  "deviceType": "user",
-  "deviceData": {
-    "sensors": [
-      {
-        "sT": 1,
-        "sV": "The Android Open Source Project",
-        "sN": "Goldfish 3-axis Accelerometer"
-      },
-      {
-        "sT": 2,
-        "sV": "The Android Open Source Project",
-        "sN": "Goldfish 3-axis Magnetic field sensor"
-      },
-      {
-        "sT": 4,
-        "sV": "The Android Open Source Project",
-        "sN": "Goldfish 3-axis Gyroscope"
-      }
-    ],
-    "cpu_abi": "arm64-v8a",
-    "build_display_id": "UE1A.230829.036.A1",
-    "btch": "no",
-    "dim": {
-      "xdp": "480.0",
-      "ydp": "480.0",
-      "x_px": "1344",
-      "y_px": "2769",
-      "d_dpi": "480",
-      "size": "2"
-    },
-    "arch": "",
-    "btl": "100.0",
-    "cpu_abi2": ""
-  },
-  "disk": "1022\/5939",
-  "meta": {
-    "rc": {
-      "sig": "success",
-      "delay": 870,
-      "c_ver": "default.v1.1637149529",
-      "latency": 865,
-      "cdn_token": "c4e61e9d955fac4dda371b18fbeb67d32d5ff769ad9a130c9d71a1f28c9d0384",
-      "res_code": 200
-    },
-    "fetchAdIdLatency": 28,
-    "host": {
-      "name": "appsflyersdk.com",
-      "prefix": "jzhtia-"
-    },
-    "first_launch": {
-      "from_fg": 40,
-      "start_with": "activity",
-      "init_to_fg": 387826
-    },
-    "ddl": {
-      "rfr_wait": 0,
-      "net": [
-        299,
-        0
-      ],
-      "timeout_value": 3000,
-      "status": "NOT_FOUND"
-    }
-  },
-  "sdk": "34",
-  "app_version_name": "1.0.0",
-  "device": "emu64a",
-  "cksm_v3": "bc303397249c4e55",
-  "rfr": {
-    "val": "utm_source=google-play&utm_medium=organic",
-    "code": "0",
-    "clk": "0",
-    "install": "0",
-    "instant": false
-  },
-  "af_events_api": "1",
-  "cell": {
-    "mcc": 310,
-    "mnc": 260
-  },
-  "network": "WIFI",
-  "timepassedsincelastlaunch": "-1",
-  "sig": "A29F12B9B89192D71FCAE12494264E333857C575165887AD4B3DEFE96C8437FC",
-  "open_referrer": "android-app:\/\/com.android.shell",
-  "uid": "1738719193496-7785625710060400796",
-  "lang_code": "ko",
-  "installDate": "2025-02-03_001822+0000",
-  "is_pc": false,
-  "referrers": [
-    {
-      "api_ver": 84462530,
-      "referrer": "utm_source=google-play&utm_medium=organic",
-      "click_ts": 0,
-      "api_ver_name": "44.6.25-31 [0] [PR] 718103699",
-      "response": "OK",
-      "install_begin_ts": 0,
-      "google_custom": {
-        "install_begin_server_ts": 0,
-        "install_version": null,
-        "click_server_ts": 0,
-        "instant": false
-      },
-      "latency": 59,
-      "source": "google",
-      "type": "store"
-    }
-  ],
-  "firstLaunchDate": "2025-02-05_103941+0900",
-  "ivc": false,
-  "lang": "한국어",
-  "batteryLevel": "100.0",
-  "last_boot_time": 1738631225877,
-  "install_source_info": {
-    "initiating_package": "com.android.shell"
-  },
-  "product": "sdk_gphone64_arm64",
-  "counter": "1",
-  "date2": "2025-02-05_103305+0900",
-  "date1": "2025-02-03_091822+0900",
-  "GAID_retry": "false",
-  "carrier": "T-Mobile",
-  "iaecounter": "0",
-  "af_preinstalled": "false",
-  "tokenRefreshConfigured": false,
-  "gaidError": "18: IOException |IOException | | 18: IOException |IOException |",
-  "platformextension": "android_flutter"
+  "status": "FOUND",
+  "error": null,
+  "deepLink": {
+    "path": "/gkqW",
+    "af_xp": "custom",
+    "media_source": "my_media_source",
+    "scheme": "https",
+    "link": "https://testdateapp.onelink.me/gkqW?af_ios_url=https%3A%2F%2Fwww.google.co.kr%2F&af_android_url=https%3A%2F%2Fwww.google.co.kr%2F&af_xp=custom&pid=my_media_source&deep_link_value=aaabbbcccddd&deep_link_sub1=valueExtra",
+    "host": "testdateapp.onelink.me",
+    "deep_link_sub1": "valueExtra",
+    "deep_link_value": "aaabbbcccddd",
+    "is_deferred": false
+  }
 }
