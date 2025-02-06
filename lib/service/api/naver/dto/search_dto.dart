@@ -41,6 +41,7 @@ class BlogSearchItems {
   final String title;
 
   final String link;
+  String? thumnail;
 
   @JsonKey(ignore: true)
   String? blogMobileLink;
@@ -59,6 +60,7 @@ class BlogSearchItems {
     required this.bloggername,
     required this.bloggerlink,
     required this.postdate,
+    required this.thumnail,
   }) {
     blogMobileLink = link.replaceFirst("blog.naver.com", "m.blog.naver.com");
   }

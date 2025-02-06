@@ -1,4 +1,3 @@
-
 import 'package:dateapp/page/down_page.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_performance/firebase_performance.dart';
@@ -12,20 +11,20 @@ import '../../main.dart';
 abstract class BaseApiService {
   final Dio api;
 
-  BaseApiService({required Dio dio})
-      : api = dio {
+  BaseApiService({required Dio dio}) : api = dio {
     _setupInterceptors();
   }
 
-  HttpMethod _convertMethod (String reqMethod) {
-    return HttpMethod.values.firstWhere((ele) => ele.name.toUpperCase() == reqMethod.toUpperCase());
+  HttpMethod _convertMethod(String reqMethod) {
+    return HttpMethod.values
+        .firstWhere((ele) => ele.name.toUpperCase() == reqMethod.toUpperCase());
   }
 
   void _setupInterceptors() {
     print("인터셉터 설정");
     api.interceptors.add(InterceptorsWrapper(
-      onRequest: (RequestOptions options, RequestInterceptorHandler handler) async {
-
+      onRequest:
+          (RequestOptions options, RequestInterceptorHandler handler) async {
         HttpMethod _method = _convertMethod(options.method);
 
         final HttpMetric metric = FirebasePerformance.instance
@@ -37,7 +36,7 @@ abstract class BaseApiService {
 
         options.extra['httpMetric'] = metric;
         metric.putAttribute('scoreTEST', '515');
-        if(options.headers['test11'] == true) {
+        if (options.headers['test11'] == true) {
           print("test11 헤더가 이미 존재합니다.");
           options.headers['test11'] = 'true';
         }
@@ -48,10 +47,11 @@ abstract class BaseApiService {
       onResponse: (response, handler) async {
         final HttpMetric? metric = response.requestOptions.extra['httpMetric'];
 
-        String _getFirebaseState = FirebaseRemoteConfig.instance.getString("close_server");
+        String _getFirebaseState =
+            FirebaseRemoteConfig.instance.getString("close_server");
         bool? _closedServer = bool.tryParse(_getFirebaseState);
 
-        if(_closedServer != null && _closedServer) {
+        if (_closedServer != null && _closedServer) {
           MyApp.navigatorKey.currentState?.push(
             MaterialPageRoute(builder: (context) => ServerDownPage()),
           );
@@ -81,10 +81,17 @@ abstract class BaseApiService {
       onError: (DioException err, handler) async {
         final HttpMetric? metric = err.requestOptions.extra['httpMetric'];
 
-        if (metric != null) {
-          metric.httpResponseCode = err.response?.statusCode ?? 500;
-          metric.putAttribute('error', err.response?.data);
-          await metric.stop();
+        try {
+          if (metric != null) {
+            metric.httpResponseCode = err.response?.statusCode ?? 500;
+            metric.putAttribute('error', err.response?.data);
+          }
+        } catch (e) {
+          print(e);
+        } finally {
+          if (metric != null) {
+            await metric.stop();
+          }
         }
 
         print('Error: ${err.message}');

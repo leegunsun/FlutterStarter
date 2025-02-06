@@ -36,12 +36,14 @@ BlogSearchItems _$BlogSearchItemsFromJson(Map<String, dynamic> json) =>
       bloggername: json['bloggername'] as String,
       bloggerlink: json['bloggerlink'] as String,
       postdate: json['postdate'] as String,
+      thumnail: json['thumnail'] as String?,
     );
 
 Map<String, dynamic> _$BlogSearchItemsToJson(BlogSearchItems instance) =>
     <String, dynamic>{
       'title': instance.title,
       'link': instance.link,
+      'thumnail': instance.thumnail,
       'description': instance.description,
       'bloggername': instance.bloggername,
       'bloggerlink': instance.bloggerlink,

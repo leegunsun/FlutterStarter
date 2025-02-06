@@ -7,6 +7,7 @@ import 'package:html/dom.dart' show Document, Element;
 import 'package:html/parser.dart' as htmlParser;
 
 import '../api/naver/dto/crawl_naver_blog.dart';
+import '../api/naver/dto/img_search_dto.dart';
 import '../api/naver/dto/search_dto.dart';
 import '../api/naver/naver_api.dart';
 import '../api/vertex/dto/vertext_search_dto.dart';
@@ -59,8 +60,29 @@ class BlogGenerationService {
             ],
           )));
 
+  String removeHtmlTags(String htmlText) {
+    final RegExp exp = RegExp(r'<[^>]*>', multiLine: true, caseSensitive: false);
+    return htmlText.replaceAll(exp, '');
+  }
+
   Future<NaverApiBlogSearchDto> searchBlogs(String query) async {
-    return await _naverAPI.blogSearch.getBlogSearch(query: query);
+    // 기본 블로그 검색 수행
+    NaverApiBlogSearchDto _baseResult = await _naverAPI.blogSearch.getBlogSearch(query: query);
+
+    // 이미지 검색 요청을 병렬 처리
+    List<ImgSearchDto?> _imgSearchResponse = await Future.wait(
+      _baseResult.items.map((searchItem) {
+        String formattedQuery = removeHtmlTags(searchItem.title).replaceAll(" ", "+");
+        return _naverAPI.blogSearch.getBlogImgSearch(query: formattedQuery);
+      }),
+    );
+
+    // 검색 결과를 업데이트
+    for (int i = 0; i < _baseResult.items.length; i++) {
+      _baseResult.items[i].thumnail = _imgSearchResponse[i]?.items.firstOrNull?.link;
+    }
+
+    return _baseResult;
   }
 
   Future<VertextSearchDto?> generateContentFromBlog(BlogSearchItems item) async {

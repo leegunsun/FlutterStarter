@@ -20,7 +20,7 @@ class _BlogSearchRestClient implements BlogSearchRestClient {
   @override
   Future<NaverApiBlogSearchDto> getBlogSearch({
     String? query,
-    int display = 50,
+    int display = 3,
   }) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
@@ -44,6 +44,40 @@ class _BlogSearchRestClient implements BlogSearchRestClient {
     late NaverApiBlogSearchDto _value;
     try {
       _value = NaverApiBlogSearchDto.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
+  Future<ImgSearchDto> getBlogImgSearch({
+    String? query,
+    int display = 1,
+  }) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{
+      r'query': query,
+      r'display': display,
+    };
+    queryParameters.removeWhere((k, v) => v == null);
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _options = _setStreamType<ImgSearchDto>(
+      Options(method: 'GET', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            'v1/search/image',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late ImgSearchDto _value;
+    try {
+      _value = ImgSearchDto.fromJson(_result.data!);
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);
       rethrow;

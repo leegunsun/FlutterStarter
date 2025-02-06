@@ -13,7 +13,11 @@ class _SearchViewState extends State<SearchView> {
     return Scaffold(
       body: ListView(
         children: [
+          TextFormField(),
+          Container(
+            child: Text("data"),
 
+          )
         ],
       ),
     );

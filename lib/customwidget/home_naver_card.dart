@@ -76,12 +76,14 @@ class _SliverListNaverCardState extends State<SliverListNaverCard> {
                           ),
                         ),
                       ),
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
-                        child: Container(
-                          margin: const EdgeInsets.only(top: 30, bottom: 10),
-                          height: 190,
-                          color: Colors.redAccent,
+                      Container(
+                        margin: const EdgeInsets.only(top: 30, bottom: 10),
+                        height: 190,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(20),
+                          child: Image.network(_item.thumnail ?? "", errorBuilder: (BuildContext context, Object error, StackTrace? stackTrace) {
+                            return Image.network("https://blog.kakaocdn.net/dn/zaHVf/btsCUzDyFK6/zLwkbqViX9RYEST5DwRJmK/img.png", fit: BoxFit.cover,);
+                          },),
                         ),
                       ),
                       // Text(_item.bloggerlink),
