@@ -97,7 +97,12 @@ class _MyAppState extends State<MyApp> {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
-        home: const MyHomePage(title: 'Flutter Demo Home Page'),
+        home: PopScope(
+            canPop: false,
+            onPopInvokedWithResult: (didPop, result) {
+              print('뒤로 가기 동작 감지됨. didPop: $didPop, result: $result');
+            },
+            child: const MyHomePage(title: 'Flutter Demo Home Page')),
       ),
     );
   }

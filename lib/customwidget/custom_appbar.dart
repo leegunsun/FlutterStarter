@@ -2,20 +2,26 @@
 import 'package:dateapp/home/home_controller.dart';
 import 'package:flutter/material.dart';
 
+import '../abs/abs_tc.dart';
 import '../search/search_view.dart';
 
-class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
-  final HomeController controller;
-  const CustomAppBar({super.key, required this.controller});
+class CustomAppBar<T extends BaseTextController> extends StatelessWidget implements PreferredSizeWidget {
+  final T controller;
+  final Color barColor;
+  const CustomAppBar({
+    super.key,
+    required this.controller,
+    this.barColor = Colors.deepPurple,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.deepPurple,
+      color: barColor,
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         decoration: BoxDecoration(
-          color: Colors.deepPurple,
+          color: barColor,
           borderRadius: BorderRadius.vertical(bottom: Radius.circular(8))
         ),
         child: SafeArea(
@@ -33,7 +39,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 IconButton(onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => SearchView<HomeController>(controller: controller,)),
+                    MaterialPageRoute(builder: (context) => SearchView<T>(controller: controller,)),
                   );
                 }, icon: Icon(Icons.search, color: Colors.white, size: 30,))
               ],
