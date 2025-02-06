@@ -13,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'firebase_options.dart';
 import 'home/home_view.dart';
@@ -79,30 +80,32 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return ProviderScope(
-      child: MaterialApp(
-        navigatorKey: MyApp.navigatorKey,
-        title: 'Flutter Demo',
-        theme: ThemeData(
-          pageTransitionsTheme: const PageTransitionsTheme(
-            builders: {
-              TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
-              TargetPlatform.android: CupertinoPageTransitionsBuilder(),
-            },
+    return ScreenUtilInit(
+      child: ProviderScope(
+        child: MaterialApp(
+          navigatorKey: MyApp.navigatorKey,
+          title: 'Flutter Demo',
+          theme: ThemeData(
+            pageTransitionsTheme: const PageTransitionsTheme(
+              builders: {
+                TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+                TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+              },
+            ),
+            scaffoldBackgroundColor: Colors.purple[50],
+            appBarTheme: AppBarTheme(
+              backgroundColor: Colors.deepPurple,
+            ),
+            colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+            useMaterial3: true,
           ),
-          scaffoldBackgroundColor: Colors.purple[50],
-          appBarTheme: AppBarTheme(
-            backgroundColor: Colors.deepPurple,
-          ),
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-          useMaterial3: true,
+          home: PopScope(
+              canPop: false,
+              onPopInvokedWithResult: (didPop, result) {
+                print('뒤로 가기 동작 감지됨. didPop: $didPop, result: $result');
+              },
+              child: const MyHomePage(title: 'Flutter Demo Home Page')),
         ),
-        home: PopScope(
-            canPop: false,
-            onPopInvokedWithResult: (didPop, result) {
-              print('뒤로 가기 동작 감지됨. didPop: $didPop, result: $result');
-            },
-            child: const MyHomePage(title: 'Flutter Demo Home Page')),
       ),
     );
   }

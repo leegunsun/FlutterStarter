@@ -15,7 +15,7 @@ class AppsflyerController {
   static Map _gcd = {};
   static final MethodChannel _channel = MethodChannel("deep_link_channel");
 
-  static void init () {
+  static Future<void> init () async {
     try {
       appsFlyerOptions = AppsFlyerOptions(
               afDevKey: dotenv.env["APPS_FLYER_DEV_KEY"]!,
