@@ -1,4 +1,4 @@
-import 'package:dateapp/customwidget/custom_appbar.dart';
+import 'package:dateapp/search/search_tabview/search_tab_view_0.dart';
 import 'package:flutter/material.dart';
 
 import '../abs/abs_tc.dart';
@@ -39,6 +39,7 @@ class _SearchViewState extends State<SearchView> with SingleTickerProviderStateM
     _focusScope1.dispose();
     _focusScope2.dispose();
     _isFocused.dispose();
+    _tabController.dispose();
     super.dispose();
   }
 
@@ -89,19 +90,19 @@ class _SearchViewState extends State<SearchView> with SingleTickerProviderStateM
                 controller: _tabController,
                 viewportFraction: 1,
                 children: [
-                  // const Center(child: Text("⭐ AI 추천 페이지")),
+                  SearchTabView0(),
 
-                  ListView(
-                    shrinkWrap: true,
-                    padding: const EdgeInsets.all(16.0),
-                    children: [
-                      Container(height: 300, color: Colors.yellowAccent,),
-                      Container(height: 300, color: Colors.yellowAccent,),
-                      Container(height: 300, color: Colors.yellowAccent,),
-                      Container(height: 300, color: Colors.yellowAccent,),
-                      Container(height: 300, color: Colors.black,),
-                    ],
-                  ),
+                  // ListView(
+                  //   shrinkWrap: true,
+                  //   padding: const EdgeInsets.all(16.0),
+                  //   children: [
+                  //
+                  //     Text("최근 검색어"),
+                  //     ListView()
+                  //     // ...List.generate(20,)
+                  //
+                  //   ],
+                  // ),
                   const Center(child: Text("⭐ AI 추천 페이지")),
                 ],
               ),
@@ -187,10 +188,10 @@ class _PersistentTabBar extends SliverPersistentHeaderDelegate {
   }
 
   @override
-  double get maxExtent => 52; // 48.0 으로 정확하게 맞추기
+  double get maxExtent => 52;
 
   @override
-  double get minExtent => 52; // 48.0 으로 정확하게 맞추기
+  double get minExtent => 52;
 
 
   @override
