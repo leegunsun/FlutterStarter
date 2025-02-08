@@ -13,17 +13,22 @@ class _SearchTabView0State extends State<SearchTabView0> with SingleTickerProvid
   late AnimationController _animationController;
   late Animation<double> _animation;
   bool _isOpen = false;
+  bool b = false;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     _animationController = AnimationController(vsync: this, duration: Duration(milliseconds: 300));
-    _animation = Tween<double>(begin: 0, end: 1).animate(_animationController);
+    _animation = Tween<double>(begin: 0, end: 1).animate(_animationController..duration = Duration(milliseconds: 40));
   }
 
   void _toggle () {
     _isOpen = !_isOpen;
+    b = !b;
+    setState(() {
+
+    });
     if(_isOpen) {
       _animationController.forward();
     } else {
@@ -79,32 +84,57 @@ class _SearchTabView0State extends State<SearchTabView0> with SingleTickerProvid
                   )
                 ],
               ),
-              AnimatedBuilder(
-                  animation: _animation,
-                  builder: (BuildContext context, Widget? child) {
-
-                    if (_animation.value <= 0) {
-                      return SizedBox.shrink();
-                    }
-
-                    return ClipRect(
-                      child: Align(
-                        heightFactor: _animation.value,
-                        child: Opacity(
-                          opacity: _animation.value,
-                          child: Container(
-                            margin: const EdgeInsets.only(top: 8),
-                            decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.grey),
-                                  borderRadius: BorderRadius.circular(8),
-                                  color: Colors.white,
-                                ),
-                            child: TickerAnimationScreen(),
-                          ),
-                        ),
-                      ),
+              ClipRect(
+                child: AnimatedSwitcher(
+                  duration: Duration(milliseconds: 40),
+                  transitionBuilder: (Widget child, Animation<double> animation) {
+                    return SlideTransition(
+                      position: Tween<Offset>(
+                        begin: const Offset(0, -1), // 아래에서 위로 이동
+                        end: const Offset(0, 0),
+                      ).animate(animation),
+                      child: FadeTransition(opacity: animation, child: child),
                     );
-                  }
+                  },
+                  layoutBuilder: (Widget? currentChild, List<Widget> previousChildren) {
+                    return Stack(
+                      alignment: Alignment.center,
+                      children: <Widget>[
+                        ...previousChildren,
+                        if (currentChild != null) currentChild,
+                      ],
+                    );
+                  },
+                  child: b == false ?
+                  ElevatedButton(onPressed: () {}, child: Text("data"))
+                      : AnimatedBuilder(
+                      animation: _animation,
+                      builder: (BuildContext context, Widget? child) {
+
+                        if (_animation.value <= 0) {
+                          return SizedBox.shrink();
+                        }
+
+                        return ClipRect(
+                          child: Align(
+                            heightFactor: _animation.value,
+                            child: Opacity(
+                              opacity: _animation.value,
+                              child: Container(
+                                margin: const EdgeInsets.only(top: 8),
+                                decoration: BoxDecoration(
+                                      border: Border.all(color: Colors.grey),
+                                      borderRadius: BorderRadius.circular(8),
+                                      color: Colors.white,
+                                    ),
+                                child: ScrollingTickerScreen(),
+                              ),
+                            ),
+                          ),
+                        );
+                      }
+                  ),
+                ),
               ),
             ],
           )
@@ -114,33 +144,15 @@ class _SearchTabView0State extends State<SearchTabView0> with SingleTickerProvid
   }
 }
 
-
-class TickerAnimationController extends ChangeNotifier {
-  bool _started;
-
-  bool get started => _started;
-
-  TickerAnimationController({bool autoStart = false}) : _started = autoStart;
-
-  void startAnimation() {
-    _started = true;
-    notifyListeners();
-  }
-
-  void stopAnimation() {
-    _started = false;
-    notifyListeners();
-  }
-}
-
-class TickerAnimationScreen extends StatefulWidget {
-  const TickerAnimationScreen({super.key});
+class ScrollingTickerScreen extends StatefulWidget {
+  const ScrollingTickerScreen({super.key});
 
   @override
-  _TickerAnimationScreenState createState() => _TickerAnimationScreenState();
+  _ScrollingTickerScreenState createState() => _ScrollingTickerScreenState();
 }
 
-class _TickerAnimationScreenState extends State<TickerAnimationScreen> with SingleTickerProviderStateMixin {
+class _ScrollingTickerScreenState extends State<ScrollingTickerScreen> {
+
   final List<String> _messages = [
     "🚀 비트코인 5% 상승!",
     "📈 나스닥 1.2% 상승",
@@ -149,96 +161,81 @@ class _TickerAnimationScreenState extends State<TickerAnimationScreen> with Sing
     "📰 경제 뉴스 속보!",
   ];
 
-  late final AnimationController _controller;
-  late final Animation<Offset> _slideAnimation;
-  late final Animation<double> _opacityAnimation;
-  late final TickerAnimationController _tickerController;
-
-  final ValueNotifier<int> _currentIndex = ValueNotifier<int>(0);
+  late PageController _pageController;
+  int _currentIndex = 0;
+  Timer? _timer;
 
   @override
   void initState() {
     super.initState();
+    _pageController = PageController(initialPage: 0);
 
-    _tickerController = TickerAnimationController(autoStart: true);
-
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 1000),
-    );
-
-    _slideAnimation = TweenSequence<Offset>([
-      TweenSequenceItem(tween: Tween(begin: const Offset(0, 0), end: const Offset(0, -1)), weight: 50),
-      TweenSequenceItem(tween: Tween(begin: const Offset(0, 1), end: const Offset(0, 0)), weight: 50),
-    ]).animate(_controller);
-
-    _opacityAnimation = TweenSequence<double>([
-      TweenSequenceItem(tween: Tween(begin: 1.0, end: 0.0), weight: 50),
-      TweenSequenceItem(tween: Tween(begin: 0.0, end: 1.0), weight: 50),
-    ]).animate(_controller);
-
-    _controller.addStatusListener((status) {
-      if (status == AnimationStatus.completed) {
-        _currentIndex.value = (_currentIndex.value + 1) % _messages.length;
-        _controller.reset();
-
-        Future.delayed(const Duration(seconds: 2), () {
-          if (_tickerController.started) {
-            _controller.forward();
-          }
-        });
-      }
-    });
-
-    if (_tickerController.started) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        _controller.forward();
-      });
-    } else {
-      _tickerController.addListener(_handleAnimationState);
-    }
+    _startScrolling();
   }
 
-  void _handleAnimationState() {
-    if (_tickerController.started) {
-      _controller.forward();
-    } else {
-      _controller.stop();
-    }
+  void _startScrolling() {
+    _timer = Timer.periodic(const Duration(seconds: 3), (timer) {
+      if(mounted) {
+        if (_currentIndex < _messages.length) {
+          _currentIndex++;
+          _pageController.animateToPage(
+            _currentIndex,
+            duration: const Duration(milliseconds: 500),
+            curve: Curves.easeInOut,
+          );
+        } else {
+          // 마지막 페이지에서 첫 번째 페이지로 순간 이동 (애니메이션 없이)
+          _pageController.jumpToPage(0);
+          _currentIndex = 1;
+
+          // 첫 번째 페이지로 애니메이션 이동 (부드럽게 흐르는 효과)
+          Future.delayed(const Duration(milliseconds: 50), () {
+            if (mounted) {
+              _pageController.animateToPage(
+                _currentIndex,
+                duration: const Duration(milliseconds: 500),
+                curve: Curves.easeInOut,
+              );
+            }
+          });
+        }
+      }
+    });
   }
 
   @override
   void dispose() {
-    _controller.dispose();
-    _tickerController.dispose();
-    _currentIndex.dispose();
+    _timer?.cancel();
+    _timer = null;
+    _pageController.dispose();
     super.dispose();
   }
-
+  
   @override
   Widget build(BuildContext context) {
     return ClipRect(
       child: SizedBox(
         width: 300,
         height: 50,
-        child: ValueListenableBuilder<int>(
-          valueListenable: _currentIndex,
-          builder: (context, index, child) {
-            int nextIndex = (index + 1) % _messages.length;
-            return AnimatedBuilder(
-              animation: _controller,
-              builder: (context, child) {
-                return FadeTransition(
-                  opacity: _opacityAnimation,
-                  child: SlideTransition(
-                    position: _slideAnimation,
-                    child: Text(
-                      _messages[nextIndex],
-                      style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
-                    ),
-                  ),
-                );
-              },
+        child: PageView.builder(
+          controller: _pageController,
+          itemCount: _messages.length + 1, // 마지막 메시지 다음에 첫 번째 메시지를 추가
+          scrollDirection: Axis.vertical,
+          physics: const NeverScrollableScrollPhysics(),
+          itemBuilder: (context, index) {
+            if (index == _messages.length) {
+              return Center(
+                child: Text(
+                  _messages[0], // 마지막 메시지 뒤에 첫 번째 메시지를 추가
+                  style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
+                ),
+              );
+            }
+            return Center(
+              child: Text(
+                _messages[index],
+                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
+              ),
             );
           },
         ),
