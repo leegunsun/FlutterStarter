@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:dateapp/core/local_database/local_secure_source.dart';
+import 'package:dateapp/core/local_database/source/local_secure_source.dart';
 import 'package:dateapp/core/local_database/local_secure_storage.dart';
 import 'package:flutter/material.dart';
 
