@@ -1,8 +1,8 @@
 
 import 'package:appsflyer_sdk/appsflyer_sdk.dart';
-import 'package:dateapp/service/api/fcm/fcm_get_token.dart';
-import 'package:dateapp/service/env_service.dart';
-import 'package:dateapp/service/onelink/appsflyer_controller.dart';
+import 'package:dateapp/core/service/fcm/fcm_get_token_service.dart';
+import 'package:dateapp/config/environment.dart';
+import 'package:dateapp/core/service/onelink/appsflyer_service.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -16,15 +16,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'firebase_options.dart';
-import 'home/home_view.dart';
+import 'presentation/views/home/home_view.dart';
 
-part 'service/api/fcm/fcm.dart';
+part 'core/service/fcm/fcm_service.dart';
 
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
-  await EnvService.init();
-  AppsflyerController.init();
+  await Environment.init();
+  AppsflyerService.init();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -59,7 +59,7 @@ class _MyAppState extends State<MyApp> {
     // TODO: implement initState
     super.initState();
     TestC().initMessaging();
-    AppsflyerController.afStart(
+    AppsflyerService.afStart(
       onGcdUpdate: (gcd) {
         setState(() {
           _gcd = gcd;
