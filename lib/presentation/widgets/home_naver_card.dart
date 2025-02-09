@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
 import '../../core/models/naver/search_model.dart';
-import '../../core/utils/html_stripper.dart';
+import '../../core/utils/html_stripper_utility.dart';
 import '../views/common/webview/base_webview.dart';
 import '../../core/theme/custom_theme_color.dart';
 
@@ -65,7 +65,7 @@ class _SliverListNaverCardState extends State<SliverListNaverCard> {
                             alignment: Alignment.bottomCenter,
                             heightFactor: 0.3,
                             child: Text(
-                              HtmlStripper.stripHtml(_item.title),
+                              HtmlStripperUtility.stripHtml(_item.title),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
@@ -111,7 +111,7 @@ class _SliverListNaverCardState extends State<SliverListNaverCard> {
                           color: CustomThemeColor.cardRecommendBackground,
                           borderRadius: BorderRadius.circular(8),
                         ),
-                          child: Text(HtmlStripper.stripHtml(_item.description),
+                          child: Text(HtmlStripperUtility.stripHtml(_item.description),
                           ),),
                       SizedBox(height: 15),
                       // Text(_item.link),

@@ -3,6 +3,7 @@ import 'package:dateapp/presentation/views/common/webview/base_webview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
+import '../../../../core/created_enum/content_type.dart';
 import '../../../../core/models/naver/crawl_naver_blog_model.dart';
 import '../../../../core/models/vertex/vertex_search_model.dart';
 

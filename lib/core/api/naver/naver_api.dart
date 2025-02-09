@@ -2,7 +2,7 @@
 import 'package:dateapp/config/environment.dart';
 import 'package:dio/dio.dart';
 
-import '../../base/api_base.dart';
+import '../../base/api/api_base.dart';
 import 'repositories/blog_search.dart';
 
 
@@ -33,3 +33,5 @@ class NaverAPI extends ApiBase {
     blogSearch = BlogSearchRestClient(api);
   }
 }
+
+//adb shell pm list packages | grep "com.google.android.gms"

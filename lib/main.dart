@@ -15,7 +15,7 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import 'core/service/notification/notification_service.dart';
+import 'core/utils/notification_utility.dart';
 import 'firebase_options.dart';
 import 'presentation/views/home/home_view.dart';
 
@@ -52,7 +52,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    NotificationService().initMessaging();
+    NotificationUtility().initMessaging();
     AppsflyerService.afStart(
       onGcdUpdate: (gcd) {
         setState(() {

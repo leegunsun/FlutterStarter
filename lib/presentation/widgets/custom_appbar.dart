@@ -2,7 +2,7 @@
 import 'package:dateapp/presentation/viewmodel/home_view_model.dart';
 import 'package:flutter/material.dart';
 
-import '../../core/base/textcontroller/widget_textcontroller_base.dart';
+import '../../core/base/controller/widget_textcontroller_base.dart';
 import '../views/search/search_view.dart';
 
 

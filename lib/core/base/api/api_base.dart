@@ -5,8 +5,8 @@ import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../../main.dart';
-import '../../presentation/views/server_state/down_view.dart';
+import '../../../main.dart';
+import '../../../presentation/views/server_state/down_view.dart';
 
 /// API 서비스의 공통 부모 클래스
 abstract class ApiBase {

@@ -1,6 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:dateapp/presentation/widgets/home_naver_card.dart';
-import 'package:dateapp/core/utils/html_stripper.dart';
+import 'package:dateapp/core/utils/html_stripper_utility.dart';
 import 'package:dateapp/presentation/views/common/webview/base_webview.dart';
 import 'package:dateapp/core/theme/custom_theme_color.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';

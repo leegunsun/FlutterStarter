@@ -1,8 +1,8 @@
 import 'package:json_annotation/json_annotation.dart';
 
-part "crawl_naver_blog_model.g.dart";
+import '../../created_enum/content_type.dart';
 
-enum ContentType { text, image }
+part "crawl_naver_blog_model.g.dart";
 
 @JsonSerializable(explicitToJson: true)
 class CrawlNaverBlogModel {
