@@ -6,7 +6,7 @@ part of 'vertex_search_model.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-VertexSearchModel _$VertextSearchDtoFromJson(Map<String, dynamic> json) =>
+VertexSearchModel _$VertexSearchModelFromJson(Map<String, dynamic> json) =>
     VertexSearchModel(
       title: VertexSearchModel.validateNonEmptyString(json['title'] as String?),
       blogMobileLink: json['blogMobileLink'] as String?,
@@ -14,8 +14,8 @@ VertexSearchModel _$VertextSearchDtoFromJson(Map<String, dynamic> json) =>
           VertexSearchModel.validateNonEmptyString(json['postdate'] as String?),
       location:
           VertexSearchModel.validateNonEmptyString(json['location'] as String?),
-      recommend:
-          VertexSearchModel.validateNonEmptyString(json['recommend'] as String?),
+      recommend: VertexSearchModel.validateNonEmptyString(
+          json['recommend'] as String?),
       desc: VertexSearchModel.validateNonEmptyString(json['desc'] as String?),
       category: $enumDecode(_$BlogCategoryEnumMap, json['category']),
       tag: json['tag'] == null
@@ -27,7 +27,7 @@ VertexSearchModel _$VertextSearchDtoFromJson(Map<String, dynamic> json) =>
               json['crawlContent'] as List<Map<String, dynamic>?>),
     );
 
-Map<String, dynamic> _$VertextSearchDtoToJson(VertexSearchModel instance) =>
+Map<String, dynamic> _$VertexSearchModelToJson(VertexSearchModel instance) =>
     <String, dynamic>{
       'title': VertexSearchModel.identityFunction(instance.title),
       'blogMobileLink': instance.blogMobileLink,

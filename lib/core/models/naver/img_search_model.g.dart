@@ -6,7 +6,8 @@ part of 'img_search_model.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-ImgSearchModel _$ImgSearchDtoFromJson(Map<String, dynamic> json) => ImgSearchModel(
+ImgSearchModel _$ImgSearchModelFromJson(Map<String, dynamic> json) =>
+    ImgSearchModel(
       lastBuildDate: json['lastBuildDate'] as String,
       total: json['total'] as num,
       start: json['start'] as num,
@@ -16,7 +17,7 @@ ImgSearchModel _$ImgSearchDtoFromJson(Map<String, dynamic> json) => ImgSearchMod
           .toList(),
     );
 
-Map<String, dynamic> _$ImgSearchDtoToJson(ImgSearchModel instance) =>
+Map<String, dynamic> _$ImgSearchModelToJson(ImgSearchModel instance) =>
     <String, dynamic>{
       'lastBuildDate': instance.lastBuildDate,
       'total': instance.total,

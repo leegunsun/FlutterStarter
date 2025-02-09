@@ -12,8 +12,8 @@ class CrawlNaverBlogModel {
 
   CrawlNaverBlogModel({required this.imgContents, required this.desc});
 
-    Map<String,dynamic> toJson () => _$CrawlNaverBlogToJson(this);
-    factory CrawlNaverBlogModel.fromJson (Map<String,dynamic> json) => _$CrawlNaverBlogFromJson(json);
+    Map<String,dynamic> toJson () => _$CrawlNaverBlogModelToJson(this);
+    factory CrawlNaverBlogModel.fromJson (Map<String,dynamic> json) => _$CrawlNaverBlogModelFromJson(json);
 }
 
 @JsonSerializable(explicitToJson: true)

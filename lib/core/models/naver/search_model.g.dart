@@ -6,7 +6,7 @@ part of 'search_model.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-NaverApiBlogSearchModel _$NaverApiBlogSearchDtoFromJson(
+NaverApiBlogSearchModel _$NaverApiBlogSearchModelFromJson(
         Map<String, dynamic> json) =>
     NaverApiBlogSearchModel(
       lastBuildDate: json['lastBuildDate'] as String,
@@ -18,7 +18,7 @@ NaverApiBlogSearchModel _$NaverApiBlogSearchDtoFromJson(
           .toList(),
     );
 
-Map<String, dynamic> _$NaverApiBlogSearchDtoToJson(
+Map<String, dynamic> _$NaverApiBlogSearchModelToJson(
         NaverApiBlogSearchModel instance) =>
     <String, dynamic>{
       'lastBuildDate': instance.lastBuildDate,

@@ -6,7 +6,7 @@ part of 'crawl_naver_blog_model.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-CrawlNaverBlogModel _$CrawlNaverBlogFromJson(Map<String, dynamic> json) =>
+CrawlNaverBlogModel _$CrawlNaverBlogModelFromJson(Map<String, dynamic> json) =>
     CrawlNaverBlogModel(
       imgContents: (json['imgContents'] as List<dynamic>)
           .map((e) => CrawlContent.fromJson(e as Map<String, dynamic>))
@@ -14,7 +14,8 @@ CrawlNaverBlogModel _$CrawlNaverBlogFromJson(Map<String, dynamic> json) =>
       desc: json['desc'] as String,
     );
 
-Map<String, dynamic> _$CrawlNaverBlogToJson(CrawlNaverBlogModel instance) =>
+Map<String, dynamic> _$CrawlNaverBlogModelToJson(
+        CrawlNaverBlogModel instance) =>
     <String, dynamic>{
       'imgContents': instance.imgContents.map((e) => e.toJson()).toList(),
       'desc': instance.desc,

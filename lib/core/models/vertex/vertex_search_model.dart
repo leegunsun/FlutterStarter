@@ -97,8 +97,8 @@ class VertexSearchModel {
     return value;
   }
 
-  Map<String, dynamic> toJson() => _$VertextSearchDtoToJson(this);
+  Map<String, dynamic> toJson() => _$VertexSearchModelToJson(this);
 
   factory VertexSearchModel.fromJson(Map<String, dynamic> json) =>
-      _$VertextSearchDtoFromJson(json);
+      _$VertexSearchModelFromJson(json);
 }

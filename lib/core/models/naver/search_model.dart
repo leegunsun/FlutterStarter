@@ -23,8 +23,8 @@ class NaverApiBlogSearchModel {
     required this.display,
     required this.items,});
 
- Map<String,dynamic> toJson () => _$NaverApiBlogSearchDtoToJson(this);
- factory NaverApiBlogSearchModel.fromJson (Map<String,dynamic> json) => _$NaverApiBlogSearchDtoFromJson(json);
+ Map<String,dynamic> toJson () => _$NaverApiBlogSearchModelToJson(this);
+ factory NaverApiBlogSearchModel.fromJson (Map<String,dynamic> json) => _$NaverApiBlogSearchModelFromJson(json);
 }
 
 

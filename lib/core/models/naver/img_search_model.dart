@@ -17,8 +17,8 @@ class ImgSearchModel {
       required this.display,
       required this.items});
 
-  factory ImgSearchModel.fromJson(Map<String, dynamic> json) => _$ImgSearchDtoFromJson(json);
-  Map<String, dynamic> toJson() => _$ImgSearchDtoToJson(this);
+  factory ImgSearchModel.fromJson(Map<String, dynamic> json) => _$ImgSearchModelFromJson(json);
+  Map<String, dynamic> toJson() => _$ImgSearchModelToJson(this);
 }
 
 /// title : "웹진 인벤 : 어른입맛 테스트 - 오픈이슈갤러리 어른입맛 테스트"
