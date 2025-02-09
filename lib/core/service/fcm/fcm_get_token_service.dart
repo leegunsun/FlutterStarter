@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dateapp/config/environment_config.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +10,7 @@ class FcmTokenManager {
   static String? token;
    final Dio _dio = Dio(
     BaseOptions(
-      baseUrl: "https://sendpushnotification-tzvcof2hmq-uc.a.run.app"
+      baseUrl: EnvironmentConfig.api.fcmApi
     )
   );
 

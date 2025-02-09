@@ -1,5 +1,8 @@
 import 'dart:async';
+import 'dart:convert';
 
+import 'package:dateapp/core/local_database/local_secure_source.dart';
+import 'package:dateapp/core/local_database/local_secure_storage.dart';
 import 'package:flutter/material.dart';
 
 class SearchTabView0 extends StatefulWidget {
@@ -12,6 +15,7 @@ class SearchTabView0 extends StatefulWidget {
 class _SearchTabView0State extends State<SearchTabView0> with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<double> _animation;
+  List<String?> _getSearchHistory = [];
   bool _isOpen = false;
   bool b = false;
 
@@ -25,8 +29,16 @@ class _SearchTabView0State extends State<SearchTabView0> with SingleTickerProvid
   void initState() {
     // TODO: implement initState
     super.initState();
+    loadSearchHistory();
     _animationController = AnimationController(vsync: this, duration: Duration(milliseconds: 300));
     _animation = Tween<double>(begin: 0, end: 1).animate(_animationController..duration = Duration(milliseconds: 40));
+  }
+
+  Future<void> loadSearchHistory () async {
+    await LocalSecureSource.set.searchInputHistory(value: ["one", "two", "three"]);
+    _getSearchHistory.clear();
+    List<String?> _getSearchData = await LocalSecureSource.get.searchInputHistory();
+    _getSearchHistory.addAll(_getSearchData);
   }
 
   void _toggle () {

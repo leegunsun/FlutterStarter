@@ -1,5 +1,5 @@
 
-import 'package:dateapp/config/environment.dart';
+import 'package:dateapp/config/environment_config.dart';
 import 'package:dio/dio.dart';
 
 import '../../base/api/api_base.dart';
@@ -13,14 +13,14 @@ class NaverAPI extends ApiBase {
 
   NaverAPI._internal() : super(dio: Dio(
     BaseOptions(
-      baseUrl: "https://openapi.naver.com/",
+      baseUrl: EnvironmentConfig.api.naverApi,
       connectTimeout: const Duration(milliseconds: 60000),
       receiveTimeout: const Duration(milliseconds: 60000),
       sendTimeout: const Duration(milliseconds: 60000),
       responseType: ResponseType.json,
       headers: {
-        "X-Naver-Client-Id" : Environment.X_Naver_Client_Id,
-        "X-Naver-Client-Secret" : Environment.X_Naver_Client_Secret,
+        "X-Naver-Client-Id" : EnvironmentConfig.env.X_Naver_Client_Id,
+        "X-Naver-Client-Secret" : EnvironmentConfig.env.X_Naver_Client_Secret,
       },
     ),
   )) {

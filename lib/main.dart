@@ -1,7 +1,7 @@
 
 import 'package:appsflyer_sdk/appsflyer_sdk.dart';
 import 'package:dateapp/core/service/fcm/fcm_get_token_service.dart';
-import 'package:dateapp/config/environment.dart';
+import 'package:dateapp/config/environment_config.dart';
 import 'package:dateapp/core/service/onelink/appsflyer_service.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -24,7 +24,7 @@ part 'core/service/fcm/fcm_service.dart';
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
-  await Environment.init();
+  await EnvironmentConfig.init();
   try {
     await AppsflyerService.init();
   } catch (e) {

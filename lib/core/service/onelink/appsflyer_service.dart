@@ -2,11 +2,9 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:appsflyer_sdk/appsflyer_sdk.dart';
-import 'package:dateapp/config/environment.dart';
+import 'package:dateapp/config/environment_config.dart';
 import 'package:dateapp/core/service/fcm/fcm_get_token_service.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class AppsflyerService {
 
@@ -19,8 +17,8 @@ class AppsflyerService {
   static Future<void> init () async {
     try {
       appsFlyerOptions = AppsFlyerOptions(
-              afDevKey: Environment.APPS_FLYER_DEV_KEY,
-              appId: "com.ddate.dateapp",
+              afDevKey: EnvironmentConfig.env.APPS_FLYER_DEV_KEY,
+              appId: EnvironmentConfig.constants.THIS_APP_NAME,
               showDebug: true,
               timeToWaitForATTUserAuthorization: 15,
               manualStart: true);
