@@ -2,8 +2,8 @@ import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
 
-import '../../models/naver/img_search_model.dart';
-import '../../models/naver/search_model.dart';
+import '../../../models/naver/img_search_model.dart';
+import '../../../models/naver/search_model.dart';
 
 part 'blog_search.g.dart';
 

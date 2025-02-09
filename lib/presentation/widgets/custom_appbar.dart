@@ -2,11 +2,11 @@
 import 'package:dateapp/presentation/viewmodel/home_view_model.dart';
 import 'package:flutter/material.dart';
 
-import '../../core/base/textcontroller/abs_tc.dart';
+import '../../core/base/textcontroller/widget_textcontroller_base.dart';
 import '../views/search/search_view.dart';
 
 
-class CustomAppBar<T extends BaseTextController> extends StatelessWidget implements PreferredSizeWidget {
+class CustomAppBar<T extends BaseWidgetTextController> extends StatelessWidget implements PreferredSizeWidget {
   final T controller;
   final Color barColor;
   const CustomAppBar({

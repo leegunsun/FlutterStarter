@@ -3,8 +3,6 @@ import 'package:json_annotation/json_annotation.dart';
 
 import '../naver/crawl_naver_blog_model.dart';
 
-
-
 part 'vertex_search_model.g.dart';
 
 // @JsonEnum(alwaysCreate: true)

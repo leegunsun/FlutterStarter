@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dateapp/core/base/textcontroller/abs_tc.dart';
+import 'package:dateapp/core/base/textcontroller/widget_textcontroller_base.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart' hide Element;
@@ -12,7 +12,7 @@ import '../../core/models/vertex/vertex_search_model.dart';
 import '../../core/service/crawl/blog_crawler_service.dart';
 import '../../core/service/crawl/blog_generation_service.dart';
 
-class HomeViewModel extends BaseTextController {
+class HomeViewModel extends BaseWidgetTextController {
   final List<VertexSearchModel?> aiResponses = [];
   final List<BlogSearchItems?> blogResponses = [];
 

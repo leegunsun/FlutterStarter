@@ -16,6 +16,12 @@ class _SearchTabView0State extends State<SearchTabView0> with SingleTickerProvid
   bool b = false;
 
   @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  @override
   void initState() {
     // TODO: implement initState
     super.initState();

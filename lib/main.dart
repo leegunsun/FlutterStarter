@@ -15,6 +15,7 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import 'core/service/notification/notification_service.dart';
 import 'firebase_options.dart';
 import 'presentation/views/home/home_view.dart';
 
@@ -24,14 +25,16 @@ void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   await Environment.init();
-  AppsflyerService.init();
+  try {
+    await AppsflyerService.init();
+  } catch (e) {
+    print(e);
+  }
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
-
   runApp(const MyApp());
 }
 
@@ -44,21 +47,12 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-  AndroidNotificationChannel channel = AndroidNotificationChannel(
-    'alert_channel_00', // id
-    'Alert Notifications', // title.
-    description: 'This channel is used for alert notifications.', // description
-    importance: Importance.max,
-  );
-
-  // This widget is the root of your application.
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    TestC().initMessaging();
+    NotificationService().initMessaging();
     AppsflyerService.afStart(
       onGcdUpdate: (gcd) {
         setState(() {
@@ -71,6 +65,7 @@ class _MyAppState extends State<MyApp> {
         });
       },
     );
+    FlutterNativeSplash.remove();
     WidgetsBinding.instance.addPostFrameCallback((_) => FcmTokenManager.init(context));
   }
 
@@ -109,64 +104,4 @@ class _MyAppState extends State<MyApp> {
       ),
     );
   }
-}
-
-class TestC {
-
-  final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-
-  AndroidNotificationChannel channel = AndroidNotificationChannel(
-    'high_importance_channel', // id
-    'High Importance Notifications', // title.
-    description: 'This channel is used for alert notifications.', // description
-    importance: Importance.max,
-  );
-
-  Future<void> initMessaging() async {
-
-    await flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
-        ?.createNotificationChannel(channel);
-
-    await FirebaseMessaging.instance.requestPermission(
-      alert: true,
-      announcement: false,
-      badge: true,
-      carPlay: false,
-      criticalAlert: false,
-      provisional: false,
-      sound: true,
-    );
-
-    //iOS foreground 알림표시.
-    await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
-      alert: true, // Required to display a heads up notification
-      badge: true,
-      sound: true,
-    );
-
-    FirebaseMessaging.onMessage.listen((message) {
-      if (message != null) {
-        if (message.notification != null) {
-          flutterLocalNotificationsPlugin.show(
-              hashCode,
-              message.notification!.title,
-              message.notification!.body,
-              NotificationDetails(
-                android: AndroidNotificationDetails(
-                  channel.id,
-                  channel.name,
-                  channelDescription: channel.description,
-                  icon: '@mipmap/ic_launcher',
-                  // other properties...
-                ),
-              ));
-        }
-      }
-    });
-    FirebaseMessaging.onMessageOpenedApp.listen((event) {
-      print("onMessageOpenedApp : $event");
-    });
-
-  }
-
 }

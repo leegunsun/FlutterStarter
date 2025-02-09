@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../../../core/base/textcontroller/abs_tc.dart';
+import '../../../core/base/textcontroller/widget_textcontroller_base.dart';
 import 'detail/search_tab_view_0.dart';
 
-class SearchView<T extends BaseTextController> extends StatefulWidget {
+class SearchView<T extends BaseWidgetTextController> extends StatefulWidget {
   final T controller;
   const SearchView({
     super.key,
