@@ -1,7 +1,6 @@
 part of '../environment_config.dart';
 
-class _DebugEnvConfig extends EnvConfig {
-  const _DebugEnvConfig() : super._();
+class _DebugEnvConfig extends _ReleaseEnvConfig {
 
   @override
   String get X_Naver_Client_Id => dotenv.env['NAVER_CLIENT_ID'] ?? '';
