@@ -7,5 +7,10 @@
     "male": "Hi man ;) {}",
     "female" : "Hello girl :) {}",
     "other": "Hello {}"
+  },
+  "day": {
+    "zero": "No days",
+    "one": "One day",
+    "other": "{} days"
   }
 }

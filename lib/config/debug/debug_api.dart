@@ -1,6 +1,7 @@
 part of '../environment_config.dart';
 
-class _DebugApiConfig extends _ApiReleaseConfig {
+class _DebugApiConfig extends ApiConfig {
+  const _DebugApiConfig() : super._();
 
   @override
   String get naverApi => "https://openapi.naver.com/";

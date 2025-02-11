@@ -7,11 +7,7 @@ import 'repositories/blog_search.dart';
 
 
 class NaverAPI extends ApiBase {
-  static final NaverAPI _instance = NaverAPI._internal();
-
-  factory NaverAPI() => _instance;
-
-  NaverAPI._internal() : super(dio: Dio(
+  NaverAPI() : super(dio: Dio(
     BaseOptions(
       baseUrl: EnvironmentConfig.api.naverApi,
       connectTimeout: const Duration(milliseconds: 60000),

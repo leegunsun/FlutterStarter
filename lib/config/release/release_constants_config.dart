@@ -7,6 +7,7 @@ abstract class ConstantsConfig {
   String get SEARCH_HISTORY;
   String get THIS_APP_NAME;
   String get EASY_LOCAL_ASSET;
+  String get ASSETS_ENV;
 
   const ConstantsConfig._();
 }
@@ -21,6 +22,8 @@ class _ReleaseConstantsConfig extends ConstantsConfig {
   String get THIS_APP_NAME => "com.ddate.dateapp";
 
   @override
-  // TODO: implement EASY_LOCAL_ASSET
   String get EASY_LOCAL_ASSET => "assets/translations";
+
+  @override
+  String get ASSETS_ENV => "assets/.env";
 }

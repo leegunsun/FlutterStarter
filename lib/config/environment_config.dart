@@ -22,7 +22,7 @@ class EnvironmentConfig {
 
   static Future<void> init() async {
     try {
-      await dotenv.load(fileName: "assets/.env");
+      await dotenv.load(fileName: EnvironmentConfig.constants.ASSETS_ENV);
     } catch (e) {
       print("Error loading .env file: $e");
     }

@@ -8,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../widgets/custom_appbar.dart';
 import '../../widgets/custom_search.dart';
@@ -35,7 +36,11 @@ class _MyHomePageState extends State<MyHomePage> {
     // TODO: implement initState
     super.initState();
     initialization();
-    controller.fetchBlogSearchResults(() => setState(() {}), (value) {
+    controller.fetchBlogSearchResults(() {
+      if(mounted) {
+        setState(() {});
+      }
+    }, (value) {
       _connectionState = value;
     });
   }
@@ -97,6 +102,12 @@ class _MyHomePageState extends State<MyHomePage> {
         }
       },
       child: Scaffold(
+        floatingActionButton: FloatingActionButton(
+          heroTag: "9803928309",
+            onPressed: () {
+              context.push("/setting");
+            }
+        ),
         appBar: CustomAppBar(controller: controller),
         body: CustomScrollView(
           slivers: [

@@ -1,12 +1,8 @@
 
-import 'package:appsflyer_sdk/appsflyer_sdk.dart';
 import 'package:dateapp/core/service/fcm/fcm_get_token_service.dart';
 import 'package:dateapp/config/environment_config.dart';
 import 'package:dateapp/core/service/onelink/appsflyer_service.dart';
-import 'package:dateapp/presentation/viewmodel/home_view_model.dart';
-import 'package:dateapp/presentation/views/search/search_view.dart';
-import 'package:dateapp/presentation/views/server_state/down_view.dart';
-import 'package:dateapp/presentation/views/setttings/setting_view.dart';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -18,11 +14,12 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:go_router/go_router.dart';
 
+import 'core/navigation/navigation_manager.dart';
+import 'core/utils/appstate_utility.dart';
+import 'core/utils/dialog_utility.dart';
 import 'core/utils/notification_utility.dart';
 import 'firebase_options.dart';
-import 'presentation/views/home/home_view.dart';
 
 import 'package:easy_localization/easy_localization.dart';
 
@@ -44,15 +41,15 @@ void main() async {
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
   runApp(EasyLocalization(
-      supportedLocales: [],
-      path: 'assets/translations',
+      supportedLocales: [Locale('en', 'US'), Locale('ko', "KR")],
+      fallbackLocale: const Locale('en', 'US'),
+      path: EnvironmentConfig.constants.EASY_LOCAL_ASSET,
       child: const MyApp())
   );
 }
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
-  static GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -78,58 +75,30 @@ class _MyAppState extends State<MyApp> {
       },
     );
     FlutterNativeSplash.remove();
-    WidgetsBinding.instance.addPostFrameCallback((_) => FcmTokenManager.init(context));
   }
 
   Map _deepLinkData = {};
   Map _gcd = {};
   bool isLoggedIn = false;
-  /// The route configuration.
-  final GoRouter _router = GoRouter(
-    navigatorKey: MyApp.navigatorKey,
-    redirect: (BuildContext context, GoRouterState state) {
-      final isGoingToProfile = state.uri.path == '/profile';
-      if (true) {
-        return '/login'; // 로그인하지 않은 사용자는 로그인 페이지로 리다이렉트
-      }
-      return null;
-    },
-    routes: <RouteBase>[
-      GoRoute(
-        path: '/',
-        builder: (BuildContext context, GoRouterState state) {
-          return const MyHomePage(title: "title");
-        },
-        routes: <RouteBase>[
-          GoRoute(
-            path: 'setting',
-            builder: (BuildContext context, GoRouterState state) {
-              return const SettingView();
-            },
-          ),
-        ],
-      ),
-      GoRoute(
-        path: '/server-down',
-        builder: (context, state) => ServerDown(),
-      ),
-      GoRoute(
-        path: '/search',
-        builder: (context, state) {
-          final controller = state.extra as HomeViewModel;
-          return SearchView(controller: controller);
-        },
-      ),
-    ],
-  );
 
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
       child: ProviderScope(
         child: MaterialApp.router(
-          routerConfig: _router,
-          // navigatorKey: MyApp.navigatorKey,
+          key: DialogUtility.navigatorKey,
+          builder: (context, child) {
+            // 여기서 context는 MaterialApp 내의 context이므로 Localizations 등의 상속 위젯을 포함합니다.
+            // 필요한 초기화 작업이나, showDialog 호출 등을 진행할 수 있습니다.
+            FcmTokenManager.init(context);
+            AppStateCheckUtility.init();
+
+            return child!;
+          },
+          localizationsDelegates: context.localizationDelegates,
+          supportedLocales: context.supportedLocales,
+          routerConfig: NavigationManager.router,
+          locale: context.locale,
           title: 'Flutter Demo',
           theme: ThemeData(
             pageTransitionsTheme: const PageTransitionsTheme(
@@ -145,12 +114,6 @@ class _MyAppState extends State<MyApp> {
             colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
             useMaterial3: true,
           ),
-          // home: PopScope(
-          //     canPop: false,
-          //     onPopInvokedWithResult: (didPop, result) {
-          //       print('뒤로 가기 동작 감지됨. didPop: $didPop, result: $result');
-          //     },
-          //     child: const MyHomePage(title: 'Flutter Demo Home Page')),
         ),
       ),
     );

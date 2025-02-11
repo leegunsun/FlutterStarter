@@ -81,7 +81,13 @@ class _SliverListNaverCardState extends State<SliverListNaverCard> {
                         height: 190,
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(20),
-                          child: Image.network(_item.thumnail ?? "https://blog.kakaocdn.net/dn/zaHVf/btsCUzDyFK6/zLwkbqViX9RYEST5DwRJmK/img.png", fit: BoxFit.cover,),
+                          child: Image.network(_item.thumnail ?? "https://blog.kakaocdn.net/dn/zaHVf/btsCUzDyFK6/zLwkbqViX9RYEST5DwRJmK/img.png", fit: BoxFit.cover, errorBuilder: (
+                              BuildContext context,
+                              Object error,
+                              StackTrace? stackTrace,
+                              ) {
+                            return Image.network("https://blog.kakaocdn.net/dn/zaHVf/btsCUzDyFK6/zLwkbqViX9RYEST5DwRJmK/img.png");
+                          },),
                         ),
                       ),
                       // Text(_item.bloggerlink),
