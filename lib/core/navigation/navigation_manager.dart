@@ -10,7 +10,11 @@ import '../../presentation/views/server_state/down_view.dart';
 import '../../presentation/views/setttings/setting_view.dart';
 
 class NavigationManager {
+
+  static final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
   static final GoRouter router = GoRouter(
+    navigatorKey: navigatorKey,
     initialLocation: "/",
     errorBuilder: (BuildContext context, GoRouterState state) {
       return NavigationErrorView();

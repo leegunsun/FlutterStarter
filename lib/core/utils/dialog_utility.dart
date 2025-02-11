@@ -1,16 +1,22 @@
 import 'package:flutter/material.dart';
 
-class DialogUtility {
-  static final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+import '../navigation/navigation_manager.dart';
 
-  static void showCustomDialog({required String title, required String message}) {
-    if (navigatorKey.currentState == null) {
-      debugPrint("NavigatorState가 존재하지 않습니다.");
+class DialogUtility {
+
+  /// 다이얼로그 표시 함수
+  static Future<void> showCustomDialog({required String title, required String message}) async {
+
+    final context = NavigationManager.navigatorKey.currentContext;
+    // final context = NavigationManager.navigatorKey.currentState?.overlay?.context;
+
+    if (context == null) {
+      debugPrint("❌ navigatorKey.currentState가 null 입니다! 다이얼로그를 띄울 수 없습니다.");
       return;
     }
 
-    showDialog(
-      context: navigatorKey.currentState!.overlay!.context,
+   await showDialog<void>(
+      context: context,
       builder: (context) => AlertDialog(
         title: Text(title),
         content: Text(message),
