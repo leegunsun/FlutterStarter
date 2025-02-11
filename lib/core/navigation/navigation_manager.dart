@@ -26,39 +26,66 @@ class NavigationManager {
       return null;
     },
     routes: <RouteBase>[
-      GoRoute(
-        path: '/',
-        name: AppRoutes.home,
-        builder: (BuildContext context, GoRouterState state) {
-          return const MyHomePage(title: "title");
-        },
-        // onExit: (BuildContext context, GoRouterState state) {
-        //   print("???");
-        //   return true;
-        // },
-        routes: <RouteBase>[
+      ShellRoute(
+          builder: (context, state, child) {
+            return PopScope(
+              canPop: false,
+              onPopInvokedWithResult: (bool didPop, result) {
+
+              },
+              child: Scaffold(
+                body: child,
+                appBar: AppBar(),
+                bottomNavigationBar: BottomNavigationBar(
+                  items: const [
+                    BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+                    BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
+                    BottomNavigationBarItem(icon: Icon(Icons.dangerous), label: 'serverDown'),
+                  ],
+                  onTap: (index) {
+                    if (index == 0) context.goNamed(AppRoutes.home);
+                    if (index == 1) context.goNamed(AppRoutes.search);
+                    if (index == 2) context.goNamed(AppRoutes.serverDown);
+                  },
+                ),
+              ),
+            );
+          },
+        routes: [
           GoRoute(
-            path: 'setting',
-            name: AppRoutes.setting,
-            builder: (BuildContext context, GoRouterState state) {
-              return const SettingView();
-            },
+          path: '/',
+          name: AppRoutes.home,
+          builder: (BuildContext context, GoRouterState state) {
+            return const MyHomePage(title: "title");
+          },
+          // onExit: (BuildContext context, GoRouterState state) {
+          //   print("???");
+          //   return true;
+          // },
+          routes: <RouteBase>[
+            GoRoute(
+              path: 'setting',
+              name: AppRoutes.setting,
+              builder: (BuildContext context, GoRouterState state) {
+                return const SettingView();
+              },
+            ),
+          ],
+        ),
+        GoRoute(
+          path: '/search',
+          name: AppRoutes.search,
+          builder: (context, state) {
+            final controller = state.extra as HomeViewModel;
+            return SearchView(controller: controller);
+          },
+        ),
+          GoRoute(
+            path: '/server-down',
+            name: AppRoutes.serverDown,
+            builder: (context, state) => ServerDown(),
           ),
-        ],
-      ),
-      GoRoute(
-        path: '/server-down',
-        name: AppRoutes.serverDown,
-        builder: (context, state) => ServerDown(),
-      ),
-      GoRoute(
-        path: '/search',
-        name: AppRoutes.search,
-        builder: (context, state) {
-          final controller = state.extra as HomeViewModel;
-          return SearchView(controller: controller);
-        },
-      ),
+      ]),
     ],
   );
 }

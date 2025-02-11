@@ -102,12 +102,6 @@ class _MyHomePageState extends State<MyHomePage> {
         }
       },
       child: Scaffold(
-        floatingActionButton: FloatingActionButton(
-          heroTag: "9803928309",
-            onPressed: () {
-              context.push("/setting");
-            }
-        ),
         appBar: CustomAppBar(controller: controller),
         body: CustomScrollView(
           slivers: [

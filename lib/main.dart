@@ -28,10 +28,10 @@ part 'core/service/fcm/fcm_service.dart';
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
-  await EasyLocalization.ensureInitialized();
-  await EnvironmentConfig.init();
+  await EnvironmentConfig.init(); // env 등록
+  await EasyLocalization.ensureInitialized(); // 국제화
   try {
-    await AppsflyerService.init();
+    await AppsflyerService.init(); // 디퍼드 딥링킹
   } catch (e) {
     print(e);
   }
@@ -64,14 +64,10 @@ class _MyAppState extends State<MyApp> {
     NotificationUtility().initMessaging();
     AppsflyerService.afStart(
       onGcdUpdate: (gcd) {
-        setState(() {
           _gcd = gcd;
-        });
       },
       onDeepLinkUpdate: (deepLinkData) {
-        setState(() {
           _deepLinkData = deepLinkData;
-        });
       },
     );
     FlutterNativeSplash.remove();
