@@ -1,3 +1,5 @@
+import 'package:dateapp/core/navigation/navigation_manager.dart';
+import 'package:dateapp/core/utils/dialog_utility.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
@@ -9,6 +11,16 @@ class SettingView extends StatefulWidget {
 }
 
 class _SettingViewState extends State<SettingView> {
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      DialogUtility.short(title: "강제 업데이트", message: "강제 업데이트 해야합니다.");
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

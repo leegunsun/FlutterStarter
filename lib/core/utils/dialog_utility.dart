@@ -5,9 +5,9 @@ import '../navigation/navigation_manager.dart';
 class DialogUtility {
 
   /// 다이얼로그 표시 함수
-  static Future<void> showCustomDialog({required String title, required String message}) async {
+  static void short({required String title, required String message}) {
 
-    final context = NavigationManager.navigatorKey.currentContext;
+    final BuildContext? context = NavigationManager.navigatorKey.currentContext;
     // final context = NavigationManager.navigatorKey.currentState?.overlay?.context;
 
     if (context == null) {
@@ -15,7 +15,7 @@ class DialogUtility {
       return;
     }
 
-   await showDialog<void>(
+    showDialog<void>(
       context: context,
       builder: (context) => AlertDialog(
         title: Text(title),

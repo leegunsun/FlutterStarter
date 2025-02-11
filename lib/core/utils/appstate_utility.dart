@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:math';
 
+import 'package:dateapp/config/environment_config.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 import '../api/status/status_api.dart';
@@ -13,7 +14,7 @@ class AppStateCheckUtility {
 
  static Future<void> init () async {
    packageInfo = await PackageInfo.fromPlatform();
-   await handleAppStatusNavigation(await StatusApi().mockResult());
+   handleAppStatusNavigation(await StatusApi().mockResult());
  }
 
  /// 현재 버전이 요구되는 버전보다 낮은지 확인하는 함수
@@ -37,11 +38,11 @@ class AppStateCheckUtility {
  }
 
  static void _handleAppStatusNavigation({
-       required AppStatus status,
+   required AppStatus status,
    required String thisAppVersion}) {
    // 1) 서버 점검 상태가 우선
    if (status.isServerMaintenance) {
-     NavigationManager.router.go("/home");
+     NavigationManager.router.goNamed(AppRoutes.home);
      return;
    }
 
@@ -52,26 +53,16 @@ class AppStateCheckUtility {
    if (_isVersionOlder) {
      if (status.isForcedUpdate) {
        // ✅ 강제 업데이트일 경우: '강제 업데이트 화면'으로 이동
-       NavigationManager.router.go("/setting2");
+       NavigationManager.router.goNamed(AppRoutes.setting);
        return;
      } else {
-       // ✅ 버전이 낮지만 강제 업데이트가 아닐 경우: 다이얼로그만 표기함 (지금은 테스트를 위해서 프린트 메서드 사용)
-       // showDialog(context: MyApp.navigatorKey.currentContext!, builder: (context) {
-       //   return Container(
-       //     width: 100,
-       //     height: 100,
-       //     color: Colors.redAccent,
-       //   );
-       // });
-       // DialogUtility.showCustomDialog(title: "title", message: "message");
+       // ✅ 버전이 낮지만 강제 업데이트가 아닐 경우: 다이얼로그만 표기함
+       DialogUtility.short(title: "버전 체크", message: "현재 버전이 낮습니다.");
      }
    }
-
-   // 3) 정상 화면(홈 화면)으로 이동
-   NavigationManager.router.go("/ss");
  }
 
- static Future<void> handleAppStatusNavigation (AppStatus status) async {
+ static void handleAppStatusNavigation (AppStatus status) {
 
    String thisAppVersion = packageInfo?.version ?? "";
 
@@ -80,7 +71,7 @@ class AppStateCheckUtility {
    } else if (Platform.isIOS) {
      _handleAppStatusNavigation(status:status, thisAppVersion: thisAppVersion);
    } else {
-     NavigationManager.router.go("not Sup platform");
+     NavigationManager.router.go(AppRoutes.notFound);
    }
  }
 }

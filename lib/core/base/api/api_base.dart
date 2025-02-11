@@ -1,4 +1,5 @@
 
+import 'package:dateapp/config/environment_config.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_performance/firebase_performance.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
@@ -54,7 +55,7 @@ abstract class ApiBase {
         bool? _closedServer = bool.tryParse(_getFirebaseState);
 
         if (_closedServer != null && _closedServer) {
-          NavigationManager.router.go("/server-down");
+          NavigationManager.router.goNamed(AppRoutes.serverDown);
           return;
         }
 

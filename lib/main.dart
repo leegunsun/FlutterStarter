@@ -75,6 +75,8 @@ class _MyAppState extends State<MyApp> {
       },
     );
     FlutterNativeSplash.remove();
+    FcmTokenManager.init();
+    AppStateCheckUtility.init();
   }
 
   Map _deepLinkData = {};
@@ -86,14 +88,6 @@ class _MyAppState extends State<MyApp> {
     return ScreenUtilInit(
       child: ProviderScope(
         child: MaterialApp.router(
-          builder: (context, child) {
-            // 여기서 context는 MaterialApp 내의 context이므로 Localizations 등의 상속 위젯을 포함합니다.
-            // 필요한 초기화 작업이나, showDialog 호출 등을 진행할 수 있습니다.
-            FcmTokenManager.init(context);
-            AppStateCheckUtility.init();
-
-            return child!;
-          },
           localizationsDelegates: context.localizationDelegates,
           supportedLocales: context.supportedLocales,
           routerConfig: NavigationManager.router,

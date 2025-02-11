@@ -1,3 +1,4 @@
+import 'package:dateapp/core/navigation/navigation_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -8,7 +9,7 @@ class PerMissionHandleUtility {
     return status;
   }
 
-  Future<void> requestPermission(BuildContext context) async {
+  Future<void> requestPermission() async {
 
     bool _isGranted = await _checkPermission().isGranted;
 
@@ -20,13 +21,13 @@ class PerMissionHandleUtility {
 
     if (status.isGranted) {
       try {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("알림 권한이 허용되었습니다.")),);
+        ScaffoldMessenger.of(NavigationManager.navigatorKey.currentContext!).showSnackBar(const SnackBar(content: Text("알림 권한이 허용되었습니다.")),);
       } catch (e) {
         print(e);
       }
     } else if (status.isDenied) {
       try {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("알림 권한이 거부되었습니다.")),);
+        ScaffoldMessenger.of(NavigationManager.navigatorKey.currentContext!).showSnackBar(const SnackBar(content: Text("알림 권한이 거부되었습니다.")),);
       } catch (e) {
         print(e);
       }

@@ -15,8 +15,7 @@ class StatusApi extends ApiBase {
 
   Future<AppStatus> mockResult () async {
     return Future.delayed(Duration(seconds: 1), () {
-      return AppStatus(currentVersion: "1.0.1", isForcedUpdate: false, isServerMaintenance: false);
+      return AppStatus(currentVersion: "1.0.1", isForcedUpdate: true, isServerMaintenance: false);
     });
   }
-
 }
