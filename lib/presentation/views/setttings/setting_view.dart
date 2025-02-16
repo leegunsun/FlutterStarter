@@ -3,6 +3,8 @@ import 'package:dateapp/core/utils/dialog_utility.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
+import '../../../core/utils/toast_utility.dart';
+
 class SettingView extends StatefulWidget {
   const SettingView({super.key});
 
@@ -24,6 +26,9 @@ class _SettingViewState extends State<SettingView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(onPressed: () {
+        ToastManager.showToast("전역 토스트 메시지입니다!");
+      }),
       body: ListView(
         children: [
           ElevatedButton(onPressed: () {

@@ -1,4 +1,5 @@
 import 'package:collection/collection.dart';
+import 'package:dateapp/core/navigation/navigation_manager.dart';
 import 'package:dateapp/presentation/widgets/home_naver_card.dart';
 import 'package:dateapp/core/utils/html_stripper_utility.dart';
 import 'package:dateapp/presentation/views/common/webview/base_webview.dart';
