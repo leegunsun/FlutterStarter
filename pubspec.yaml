@@ -61,6 +61,10 @@ dependencies:
   flutter_screenutil: ^5.9.3
   flutter_secure_storage: ^4.2.1
   web_socket_channel: ^3.0.2
+  go_router: ^14.8.0
+  easy_localization: ^3.0.7+1
+  package_info_plus: ^8.2.1
+  firebase_in_app_messaging: ^0.8.1+2
 
 dev_dependencies:
   flutter_test:
@@ -91,6 +95,7 @@ flutter:
     - assets/.env
     - assets/web/
     - assets/web/marker.png
+    - assets/translations/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

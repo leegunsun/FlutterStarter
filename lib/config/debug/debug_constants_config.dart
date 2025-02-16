@@ -5,6 +5,13 @@ class _DebugConstantsConfig extends ConstantsConfig {
 
   @override
   String get SEARCH_HISTORY => "search_history";
+
   @override
   String get THIS_APP_NAME => "com.ddate.dateapp";
+
+  @override
+  String get EASY_LOCAL_ASSET => "assets/translations";
+
+  @override
+  String get ASSETS_ENV => "assets/.env";
 }

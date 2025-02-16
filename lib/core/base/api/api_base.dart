@@ -1,4 +1,5 @@
 
+import 'package:dateapp/config/environment_config.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_performance/firebase_performance.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
@@ -7,6 +8,7 @@ import 'package:flutter/material.dart';
 
 import '../../../main.dart';
 import '../../../presentation/views/server_state/down_view.dart';
+import '../../navigation/navigation_manager.dart';
 
 /// API 서비스의 공통 부모 클래스
 abstract class ApiBase {
@@ -53,9 +55,7 @@ abstract class ApiBase {
         bool? _closedServer = bool.tryParse(_getFirebaseState);
 
         if (_closedServer != null && _closedServer) {
-          MyApp.navigatorKey.currentState?.push(
-            MaterialPageRoute(builder: (context) => ServerDown()),
-          );
+          NavigationManager.router.goNamed(AppRoutes.serverDown);
           return;
         }
 

@@ -8,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../widgets/custom_appbar.dart';
 import '../../widgets/custom_search.dart';
@@ -35,16 +36,16 @@ class _MyHomePageState extends State<MyHomePage> {
     // TODO: implement initState
     super.initState();
     initialization();
-    controller.fetchBlogSearchResults(() => setState(() {}), (value) {
+    controller.fetchBlogSearchResults(() {
+      if(mounted) {
+        setState(() {});
+      }
+    }, (value) {
       _connectionState = value;
     });
   }
 
   void initialization() async {
-    // This is where you can initialize the resources needed by your app while
-    // the splash screen is displayed.  Remove the following example because
-    // delaying the user experience is a bad design practice!
-    // ignore_for_file: avoid_print
 
     await controller.remoteConfig.setConfigSettings(
       RemoteConfigSettings(
@@ -59,15 +60,6 @@ class _MyHomePageState extends State<MyHomePage> {
     });
 
     await controller.remoteConfig.fetchAndActivate();
-
-    // print('ready in 3...');
-    // await Future.delayed(const Duration(seconds: 1));
-    // print('ready in 2...');
-    // await Future.delayed(const Duration(seconds: 1));
-    // print('ready in 1...');
-    // await Future.delayed(const Duration(seconds: 1));
-    // print('go!');
-
   }
 
   ValueNotifier<double> progressValue = ValueNotifier(0.0);
@@ -81,59 +73,78 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-
     if (_connectionState == ConnectionState.waiting) {
-      return Scaffold(
-        body: ValueListenableBuilder(
+      return PopScope(
+        canPop: false, // 뒤로 가기 버튼을 무력화
+        onPopInvokedWithResult: (didPop, result) {
+          if (!didPop) {
+            // 뒤로 가기 버튼이 눌렸을 때 수행할 동작
+            print("뒤로 가기 버튼이 눌렸지만 앱이 종료되지 않음");
+          }
+        },
+        child: Scaffold(
+          body: ValueListenableBuilder(
             valueListenable: progressValue,
             builder: (context, value, child) {
               return Center(child: CircularProgressIndicator());
-            }),
+            },
+          ),
+        ),
       );
     }
 
-    return Scaffold(
-      appBar: CustomAppBar(controller: controller),
-      body: CustomScrollView(
-        slivers: [
-          SliverToBoxAdapter(
-            child: CustomSearchBar(controller : controller),
-          ),
-          SliverToBoxAdapter(
-            child: Stack(
-              children: [
-                Positioned(
-                  child: Container(
-                    height: MediaQuery.of(context).size.height / 3,
-                    decoration: BoxDecoration(
-                      color: Colors.deepPurple,
-                      borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(50),
-                        bottomRight: Radius.circular(50),
+    return PopScope(
+      canPop: false, // 뒤로 가기 버튼이 무력화됨
+      onPopInvokedWithResult: (didPop, result) {
+        if (!didPop) {
+          // 뒤로 가기 버튼이 눌렸을 때 원하는 동작 수행 가능
+          print("뒤로 가기 버튼이 눌렸지만 앱이 종료되지 않음");
+        }
+      },
+      child: Scaffold(
+        appBar: CustomAppBar(controller: controller),
+        body: CustomScrollView(
+          slivers: [
+            SliverToBoxAdapter(
+              child: CustomSearchBar(controller: controller),
+            ),
+            SliverToBoxAdapter(
+              child: Stack(
+                children: [
+                  Positioned(
+                    child: Container(
+                      height: MediaQuery.of(context).size.height / 3,
+                      decoration: BoxDecoration(
+                        color: Colors.deepPurple,
+                        borderRadius: BorderRadius.only(
+                          bottomLeft: Radius.circular(50),
+                          bottomRight: Radius.circular(50),
+                        ),
                       ),
                     ),
                   ),
-                ),
-                Column(
-                  children: [
-                    CustomTitle(title: "✨AI 추천 "),
-                    VertexCarousel(
-                      controller: controller,
-                    ),
-                  ],
-                ),
-              ],
+                  Column(
+                    children: [
+                      CustomTitle(title: "✨AI 추천 "),
+                      VertexCarousel(controller: controller),
+                    ],
+                  ),
+                ],
+              ),
             ),
-          ),
-          SliverToBoxAdapter(
-            child: const SizedBox(height: 40,),
-          ),
-          SliverToBoxAdapter(
-            child: CustomTitle.bottom(title: controller.remoteConfig.getString("home_sub_title")),
-          ),
-          SliverListNaverCard(controller: controller),
-        ],
+            SliverToBoxAdapter(
+              child: const SizedBox(height: 40),
+            ),
+            SliverToBoxAdapter(
+              child: CustomTitle.bottom(
+                title: controller.remoteConfig.getString("home_sub_title"),
+              ),
+            ),
+            SliverListNaverCard(controller: controller),
+          ],
+        ),
       ),
     );
   }
+
 }

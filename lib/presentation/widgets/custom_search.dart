@@ -4,6 +4,7 @@ import 'package:appsflyer_sdk/appsflyer_sdk.dart';
 import 'package:dateapp/presentation/viewmodel/home_view_model.dart';
 import 'package:dateapp/core/service/onelink/appsflyer_service.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../views/search/search_view.dart';
 
@@ -15,10 +16,13 @@ class CustomSearchBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => SearchView<HomeViewModel>(controller: controller)),
-        );
+
+        context.push("/search", extra: controller);
+
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(builder: (context) => SearchView<HomeViewModel>(controller: controller)),
+        // );
 
         // AppsflyerController.appsflyerSdk.setOneLinkCustomDomain(["invite.mydomain.com"]);
 

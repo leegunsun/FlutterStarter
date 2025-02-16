@@ -14,10 +14,10 @@ class FcmTokenManager {
     )
   );
 
-  static Future<void> init (BuildContext context) async {
+  static Future<void> init () async {
     int _retryCount = 0;
 
-    PerMissionHandleUtility().requestPermission(context);
+    PerMissionHandleUtility().requestPermission();
 
     token = await FirebaseMessaging.instance.getToken();
 

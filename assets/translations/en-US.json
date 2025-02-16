@@ -1,0 +1,16 @@
+{
+  "settings" : "Setting",
+  "hello" : "Hello, {}!",
+  "app_named": "This is a {name} App!",
+  "msg": "{} are written in the {} language",
+  "gender" : {
+    "male": "Hi man ;) {}",
+    "female" : "Hello girl :) {}",
+    "other": "Hello {}"
+  },
+  "day": {
+    "zero": "No days",
+    "one": "One day",
+    "other": "{} days"
+  }
+}
