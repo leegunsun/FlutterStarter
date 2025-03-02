@@ -29,6 +29,13 @@ class _ServerDownState extends State<ServerDown>
   }
 
   @override
+  void dispose() {
+    // TODO: implement dispose
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
