@@ -29,18 +29,24 @@ class NavigationManager {
     routes: <RouteBase>[
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) {
-          return Scaffold(
-            body: navigationShell, // 자동으로 상태가 유지되는 네비게이터
-            bottomNavigationBar: BottomNavigationBar(
-              currentIndex: navigationShell.currentIndex,
-              onTap: (index) {
-                navigationShell.goBranch(index); // 탭 이동 시 상태 유지
-              },
-              items: const [
-                BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-                BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Settings'),
-                BottomNavigationBarItem(icon: Icon(Icons.error), label: 'Server Down'),
-              ],
+          return PopScope(
+            canPop: false,
+            onPopInvokedWithResult: (didPop, result) {
+
+            },
+            child: Scaffold(
+              body: navigationShell, // 자동으로 상태가 유지되는 네비게이터
+              bottomNavigationBar: BottomNavigationBar(
+                currentIndex: navigationShell.currentIndex,
+                onTap: (index) {
+                  navigationShell.goBranch(index); // 탭 이동 시 상태 유지
+                },
+                items: const [
+                  BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+                  BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Settings'),
+                  BottomNavigationBarItem(icon: Icon(Icons.error), label: 'Server Down'),
+                ],
+              ),
             ),
           );
         },
