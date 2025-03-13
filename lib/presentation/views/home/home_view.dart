@@ -1,15 +1,8 @@
-import 'package:collection/collection.dart';
-import 'package:dateapp/core/navigation/navigation_manager.dart';
 import 'package:dateapp/presentation/widgets/home_naver_card.dart';
-import 'package:dateapp/core/utils/html_stripper_utility.dart';
-import 'package:dateapp/presentation/views/common/webview/base_webview.dart';
-import 'package:dateapp/core/theme/custom_theme_color.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
-import 'package:go_router/go_router.dart';
 
 import '../../widgets/custom_appbar.dart';
 import '../../widgets/custom_search.dart';

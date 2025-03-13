@@ -1,12 +1,6 @@
-import 'dart:convert';
-
-import 'package:appsflyer_sdk/appsflyer_sdk.dart';
 import 'package:dateapp/presentation/viewmodel/home_view_model.dart';
-import 'package:dateapp/core/service/onelink/appsflyer_service.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-
-import '../views/search/search_view.dart';
 
 class CustomSearchBar extends StatelessWidget {
   final HomeViewModel controller;
