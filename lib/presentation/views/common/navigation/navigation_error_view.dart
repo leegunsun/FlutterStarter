@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../core/utils/dialog_utility.dart';
 
@@ -29,8 +30,10 @@ class _NavigationErrorViewState extends State<NavigationErrorView> {
         print("에러 페이지");
       },
       child: Scaffold(
-        body: Container(
-          color: Colors.teal,
+        body: Center(
+          child: ElevatedButton(onPressed: () {
+            context.push('/');
+          }, child: Text('to main')),
         ),
       ),
     );

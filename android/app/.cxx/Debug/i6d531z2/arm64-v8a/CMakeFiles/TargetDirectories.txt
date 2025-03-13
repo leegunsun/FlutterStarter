@@ -1,0 +1,2 @@
+C:/Users/zkvpt/Desktop/dateapp/android/app/.cxx/Debug/i6d531z2/arm64-v8a/CMakeFiles/edit_cache.dir
+C:/Users/zkvpt/Desktop/dateapp/android/app/.cxx/Debug/i6d531z2/arm64-v8a/CMakeFiles/rebuild_cache.dir

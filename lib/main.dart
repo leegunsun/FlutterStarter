@@ -118,8 +118,8 @@ class _MyAppState extends State<MyApp> {
           theme: ThemeData(
             pageTransitionsTheme: const PageTransitionsTheme(
               builders: {
-                TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
-                TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+                TargetPlatform.iOS: FadeForwardsPageTransitionsBuilder(),
+                TargetPlatform.android: FadeForwardsPageTransitionsBuilder(),
               },
             ),
             scaffoldBackgroundColor: Colors.purple[50],

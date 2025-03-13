@@ -22,11 +22,14 @@ class _SettingViewState extends State<SettingView> {
     });
   }
 
+  int count = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(onPressed: () {
-        ToastManager.showToast("전역 토스트 메시지입니다!");
+        count++;
+        ToastManager.showToast("전역 토스트 메시지입니다! $count");
       }),
       body: ListView(
         children: [

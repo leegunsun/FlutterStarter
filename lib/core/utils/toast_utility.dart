@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
 import '../navigation/navigation_manager.dart';
 
@@ -5,13 +7,26 @@ part '../../presentation/widgets/custom_toast.dart';
 
 class ToastManager {
   static final GlobalKey<NavigatorState> navigatorKey = NavigationManager.navigatorKey;
-  static OverlayEntry? _overlayEntry;
 
-  // GlobalKey를 생성하여 AnimatedOverlayEntry의 상태에 접근할 수 있게 합니다.
-  static final GlobalKey<_AnimatedOverlayEntryState> _animatedOverlayKey = GlobalKey<_AnimatedOverlayEntryState>();
-
+  // 메시지 큐
+  static final Queue<String> _messageQueue = Queue<String>();
+  static bool _isShowing = false; // 현재 토스트 메시지가 표시 중인지 확인하는 플래그
 
   static void showToast(String message, {Duration duration = const Duration(seconds: 2)}) {
+    _messageQueue.add(message);
+    _showNextToast(duration);
+
+  }
+
+  static void _showNextToast(Duration duration) async {
+
+    if (_isShowing || _messageQueue.isEmpty) {
+      return;
+    }
+
+    _isShowing = true;
+
+    OverlayEntry? _overlayEntry;
     final overlayState = navigatorKey.currentState?.overlay;
 
     if (overlayState == null) {
@@ -19,7 +34,11 @@ class ToastManager {
       return;
     }
 
-    _overlayEntry?.remove();
+    final message = _messageQueue.removeFirst();
+
+    // ✅ 매번 새로운 GlobalKey 생성
+    final GlobalKey<_AnimatedOverlayEntryState> animatedOverlayKey = GlobalKey<_AnimatedOverlayEntryState>();
+
     _overlayEntry = OverlayEntry(
       builder: (context) => Positioned(
         bottom: kBottomNavigationBarHeight + 50,
@@ -28,7 +47,7 @@ class ToastManager {
         child: Material(
           color: Colors.transparent,
           child: AnimatedOverlayEntry(
-            key: _animatedOverlayKey, // 여기서 GlobalKey를 할당합니다.
+            key: animatedOverlayKey, // 새로운 키 사용
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
               decoration: BoxDecoration(
@@ -46,15 +65,21 @@ class ToastManager {
       ),
     );
 
-    overlayState.insert(_overlayEntry!);
+    overlayState.insert(_overlayEntry);
 
-    // 일정 시간 후 fade-out 효과를 위해 dismiss()를 호출한 후 OverlayEntry를 제거합니다.
-    Future.delayed(duration, () async {
-      await _animatedOverlayKey.currentState?.dismiss();
-      _overlayEntry?.remove();
-      _overlayEntry = null;
-    });
+    // 메시지 표시 후 대기
+    await Future.delayed(duration);
+
+    // 애니메이션 종료 후 제거
+    await animatedOverlayKey.currentState?.dismiss();
+    _overlayEntry.remove();
+    _overlayEntry = null;
+
+    _isShowing = false;
+
+    // 다음 메시지가 있는지 확인하고 실행
+    if (_messageQueue.isNotEmpty) {
+      _showNextToast(duration);
+    }
   }
 }
-
-
