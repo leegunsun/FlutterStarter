@@ -4,17 +4,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:stomp_dart_client/stomp_dart_client.dart';
 
-class ChatMessage {
-
-  ChatMessage({required this.type, required this.message, required this.receiverId, required this.roomId, required this.senderId});
-
-   String type; // "PRIVATE" 또는 "GROUP"
-   String senderId;
-   String receiverId; // 1:1 채팅 상대
-   String roomId; // 그룹 채팅 ID
-   String message;
-}
-
 class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key});
 
@@ -24,7 +13,8 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   late StompClient _stompClient;
-  final TextEditingController _controller = TextEditingController();
+  final TextEditingController _privateMessageController = TextEditingController();
+  final TextEditingController _groupMessageController = TextEditingController();
   final List<String> _messages = [];
 
   @override
@@ -34,50 +24,81 @@ class _ChatScreenState extends State<ChatScreen> {
     // STOMP 클라이언트 설정
     _stompClient = StompClient(
       config: StompConfig(
-        url: 'ws://10.0.2.2:8080/chat/websocket',  // 변경된 URL
-        // url: 'ws://10.0.2.2:8080/chat', // 실패하는 Url
-        // url: 'ws://localhost:8080/chat',
+        url: 'ws://10.0.2.2:8080/ws/websocket',  // ✅ 경로 수정
         onConnect: _onConnect,
         onDisconnect: (frame) => print("연결 종료"),
         onWebSocketError: (error) => print("오류 발생: $error"),
+
+        // 🔥 사용자 정보 전달 (핸드셰이크에 사용)
+        stompConnectHeaders: {
+          'Authorization': 'Bearer <YOUR_ACCESS_TOKEN>',
+          'username': 'testUser'
+        },
+        webSocketConnectHeaders: {
+          'Authorization': 'Bearer <YOUR_ACCESS_TOKEN>',
+          'username': 'testUser'
+        },
       ),
     );
 
-    _stompClient.activate();  // 연결 활성화
+    _stompClient.activate();
   }
 
   void _onConnect(StompFrame frame) {
+    // 🔥 1:1 대화 구독
     _stompClient.subscribe(
-      destination: '/topic/public',
+      destination: '/user/queue/messages',  // ✅ 구독 경로 수정
       callback: (frame) {
         setState(() {
-          _messages.add(jsonDecode(frame.body!)['message']);
+          _messages.add("[1:1] ${jsonDecode(frame.body!)['message']}");
+        });
+      },
+    );
+
+    // 🔥 그룹 대화 구독
+    _stompClient.subscribe(
+      destination: '/topic/group_name',  // ✅ 그룹 대화 경로 수정
+      callback: (frame) {
+        setState(() {
+          _messages.add("[그룹] ${jsonDecode(frame.body!)['message']}");
         });
       },
     );
   }
 
-  void _sendMessage() {
-    if (_controller.text.isNotEmpty) {
+  /// 1:1 메시지 전송
+  void _sendPrivateMessage() {
+    if (_privateMessageController.text.isNotEmpty) {
       _stompClient.send(
-        destination: '/app/chat.send',
+        destination: '/app/chat.sendToUser',  // ✅ 전송 경로 수정
         body: jsonEncode({
-          "sender": "Flutter_User",
-          "message": _controller.text,
-          "type": "PRIVATE",
-          "receiverId": "receiver_id",
-          "roomId": "room_id",
+          "message": _privateMessageController.text,
+          "recipient": "recipient",   // ✅ `recipient` 필드만 필요
           "senderId": "sender_id"
         }),
       );
-      _controller.clear();
+      _privateMessageController.clear();
     }
   }
 
+  /// 그룹 메시지 전송
+  void _sendGroupMessage() {
+    if (_groupMessageController.text.isNotEmpty) {
+      _stompClient.send(
+        destination: '/app/chat.sendToGroup',  // ✅ 전송 경로 수정
+        body: jsonEncode({
+          "message": _groupMessageController.text,
+          "groupName": "group_name",  // ✅ `groupName` 필드 추가
+          "senderId": "sender_id"
+        }),
+      );
+      _groupMessageController.clear();
+    }
+  }
 
   @override
   void dispose() {
-    _stompClient.deactivate();  // 연결 종료
+    _stompClient.deactivate(); // 연결 종료
     super.dispose();
   }
 
@@ -95,19 +116,38 @@ class _ChatScreenState extends State<ChatScreen> {
               ),
             ),
           ),
+          // 1:1 메시지 전송 UI
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(
               children: [
                 Expanded(
                   child: TextField(
-                    controller: _controller,
-                    decoration: const InputDecoration(hintText: '메시지를 입력하세요'),
+                    controller: _privateMessageController,
+                    decoration: const InputDecoration(hintText: '1:1 메시지를 입력하세요'),
                   ),
                 ),
                 IconButton(
                   icon: const Icon(Icons.send),
-                  onPressed: _sendMessage,
+                  onPressed: _sendPrivateMessage,
+                )
+              ],
+            ),
+          ),
+          // 그룹 메시지 전송 UI
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: _groupMessageController,
+                    decoration: const InputDecoration(hintText: '그룹 메시지를 입력하세요'),
+                  ),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.send),
+                  onPressed: _sendGroupMessage,
                 )
               ],
             ),
