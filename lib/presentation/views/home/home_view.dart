@@ -17,6 +17,7 @@ import '../../widgets/custom_title.dart';
 import '../../widgets/home_vertext_card.dart';
 
 import '../../viewmodel/home_view_model.dart';
+import '../chat/chat_view.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
@@ -103,6 +104,9 @@ class _MyHomePageState extends State<MyHomePage> {
         }
       },
       child: Scaffold(
+        floatingActionButton: FloatingActionButton(heroTag: "20698206923",onPressed: () {
+          Navigator.push(context, MaterialPageRoute(builder: (context) => ChatScreen()));
+        }),
         appBar: CustomAppBar(controller: controller),
         body: CustomScrollView(
           slivers: [
