@@ -1,7 +1,6 @@
 import 'package:dateapp/presentation/viewmodel/home_view_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'dart:math' as math;
 
 import '../../core/models/naver/search_model.dart';
 import '../../core/utils/html_stripper_utility.dart';

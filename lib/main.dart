@@ -17,7 +17,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'core/navigation/navigation_manager.dart';
 import 'core/utils/appstate_utility.dart';
-import 'core/utils/dialog_utility.dart';
 import 'core/utils/notification_utility.dart';
 import 'firebase_options.dart';
 

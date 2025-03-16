@@ -7,7 +7,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../../main.dart';
-import '../../../presentation/views/server_state/down_view.dart';
 import '../../navigation/navigation_manager.dart';
 
 /// API 서비스의 공통 부모 클래스
