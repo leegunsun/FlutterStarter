@@ -4,6 +4,17 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:stomp_dart_client/stomp_dart_client.dart';
 
+class ChatMessage {
+
+  ChatMessage({required this.type, required this.message, required this.receiverId, required this.roomId, required this.senderId});
+
+   String type; // "PRIVATE" 또는 "GROUP"
+   String senderId;
+   String receiverId; // 1:1 채팅 상대
+   String roomId; // 그룹 채팅 ID
+   String message;
+}
+
 class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key});
 
@@ -40,7 +51,7 @@ class _ChatScreenState extends State<ChatScreen> {
       destination: '/topic/public',
       callback: (frame) {
         setState(() {
-          _messages.add(jsonDecode(frame.body!)['content']);
+          _messages.add(jsonDecode(frame.body!)['message']);
         });
       },
     );
@@ -52,12 +63,17 @@ class _ChatScreenState extends State<ChatScreen> {
         destination: '/app/chat.send',
         body: jsonEncode({
           "sender": "Flutter_User",
-          "content": _controller.text
+          "message": _controller.text,
+          "type": "PRIVATE",
+          "receiverId": "receiver_id",
+          "roomId": "room_id",
+          "senderId": "sender_id"
         }),
       );
       _controller.clear();
     }
   }
+
 
   @override
   void dispose() {
