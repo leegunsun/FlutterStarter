@@ -1,3 +1,4 @@
+import 'package:dateapp/core/utils/toast_utility.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
@@ -13,6 +14,16 @@ class BaseWebview extends StatefulWidget {
 class _BaseWebviewState extends State<BaseWebview> {
 
   InAppWebViewController? webViewController;
+
+  // 허용할 URL 패턴 정의
+  final List<String> allowedUrls = [
+    "https://m.blog.naver.com/",
+    "https://blog.naver.com"
+  ];
+
+  bool _isAllowedUrl(String url) {
+    return allowedUrls.any((allowedUrl) => url.startsWith(allowedUrl));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +46,17 @@ class _BaseWebviewState extends State<BaseWebview> {
         },
         onProgressChanged: (controller, progress) {
 
+        },
+        shouldOverrideUrlLoading: (controller, navigationAction) async {
+          final String? url = navigationAction.request.url.toString();
+
+          if (url != null && _isAllowedUrl(url)) {
+            return NavigationActionPolicy.ALLOW;
+          } else {
+            // 허용되지 않은 URL은 차단하고 경고 메시지 표시
+            ToastManager.showToast('허용되지 않은 URL입니다.');
+            return NavigationActionPolicy.CANCEL;
+          }
         },
       ),
     );
