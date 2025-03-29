@@ -53,6 +53,8 @@ class _SearchTabView0State extends State<SearchTabView0> with SingleTickerProvid
       _animationController.reverse();
     }
   }
+  List<String> items = ['item1', 'item2', 'item3'];
+
 
   @override
   Widget build(BuildContext context) {
@@ -239,6 +241,7 @@ class _ScrollingTickerScreenState extends State<ScrollingTickerScreen> {
 
     _startScrolling();
   }
+
 
   void _startScrolling() {
     _timer = Timer.periodic(const Duration(seconds: 3), (timer) {
