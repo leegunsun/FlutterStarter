@@ -4,13 +4,21 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 class LocalSecureStorage {
   static final FlutterSecureStorage storage = FlutterSecureStorage();
 
-  // 쓰기
-  static Future<void> write ({required String key, required dynamic value}) async {
-    String? _encode = JsonUtils.encodeToJson(key: key, value: value);
-    if(_encode == null) {
-      throw Exception("인코드의 값이 null입니다.");
+
+  static  final AndroidOptions _defaultAndroidOptionsAN = AndroidOptions();
+  static  final IOSOptions _defaultAndroidOptionsIOS = IOSOptions();
+
+  static Future<void> write({required String key, required dynamic value}) async {
+    final encoded = JsonUtils.encodeToJson(key: key, value: value);
+    if (encoded == null) {
+      throw Exception("인코딩된 값이 null입니다.");
     }
-    await storage.write(key: key, value: _encode);
+    await storage.write(
+      key: key,
+      value: encoded,
+      aOptions: _defaultAndroidOptionsAN,
+      iOptions: _defaultAndroidOptionsIOS,
+    );
   }
 
   // 읽기

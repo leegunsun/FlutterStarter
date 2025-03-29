@@ -36,9 +36,9 @@ class _SearchTabView0State extends State<SearchTabView0> with SingleTickerProvid
 
   Future<void> loadSearchHistory () async {
     await LocalSecureSource.set.searchInputHistory(value: ["one", "two", "three"]);
-    _getSearchHistory.clear();
     List<String?> _getSearchData = await LocalSecureSource.get.searchInputHistory();
     _getSearchHistory.addAll(_getSearchData);
+    setState(() {});
   }
 
   void _toggle () {
@@ -71,11 +71,11 @@ class _SearchTabView0State extends State<SearchTabView0> with SingleTickerProvid
           ),
           SizedBox(
             height: 40, // 내부 ListView의 높이를 명확하게 지정
-            child: ListView(
+            child: ListView.builder(
               scrollDirection: Axis.horizontal,
-              children: List.generate(
-                10,
-                    (index) => Center(
+              itemCount: _getSearchHistory.length,
+              itemBuilder: (BuildContext context, int index) {
+                return Center(
                   child: Container(
                     width: 40,
                     height: 30,
@@ -83,10 +83,10 @@ class _SearchTabView0State extends State<SearchTabView0> with SingleTickerProvid
                       borderRadius: BorderRadius.circular(20),
                       border: Border.all(color: Colors.black),
                     ),
-                    child: Center(child: Text("$index")),
+                    child: Center(child: Text("${_getSearchHistory[index]}")),
                   ),
-                ),
-              ),
+                );
+              },
             ),
           ),
           Text("최근 검색어"),
