@@ -13,6 +13,8 @@ import '../../core/service/crawl/blog_generation_service.dart';
 class HomeViewModel extends BaseWidgetTextController {
   final List<VertexSearchModel?> aiResponses = [];
   final List<BlogSearchItems?> blogResponses = [];
+  final PageController pageController = PageController(viewportFraction: 0.8);
+  final PageController pageController2 = PageController(viewportFraction: 0.9);
 
   @override
   final TextEditingController textEditingController = TextEditingController(text: "문정역 맛집");

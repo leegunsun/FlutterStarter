@@ -1,3 +1,5 @@
+import 'dart:isolate';
+
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -21,19 +23,24 @@ class VertexCarousel extends StatelessWidget {
         minHeight: 500, // 최소 높이 설정
         maxHeight: 610, // 최대 높이 설정
       ),
-      child: ListView.builder(
+      child: PageView.builder(
+        controller: controller.pageController2,
         scrollDirection: Axis.horizontal,
         // physics: NeverScrollableScrollPhysics(),
-        shrinkWrap: true,
         itemCount: controller.aiResponses.length,
         itemBuilder: (context, index) {
           final VertexSearchModel? response = controller.aiResponses[index];
-
           if(response == null) {
             return SizedBox.shrink();
           }
 
-          final List<CrawlContent?> _crawlContent = response.crawlContent.where((CrawlContent? ele) => ele?.contentType == ContentType.image).toList();
+          final List<CrawlContent?> _crawlContent = response.crawlContent.where((CrawlContent? ele) {
+           final result = ele?.contentType == ContentType.image;
+           if(result) {
+             precacheImage(NetworkImage(ele?.contentValue ?? ""), context);
+           }
+           return result;
+          }).toList();
 
           return SizedBox(
             width: MediaQuery.of(context).size.width,
@@ -106,30 +113,25 @@ class VertexCarousel extends StatelessWidget {
                               builder: (context, constraints) {
                                 double parentWidth = constraints.maxWidth;
 
-                                return CustomScrollView(
-                                  scrollDirection: Axis.horizontal,
-                                  slivers: [
-                                    SliverList(
-                                      delegate: SliverChildBuilderDelegate(
-                                            (context, index) {
-                                          final String imgUrl = _crawlContent[index]?.contentValue ?? "";
-                                          return Padding(
-                                            padding: index + 1 == _crawlContent.length ? EdgeInsets.zero : const EdgeInsets.only(right: 10), // 이미지 사이 간격 추가
-                                            child: ClipRRect(
-                                              borderRadius: BorderRadius.circular(10),
-                                              child: Image.network(
-                                                imgUrl,
-                                                fit: BoxFit.cover,
-                                                width: parentWidth, // 부모 컨테이너의 너비만큼 설정
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                        childCount: _crawlContent.length,
+                                return PageView.builder(
+                                  controller: controller.pageController,
+                                    itemCount: _crawlContent.length,
+                                    itemBuilder: (BuildContext context, int index) {
+
+                                  final String imgUrl = _crawlContent[index]?.contentValue ?? "";
+
+                                    return Padding(
+                                      padding: index + 1 == _crawlContent.length ? EdgeInsets.zero : const EdgeInsets.only(right: 10), // 이미지 사이 간격 추가
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(10),
+                                        child: Image.network(
+                                          imgUrl,
+                                          fit: BoxFit.cover,
+                                          width: parentWidth, // 부모 컨테이너의 너비만큼 설정
+                                        ),
                                       ),
-                                    ),
-                                  ],
-                                );
+                                    );
+                                });
                               },
                             ),
                           ),

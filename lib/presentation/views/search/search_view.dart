@@ -22,7 +22,6 @@ class _SearchViewState extends State<SearchView> with SingleTickerProviderStateM
     // TODO: implement initState
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
-
     // FocusNode의 상태 변경을 감지하여 ValueNotifier를 업데이트
     _focusScope1.addListener(() {
       _isFocused.value = _focusScope1.hasFocus;

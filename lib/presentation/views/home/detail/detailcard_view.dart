@@ -2,6 +2,7 @@
 import 'package:dateapp/presentation/views/common/webview/base_webview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:collection/collection.dart';
 
 import '../../../../core/created_enum/content_type.dart';
 import '../../../../core/models/naver/crawl_naver_blog_model.dart';
@@ -21,6 +22,7 @@ class _DetailCardWidgetState extends State<DetailCardWidget> {
 
   List<CrawlContent?> _filterImg = [];
   final ScrollController _scrollController = ScrollController();
+  final PageController _pageController = PageController();
   List<GlobalKey> _imageKeys = [];
   final List<double> _imageWidths = [];
 
@@ -158,40 +160,69 @@ class _DetailCardWidgetState extends State<DetailCardWidget> {
                 child: Column(
                   children: [
                     Expanded(
-                      child: ListView.builder(
-                        controller: _scrollController,
-                        scrollDirection: Axis.horizontal,
+                      child: PageView.builder(
                         itemCount: _filterImg.length,
-                        itemBuilder: (context, index) {
-                          return LayoutBuilder(
-                            builder: (context, constraints) {
-                              WidgetsBinding.instance.addPostFrameCallback((_) {
-                                _updateImageWidth(index);
-                              });
-
-                              return GestureDetector(
-                                onTap: () {
-                                  _scrollToNext(index);
-                                },
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(5),
-                                    child: Image.network(
-                                      _filterImg[index]?.contentValue ?? "",
-                                      fit: BoxFit.cover,
-                                      key: _imageKeys[index], // 크기 측정용 key 추가
-                                      errorBuilder: (context, _, StackTrace? stackTrace,) {
-                                        return Image.network("https://blog.kakaocdn.net/dn/zaHVf/btsCUzDyFK6/zLwkbqViX9RYEST5DwRJmK/img.png", fit: BoxFit.cover,);
-                                      },
-                                    ),
-                                  ),
-                                ),
-                              );
+                        itemBuilder : (BuildContext context, int index) {
+                          return GestureDetector(
+                            onTap: () {
+                              if(_pageController.page!.round() == _filterImg.length - 1) {
+                                _pageController.animateToPage(0, duration: const Duration(milliseconds: 500), curve: Curves.easeOut);
+                              } else {
+                                _pageController.nextPage(duration: const Duration(milliseconds: 500), curve: Curves.easeInOut);
+                              }
                             },
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(5),
+                                child: Image.network(
+                                  _filterImg[index]?.contentValue ?? "",
+                                  fit: BoxFit.cover,
+                                  key: _imageKeys[index], // 크기 측정용 key 추가
+                                  errorBuilder: (context, _, StackTrace? stackTrace,) {
+                                    return Image.network("https://blog.kakaocdn.net/dn/zaHVf/btsCUzDyFK6/zLwkbqViX9RYEST5DwRJmK/img.png", fit: BoxFit.cover,);
+                                  },
+                                ),
+                              ),
+                            ),
                           );
                         },
+                        controller: _pageController,
                       ),
+                      // child: ListView.builder(
+                      //   controller: _scrollController,
+                      //   scrollDirection: Axis.horizontal,
+                      //   itemCount: _filterImg.length,
+                      //   itemBuilder: (context, index) {
+                      //     return LayoutBuilder(
+                      //       builder: (context, constraints) {
+                      //         WidgetsBinding.instance.addPostFrameCallback((_) {
+                      //           _updateImageWidth(index);
+                      //         });
+                      //
+                      //         return GestureDetector(
+                      //           onTap: () {
+                      //             _scrollToNext(index);
+                      //           },
+                      //           child: Padding(
+                      //             padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      //             child: ClipRRect(
+                      //               borderRadius: BorderRadius.circular(5),
+                      //               child: Image.network(
+                      //                 _filterImg[index]?.contentValue ?? "",
+                      //                 fit: BoxFit.cover,
+                      //                 key: _imageKeys[index], // 크기 측정용 key 추가
+                      //                 errorBuilder: (context, _, StackTrace? stackTrace,) {
+                      //                   return Image.network("https://blog.kakaocdn.net/dn/zaHVf/btsCUzDyFK6/zLwkbqViX9RYEST5DwRJmK/img.png", fit: BoxFit.cover,);
+                      //                 },
+                      //               ),
+                      //             ),
+                      //           ),
+                      //         );
+                      //       },
+                      //     );
+                      //   },
+                      // ),
                     ),
                   ],
                 ),
