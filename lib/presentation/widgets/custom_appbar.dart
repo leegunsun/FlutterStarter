@@ -7,11 +7,11 @@ import '../views/search/search_view.dart';
 
 
 class CustomAppBar<T extends BaseWidgetTextController> extends StatelessWidget implements PreferredSizeWidget {
-  final T controller;
+  // final T controller;
   final Color barColor;
   const CustomAppBar({
     super.key,
-    required this.controller,
+    // required this.controller,
     this.barColor = Colors.deepPurple,
   });
 
@@ -40,7 +40,7 @@ class CustomAppBar<T extends BaseWidgetTextController> extends StatelessWidget i
                 IconButton(onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => SearchView<T>(controller: controller,)),
+                    MaterialPageRoute(builder: (context) => SearchView<T>()),
                   );
                 }, icon: Icon(Icons.search, color: Colors.white, size: 30,))
               ],

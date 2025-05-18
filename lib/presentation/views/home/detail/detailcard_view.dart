@@ -176,7 +176,7 @@ class _DetailCardWidgetState extends State<DetailCardWidget> {
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(5),
                                 child: Image.network(
-                                  _filterImg[index]?.contentValue ?? "",
+                                  _filterImg[index]!.contentValue,
                                   fit: BoxFit.cover,
                                   key: _imageKeys[index], // 크기 측정용 key 추가
                                   errorBuilder: (context, _, StackTrace? stackTrace,) {

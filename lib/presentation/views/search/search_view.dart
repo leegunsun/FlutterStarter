@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/base/controller/widget_textcontroller_base.dart';
+import '../../viewmodel/home_view_model.dart';
 import 'detail/search_tab_view_0.dart';
 
 class SearchView<T extends BaseWidgetTextController> extends StatefulWidget {
-  final T controller;
+  // final T controller;
   const SearchView({
     super.key,
-    required this.controller,
+    // required this.controller,
   });
 
   @override
@@ -62,21 +64,11 @@ class _SearchViewState extends State<SearchView> with SingleTickerProviderStateM
                   // snap: true,
                   elevation: 0,
                   backgroundColor: Colors.white, // 투명도 없는 배경색 지정
-                  title: TextFormField(
-                    focusNode: _focusScope1,
-                    onTap: () {
-                    },
-                    controller: widget.controller.textEditingController,
-                    onTapOutside: (value) {
-                      _focusScope1.unfocus();
-                    },
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                    hintText: widget.controller.textEditingController.text
-                    ),
-                  ),
+                  title: NewWidget(focusScope: _focusScope1, widget: widget),
                   actions: [
-                    IconButton(onPressed: () {}, icon: Icon(Icons.star))
+                    IconButton(onPressed: () {
+
+                    }, icon: Icon(Icons.star))
                   ],
                 ),
                 SliverPersistentHeader(
@@ -126,20 +118,11 @@ class _SearchViewState extends State<SearchView> with SingleTickerProviderStateM
                       // snap: true,
                       elevation: 0,
                       backgroundColor: Colors.white, // 투명도 없는 배경색 지정
-                      title: TextFormField(
-                        focusNode: _focusScope2,
-                        onTap: () {},
-                        controller: widget.controller.textEditingController,
-                        onTapOutside: (value) {
-                          _focusScope2.unfocus();
-                        },
-                        decoration: InputDecoration(
-                            border: InputBorder.none,
-                            hintText: widget.controller.textEditingController.text
-                        ),
-                      ),
+                      title: NewWidget(focusScope: _focusScope2, widget: widget),
                       actions: [
-                        IconButton(onPressed: () {}, icon: Icon(Icons.star))
+                        IconButton(onPressed: () {
+
+                        }, icon: Icon(Icons.star))
                       ],
                     )
                   ],
@@ -148,6 +131,36 @@ class _SearchViewState extends State<SearchView> with SingleTickerProviderStateM
             )
           ],
         ),
+      ),
+    );
+  }
+}
+
+class NewWidget extends ConsumerWidget {
+  const NewWidget({
+    super.key,
+    required FocusNode focusScope,
+    required this.widget,
+  }) : _focusScope = focusScope;
+
+  final FocusNode _focusScope;
+  final SearchView<BaseWidgetTextController> widget;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+
+    final TextEditingController controller = ref.watch(queryTextProvider);
+
+    return TextFormField(
+      focusNode: _focusScope,
+      onTap: () {},
+      controller: controller,
+      onTapOutside: (value) {
+        _focusScope.unfocus();
+      },
+      decoration: InputDecoration(
+          border: InputBorder.none,
+          hintText: controller.text
       ),
     );
   }

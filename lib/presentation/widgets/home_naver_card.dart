@@ -1,21 +1,22 @@
 import 'package:dateapp/presentation/viewmodel/home_view_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/models/naver/search_model.dart';
 import '../../core/utils/html_stripper_utility.dart';
 import '../views/common/webview/base_webview.dart';
 import '../../core/theme/custom_theme_color.dart';
 
-class SliverListNaverCard extends StatefulWidget {
-  final HomeViewModel controller;
-  const SliverListNaverCard({super.key, required this.controller});
+class SliverListNaverCard extends ConsumerStatefulWidget {
+
+  const SliverListNaverCard({super.key});
 
   @override
-  State<SliverListNaverCard> createState() => _SliverListNaverCardState();
+  ConsumerState<SliverListNaverCard> createState() => _SliverListNaverCardState();
 }
 
-class _SliverListNaverCardState extends State<SliverListNaverCard> {
+class _SliverListNaverCardState extends ConsumerState<SliverListNaverCard> {
 
   bool _selectIcon = false;
 
@@ -29,10 +30,13 @@ class _SliverListNaverCardState extends State<SliverListNaverCard> {
 
   @override
   Widget build(BuildContext context) {
+
+    final controller = ref.watch(blogSearchProvider);
+
     return SliverList.builder(
-        itemCount: widget.controller.blogResponses.length,
+        itemCount: controller.value?.length,
         itemBuilder: (BuildContext context, int index) {
-          BlogSearchItems? _item = widget.controller.blogResponses[index];
+          BlogSearchItems? _item = controller.value?[index];
 
           if(_item == null) {
             return SizedBox.shrink();
@@ -80,7 +84,10 @@ class _SliverListNaverCardState extends State<SliverListNaverCard> {
                         height: 190,
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(20),
-                          child: Image.network(_item.thumnail ?? "https://blog.kakaocdn.net/dn/zaHVf/btsCUzDyFK6/zLwkbqViX9RYEST5DwRJmK/img.png", fit: BoxFit.cover, errorBuilder: (
+                          child: Image.network(
+                            _item.thumnail!,
+                            fit: BoxFit.cover,
+                            errorBuilder: (
                               BuildContext context,
                               Object error,
                               StackTrace? stackTrace,

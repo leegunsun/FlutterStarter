@@ -1,118 +1,112 @@
-import 'package:dateapp/presentation/widgets/home_naver_card.dart';
-import 'package:firebase_remote_config/firebase_remote_config.dart';
-import 'package:flutter/cupertino.dart';
+import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:firebase_remote_config/firebase_remote_config.dart';
 
+import '../../../core/models/vertex/vertex_search_model.dart';
+import '../../viewmodel/home_view_model.dart';
 import '../../widgets/custom_appbar.dart';
 import '../../widgets/custom_search.dart';
 import '../../widgets/custom_title.dart';
+import '../../widgets/home_naver_card.dart';
 import '../../widgets/home_vertext_card.dart';
-
-import '../../viewmodel/home_view_model.dart';
 import '../chat/chat_view.dart';
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
 
+// 1) ConsumerStatefulWidget으로 변경
+class MyHomePage extends ConsumerStatefulWidget {
+  const MyHomePage({Key? key, required this.title}) : super(key: key);
   final String title;
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  ConsumerState<MyHomePage> createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  HomeViewModel controller = HomeViewModel();
-
-  ConnectionState _connectionState = ConnectionState.none;
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    initialization();
-    controller.fetchBlogSearchResults(() {
-      if(mounted) {
-        setState(() {});
-      }
-    }, (value) {
-      _connectionState = value;
-    });
-  }
-
-  void initialization() async {
-
-    await controller.remoteConfig.setConfigSettings(
-      RemoteConfigSettings(
-        fetchTimeout: const Duration(seconds: 10), // 원격 데이터 가져오기 제한 시간
-        minimumFetchInterval: const Duration(minutes: 1), // 최소 업데이트 간격
-      ),
-    );
-
-    await controller.remoteConfig.setDefaults(const <String, dynamic>{
-      "home_sub_title": "👋 좋아요 ",
-      "close_server": "false",
-    });
-
-    await controller.remoteConfig.fetchAndActivate();
-  }
-
+class _MyHomePageState extends ConsumerState<MyHomePage> {
+  late final FirebaseRemoteConfig _remoteConfig;
   ValueNotifier<double> progressValue = ValueNotifier(0.0);
 
   @override
+  void initState() {
+    super.initState();
+    _remoteConfig = FirebaseRemoteConfig.instance;
+    _initRemoteConfig();
+    // 만약 강제 초기 로드가 필요하다면 아래 호출
+    // ref.read(combinedProvider.notifier).refresh();
+  }
+
+  Future<void> _initRemoteConfig() async {
+    await _remoteConfig.setConfigSettings(RemoteConfigSettings(
+      fetchTimeout: const Duration(seconds: 10),
+      minimumFetchInterval: const Duration(minutes: 1),
+    ));
+    await _remoteConfig.setDefaults(const {
+      "home_sub_title": "👋 좋아요 ",
+      "close_server": "false",
+    });
+    await _remoteConfig.fetchAndActivate();
+    if(mounted) {
+      setState(() {}); // 파라미터 가져온 뒤 UI 업데이트
+    }
+  }
+
+  @override
   void dispose() {
-    // TODO: implement dispose
     progressValue.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    if (_connectionState == ConnectionState.waiting) {
-      return PopScope(
-        canPop: false, // 뒤로 가기 버튼을 무력화
-        onPopInvokedWithResult: (didPop, result) {
-          if (!didPop) {
-            // 뒤로 가기 버튼이 눌렸을 때 수행할 동작
-            print("뒤로 가기 버튼이 눌렸지만 앱이 종료되지 않음");
-          }
-        },
-        child: Scaffold(
-          body: ValueListenableBuilder(
-            valueListenable: progressValue,
-            builder: (context, value, child) {
-              return Center(child: CircularProgressIndicator());
-            },
-          ),
-        ),
-      );
-    }
+    // 2) Riverpod에서 제공하는 AsyncValue로 콘텐츠 로딩 상태 구독
+    final AsyncValue<List<VertexSearchModel>> aiListAsync = ref.watch(combinedProvider);
+    // 3) 검색어 상태 구독
+    final TextEditingController query = ref.watch(queryTextProvider);
 
-    return PopScope(
-      canPop: false, // 뒤로 가기 버튼이 무력화됨
-      onPopInvokedWithResult: (didPop, result) {
-        if (!didPop) {
-          // 뒤로 가기 버튼이 눌렸을 때 원하는 동작 수행 가능
-          print("뒤로 가기 버튼이 눌렸지만 앱이 종료되지 않음");
-        }
-      },
-      child: Scaffold(
-        floatingActionButton: FloatingActionButton(heroTag: "20698206923",onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => ChatScreen()));
-        }),
-        appBar: CustomAppBar(controller: controller),
-        body: CustomScrollView(
-          slivers: [
-            SliverToBoxAdapter(
-              child: CustomSearchBar(controller: controller),
-            ),
-            SliverToBoxAdapter(
-              child: Stack(
-                children: [
-                  Positioned(
-                    child: Container(
+    return aiListAsync.when(
+      loading: () => PopScope(
+        canPop: false,
+        child: Scaffold(
+          body: Center(child: CircularProgressIndicator()),
+        ),
+      ),
+      error: (err, st) => Scaffold(
+        body: Center(child: Text('오류 발생: $err')),
+      ),
+      data: (aiItems) => PopScope(
+        canPop: false,
+        child: Scaffold(
+          floatingActionButton: FloatingActionButton(
+            heroTag: 'fab_chat',
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => ChatScreen()),
+              );
+            },
+            child: const Icon(Icons.chat),
+          ),
+          appBar: CustomAppBar(
+            // 필요에 따라 Riverpod ref.read(...)로 상태 전달
+          ),
+          body: CustomScrollView(
+            slivers: [
+              // 4) CustomSearchBar를 StateProvider와 연동
+              SliverToBoxAdapter(
+                child: CustomSearchBar(
+                  // initialText: query,
+                  // onChanged: (val) =>
+                  // ref.read(queryTextProvider.notifier).state = val,
+                  // onSubmitted: (_) =>
+                  //     ref.read(combinedProvider.notifier).refresh(),
+                ),
+              ),
+              SliverToBoxAdapter(
+                child: Stack(
+                  children: [
+                    Container(
                       height: MediaQuery.of(context).size.height / 3,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         color: Colors.deepPurple,
                         borderRadius: BorderRadius.only(
                           bottomLeft: Radius.circular(50),
@@ -120,26 +114,28 @@ class _MyHomePageState extends State<MyHomePage> {
                         ),
                       ),
                     ),
-                  ),
-                  Column(
-                    children: [
-                      CustomTitle(title: "✨AI 추천 "),
-                      VertexCarousel(controller: controller),
-                    ],
-                  ),
-                ],
+                    Column(
+                      children: [
+                        const CustomTitle(title: "✨AI 추천 "),
+                        // 5) Riverpod으로 받은 aiItems 전달
+                        VertexCarousel(),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            ),
-            SliverToBoxAdapter(
-              child: const SizedBox(height: 40),
-            ),
-            SliverToBoxAdapter(
-              child: CustomTitle.bottom(
-                title: controller.remoteConfig.getString("home_sub_title"),
+              const SliverToBoxAdapter(child: SizedBox(height: 40)),
+              SliverToBoxAdapter(
+                child: CustomTitle.bottom(
+                  title: _remoteConfig.getString('home_sub_title'),
+                ),
               ),
-            ),
-            SliverListNaverCard(controller: controller),
-          ],
+              // 6) 블로그 카드도 FutureProvider로 구독
+              SliverListNaverCard(
+
+              ),
+            ],
+          ),
         ),
       ),
     );

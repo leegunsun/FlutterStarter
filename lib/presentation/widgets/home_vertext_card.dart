@@ -3,6 +3,7 @@ import 'dart:isolate';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/created_enum/content_type.dart';
 import '../../core/models/naver/crawl_naver_blog_model.dart';
@@ -12,33 +13,36 @@ import '../viewmodel/home_view_model.dart';
 import '../../core/theme/custom_theme_color.dart';
 import '../views/home/detail/detailcard_view.dart';
 
-class VertexCarousel extends StatelessWidget {
-  final HomeViewModel controller;
-  const VertexCarousel({super.key, required this.controller});
+class VertexCarousel extends ConsumerWidget {
+
+  const VertexCarousel({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+
+    final controller = ref.watch(combinedProvider);
+
     return ConstrainedBox(
       constraints: BoxConstraints(
         minHeight: 500, // 최소 높이 설정
         maxHeight: 610, // 최대 높이 설정
       ),
       child: PageView.builder(
-        controller: controller.pageController2,
+        controller: PageController(viewportFraction: 0.9),
         scrollDirection: Axis.horizontal,
         // physics: NeverScrollableScrollPhysics(),
-        itemCount: controller.aiResponses.length,
+        itemCount: controller.value?.length,
         itemBuilder: (context, index) {
-          final VertexSearchModel? response = controller.aiResponses[index];
+          final VertexSearchModel? response = controller.value?[index];
           if(response == null) {
             return SizedBox.shrink();
           }
 
           final List<CrawlContent?> _crawlContent = response.crawlContent.where((CrawlContent? ele) {
            final result = ele?.contentType == ContentType.image;
-           if(result) {
-             precacheImage(NetworkImage(ele?.contentValue ?? ""), context);
-           }
+           // if(result) {
+           //   precacheImage(NetworkImage(ele?.contentValue ?? ""), context);
+           // }
            return result;
           }).toList();
 
@@ -114,7 +118,7 @@ class VertexCarousel extends StatelessWidget {
                                 double parentWidth = constraints.maxWidth;
 
                                 return PageView.builder(
-                                  controller: controller.pageController,
+                                  controller: PageController(viewportFraction: 0.8),
                                     itemCount: _crawlContent.length,
                                     itemBuilder: (BuildContext context, int index) {
 

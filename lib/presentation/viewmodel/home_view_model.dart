@@ -2,108 +2,125 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dateapp/core/base/controller/widget_textcontroller_base.dart';
-import 'package:firebase_remote_config/firebase_remote_config.dart';
-import 'package:flutter/material.dart' hide Element;
+import 'package:flutter/cupertino.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/models/naver/search_model.dart';
 import '../../core/models/vertex/vertex_search_model.dart';
 import '../../core/service/crawl/blog_generation_service.dart';
 
-class HomeViewModel extends BaseWidgetTextController {
-  final List<VertexSearchModel?> aiResponses = [];
-  final List<BlogSearchItems?> blogResponses = [];
-  final PageController pageController = PageController(viewportFraction: 0.8);
-  final PageController pageController2 = PageController(viewportFraction: 0.9);
+// 1) Repository
+class AiParserRepository {
+  final FirebaseFirestore _firestore;
+  AiParserRepository(this._firestore);
 
-  @override
-  final TextEditingController textEditingController = TextEditingController(text: "문정역 맛집");
+  /// 전체 문서 개수를 집계 쿼리로 가져옵니다.
+  Future<int?> _getTotalCount() async {
+    final agg = _firestore.collection('aiParserData').count();
+    final snapshot = await agg.get();
+    return snapshot.count;
+  }
 
-  // final BlogCrawlerService _blogCrawlerService = BlogCrawlerService();
-  final BlogGenerationService _blogGenerationService = BlogGenerationService();
+  /// 랜덤 오프셋 + limit 조합으로 문서 가져오기
+  Future<List<VertexSearchModel>> fetchRandomDocs({int limit = 5}) async {
+    final total = await _getTotalCount();
+    if (total == 0) return [];
 
-  final remoteConfig = FirebaseRemoteConfig.instance;
-
-  Future<List<VertexSearchModel>> getRandomDocs() async {
-    final collectionRef = FirebaseFirestore.instance.collection("aiParserData");
-
-    // Firestore에 저장된 전체 문서 개수 가져오기
-    QuerySnapshot allDocsSnapshot = await collectionRef.get();
-    int docCount = allDocsSnapshot.docs.length;
-
-    if (docCount == 0) {
-      return []; // Firestore에 문서가 없으면 빈 리스트 반환
-    }
-
-    // startIndex를 전체 문서 개수 내에서만 랜덤하게 설정
-    final random = Random();
-    final startIndex = random.nextInt(docCount); // 0 ~ (docCount - 1) 사이의 값 설정
-
-    // Firestore에서 무작위 시작점부터 5개 문서 가져오기
-    QuerySnapshot<Map<String,dynamic>> querySnapshot = await collectionRef
-        .orderBy(FieldPath.documentId) // 문서 ID 기준 정렬
-        .startAtDocument(allDocsSnapshot.docs[startIndex]) // 랜덤 시작 위치
-        .limit(5)
+    final startOffset = Random().nextInt(max(1, total! - limit));
+    final snap = await _firestore
+        .collection('aiParserData')
+        .orderBy(FieldPath.documentId)
+        // .offset(startOffset)
+        .limit(limit)
         .get();
 
-    // return querySnapshot.docs;
-
-    List<QueryDocumentSnapshot<Map<String, dynamic>>> _doc = querySnapshot.docs;
-    List<VertexSearchModel> _result = _doc.map((QueryDocumentSnapshot<Map<String, dynamic>> e) {
-      Map<String, dynamic> data = e.data();
-
-      Map<String, dynamic> _key1 = e.data().remove('tag');
-
-      data['tag'] = (_key1["tag"] as List<dynamic>).join(",");
-
-      dynamic removedData = e.data().remove('crawlContent')['crawlContent'];
-
-      data['crawlContent'] = (removedData as List)
-          .map((e) => Map<String, dynamic>.from(e as Map))
-          .toList();
-
-      return VertexSearchModel.fromJson(data);
-    }).toList();
-
-    return _result;
+    return snap.docs.map(_mapDoc).toList();
   }
 
-  Future<void> fetchBlogSearchResults(void Function() setState,
-      void Function(ConnectionState) connectionState) async {
-    connectionState(ConnectionState.waiting);
+  VertexSearchModel _mapDoc(QueryDocumentSnapshot<Map<String, dynamic>> doc) {
+    final raw = Map<String, dynamic>.from(doc.data());
+    // 태그 합치기
+    final tags = List<String>.from(raw['tag'] as List<dynamic>);
+    // 크롤 콘텐츠 구조 복원
+    final crawlList = (raw['crawlContent'] as Map<String, dynamic>)['crawlContent']
+    as List<dynamic>;
+    final processed = VertexSearchModel.fromJson({
+      ...raw,
+      'tag': tags.join(','),
+      'crawlContent': crawlList
+          .map((e) => Map<String, dynamic>.from(e as Map))
+          .toList(),
+    });
+    return processed;
+  }
 
-    // 네이버 블로그 검색
-    String _qury = textEditingController.text.replaceAll(" ", "+");
-    NaverApiBlogSearchModel _result = await _blogGenerationService.searchBlogs(_qury);
-    // ImgSearchDto _a = await _naverAPI.blogSearch.getBlogImgSearch(query:"테스트");
-
-    blogResponses.addAll(_result.items);
-
-    // 'isNaverBlog' 조건을 만족하는 아이템 필터링 후 랜덤으로 2개 선택
-    List<BlogSearchItems> filteredItems = _result.items.where((item) => item.isNaverBlog).toList();
-    filteredItems.shuffle(); // 무작위로 섞기
-    Iterable<BlogSearchItems> selectedItems = filteredItems.take(2); // 2개 선택
-
-    try {
-      // 병렬 실행 + 결과 즉시 responses에 추가
-      aiResponses.addAll(await Future.wait(selectedItems.map(_blogGenerationService.generateContentFromBlog)));
-      aiResponses.addAll(await getRandomDocs());
-    } catch (e) {
-      // 예외 발생 시 로그 남기기 (필요하면 예외 처리 방식 추가)
-      print("블로그 컨텐츠 생성 중 오류 발생: $e");
-    }
-
-    try {
-      for (VertexSearchModel item in aiResponses.whereType<VertexSearchModel>()) {
-        String safeDocId = base64Encode(utf8.encode(item.blogMobileLink!)); // Base64 인코딩
-        FirebaseFirestore.instance.collection("aiParserData").doc(safeDocId).set(item.toJson());
-      }
-
-    } catch (e) {
-      print(e);
-    }
-
-    connectionState(ConnectionState.done);
-    setState();
+  Future<void> saveModel(VertexSearchModel model) async {
+    final id = base64Encode(utf8.encode(model.blogMobileLink!));
+    await _firestore.collection('aiParserData').doc(id).set(model.toJson());
   }
 }
+
+
+/// 블로그 검색만 담당
+final blogSearchProvider = FutureProvider.autoDispose<List<BlogSearchItems>>((ref) async {
+  final svc = ref.read(blogSvcProvider);
+  final query = ref.read(queryTextProvider).text.trim().replaceAll(' ', '+');
+  final result = await svc.searchBlogs(query);
+  return result.items.where((e) => e.isNaverBlog).toList();
+});
+
+/// 랜덤 도큐먼트만 담당
+final randomDocsProvider = FutureProvider.autoDispose<List<VertexSearchModel>>((ref) {
+  final repo = ref.read(aiRepoProvider);
+  return repo.fetchRandomDocs(limit: 5);
+});
+
+/// 최종 결합 + 저장
+class CombinedNotifier extends AutoDisposeAsyncNotifier<List<VertexSearchModel>> {
+  @override
+  Future<List<VertexSearchModel>> build() async {
+    // 병렬로 블로그 검색과 랜덤 문서 조회
+    final blogItems = await ref.watch(blogSearchProvider.future);
+    final repo = ref.read(aiRepoProvider);
+    final svc = ref.read(blogSvcProvider);
+
+    // AI 컨텐츠 생성 (랜덤 2개)
+    final picks = blogItems..shuffle();
+    final aiGenerated = await Future.wait(
+      picks.take(2).map(svc.generateContentFromBlog),
+    );
+
+    // Firestore 랜덤 문서
+    final randomDocs = await ref.watch(randomDocsProvider.future);
+
+    // 결합 및 저장
+    final combined = [...aiGenerated.whereType<VertexSearchModel>(), ...randomDocs];
+    for (var model in combined) {
+      await repo.saveModel(model);
+    }
+    return combined;
+  }
+
+  Future<void> refresh() async {
+    state = const AsyncLoading();
+    try {
+      final result = await build();
+      state = AsyncData(result);
+    } catch (e, s) {
+      state = AsyncError(e, s);
+    }
+  }
+}
+
+final combinedProvider = AsyncNotifierProvider.autoDispose<CombinedNotifier, List<VertexSearchModel>>(
+      () => CombinedNotifier(),
+);
+
+// 기존 Providers
+final aiRepoProvider = Provider<AiParserRepository>(
+      (ref) => AiParserRepository(FirebaseFirestore.instance),
+);
+final blogSvcProvider = Provider<BlogGenerationService>(
+      (ref) => BlogGenerationService(),
+);
+final StateProvider<TextEditingController> queryTextProvider = StateProvider<TextEditingController>((ref) => TextEditingController(text : '문정역 맛집'));

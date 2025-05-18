@@ -88,8 +88,7 @@ class NavigationManager {
         path: '/search',
         name: AppRoutes.search,
         builder: (context, state) {
-          final controller = state.extra as HomeViewModel;
-          return SearchView(controller: controller);
+          return SearchView();
         },
       ),
     ],

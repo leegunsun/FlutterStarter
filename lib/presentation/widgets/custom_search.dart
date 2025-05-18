@@ -3,15 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class CustomSearchBar extends StatelessWidget {
-  final HomeViewModel controller;
-  const CustomSearchBar({super.key, required this.controller});
+
+  const CustomSearchBar({super.key});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
 
-        context.push("/search", extra: controller);
+        context.push("/search");
 
         // Navigator.push(
         //   context,
