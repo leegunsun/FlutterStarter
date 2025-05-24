@@ -22,10 +22,8 @@ class LocalSecureStorage {
   }
 
   // 읽기
-  static Future<Map<String, dynamic>?> read ({required String key}) async {
-    String? _getData = await storage.read(key: key);
-    Map<String, dynamic>? _result = JsonUtils.decodeFromJson(value: _getData);
-    return _result;
+  static Future<String?> read ({required String key}) async {
+    return await storage.read(key: key);
   }
 
   // 전체 읽기

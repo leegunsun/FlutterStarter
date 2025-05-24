@@ -1,10 +1,10 @@
-import 'package:dateapp/presentation/viewmodel/home_view_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../core/models/naver/search_model.dart';
+import '../../core/models/naver/blog_search_items.dart';
 import '../../core/utils/html_stripper_utility.dart';
+import '../viewmodel/provider/search/search_blog.dart';
 import '../views/common/webview/base_webview.dart';
 import '../../core/theme/custom_theme_color.dart';
 

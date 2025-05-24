@@ -14,4 +14,7 @@ class _DebugConstantsConfig extends ConstantsConfig {
 
   @override
   String get ASSETS_ENV => "assets/.env";
+
+  @override
+  String get SEARCH_LAST_INPUT_HISTORY => "search_last_input_history";
 }

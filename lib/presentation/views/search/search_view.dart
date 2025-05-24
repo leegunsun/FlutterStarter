@@ -3,9 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/base/controller/widget_textcontroller_base.dart';
 import '../../viewmodel/home_view_model.dart';
+import '../../viewmodel/provider/search/search_blog.dart';
+import '../../viewmodel/provider/search/search_common.dart';
 import 'detail/search_tab_view_0.dart';
 
-class SearchView<T extends BaseWidgetTextController> extends StatefulWidget {
+class SearchView<T extends BaseWidgetTextController> extends ConsumerStatefulWidget {
   // final T controller;
   const SearchView({
     super.key,
@@ -13,10 +15,10 @@ class SearchView<T extends BaseWidgetTextController> extends StatefulWidget {
   });
 
   @override
-  State<SearchView> createState() => _SearchViewState();
+  ConsumerState<SearchView> createState() => _SearchViewState();
 }
 
-class _SearchViewState extends State<SearchView> with SingleTickerProviderStateMixin {
+class _SearchViewState extends ConsumerState<SearchView> with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
   @override
@@ -64,10 +66,10 @@ class _SearchViewState extends State<SearchView> with SingleTickerProviderStateM
                   // snap: true,
                   elevation: 0,
                   backgroundColor: Colors.white, // 투명도 없는 배경색 지정
-                  title: NewWidget(focusScope: _focusScope1, widget: widget),
+                  title: NewWidget(focusScope: _focusScope1),
                   actions: [
                     IconButton(onPressed: () {
-
+                      ref.read(blogSearchProvider.notifier).refresh();
                     }, icon: Icon(Icons.star))
                   ],
                 ),
@@ -118,10 +120,9 @@ class _SearchViewState extends State<SearchView> with SingleTickerProviderStateM
                       // snap: true,
                       elevation: 0,
                       backgroundColor: Colors.white, // 투명도 없는 배경색 지정
-                      title: NewWidget(focusScope: _focusScope2, widget: widget),
+                      title: NewWidget(focusScope: _focusScope2),
                       actions: [
                         IconButton(onPressed: () {
-
                         }, icon: Icon(Icons.star))
                       ],
                     )
@@ -139,28 +140,25 @@ class _SearchViewState extends State<SearchView> with SingleTickerProviderStateM
 class NewWidget extends ConsumerWidget {
   const NewWidget({
     super.key,
-    required FocusNode focusScope,
-    required this.widget,
+    required FocusNode focusScope
   }) : _focusScope = focusScope;
 
   final FocusNode _focusScope;
-  final SearchView<BaseWidgetTextController> widget;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-
-    final TextEditingController controller = ref.watch(queryTextProvider);
+    final a = ref.watch(queryTextControllerProvider);
 
     return TextFormField(
       focusNode: _focusScope,
+      controller: a.whenOrNull(),
       onTap: () {},
-      controller: controller,
       onTapOutside: (value) {
         _focusScope.unfocus();
       },
       decoration: InputDecoration(
           border: InputBorder.none,
-          hintText: controller.text
+          hintText: '검색어를 입력하세요'
       ),
     );
   }

@@ -1,12 +1,14 @@
 
 import 'package:dateapp/presentation/viewmodel/home_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/base/controller/widget_textcontroller_base.dart';
+import '../viewmodel/provider/search/search_common.dart';
 import '../views/search/search_view.dart';
 
 
-class CustomAppBar<T extends BaseWidgetTextController> extends StatelessWidget implements PreferredSizeWidget {
+class CustomAppBar<T extends BaseWidgetTextController> extends ConsumerWidget implements PreferredSizeWidget {
   // final T controller;
   final Color barColor;
   const CustomAppBar({
@@ -16,7 +18,9 @@ class CustomAppBar<T extends BaseWidgetTextController> extends StatelessWidget i
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final searchText = ref.watch(queryTextControllerProvider);
+
     return Container(
       color: barColor,
       child: Container(
@@ -33,7 +37,7 @@ class CustomAppBar<T extends BaseWidgetTextController> extends StatelessWidget i
                 Row(
                   children: [
                     const SizedBox(width: 20,),
-                    Text("서울", style: TextStyle(fontSize: 20, color: Colors.white, fontWeight: FontWeight.w500),),
+                    Text(searchText.whenOrNull(), style: TextStyle(fontSize: 20, color: Colors.white, fontWeight: FontWeight.w500),),
                   ],
                 ),
                 Spacer(),

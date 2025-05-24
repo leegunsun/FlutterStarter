@@ -6,9 +6,9 @@ part of 'search_model.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-NaverApiBlogSearchModel _$NaverApiBlogSearchModelFromJson(
+_NaverApiBlogSearchModel _$NaverApiBlogSearchModelFromJson(
         Map<String, dynamic> json) =>
-    NaverApiBlogSearchModel(
+    _NaverApiBlogSearchModel(
       lastBuildDate: json['lastBuildDate'] as String,
       total: json['total'] as num,
       start: json['start'] as num,
@@ -19,33 +19,11 @@ NaverApiBlogSearchModel _$NaverApiBlogSearchModelFromJson(
     );
 
 Map<String, dynamic> _$NaverApiBlogSearchModelToJson(
-        NaverApiBlogSearchModel instance) =>
+        _NaverApiBlogSearchModel instance) =>
     <String, dynamic>{
       'lastBuildDate': instance.lastBuildDate,
       'total': instance.total,
       'start': instance.start,
       'display': instance.display,
       'items': instance.items.map((e) => e.toJson()).toList(),
-    };
-
-BlogSearchItems _$BlogSearchItemsFromJson(Map<String, dynamic> json) =>
-    BlogSearchItems(
-      title: json['title'] as String,
-      link: json['link'] as String,
-      description: json['description'] as String,
-      bloggername: json['bloggername'] as String,
-      bloggerlink: json['bloggerlink'] as String,
-      postdate: json['postdate'] as String,
-      thumnail: json['thumnail'] as String?,
-    );
-
-Map<String, dynamic> _$BlogSearchItemsToJson(BlogSearchItems instance) =>
-    <String, dynamic>{
-      'title': instance.title,
-      'link': instance.link,
-      'thumnail': instance.thumnail,
-      'description': instance.description,
-      'bloggername': instance.bloggername,
-      'bloggerlink': instance.bloggerlink,
-      'postdate': instance.postdate,
     };

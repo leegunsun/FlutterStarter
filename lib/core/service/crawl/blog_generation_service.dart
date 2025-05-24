@@ -2,10 +2,9 @@
 import 'dart:convert';
 
 import 'package:firebase_vertexai/firebase_vertexai.dart';
-import 'package:flutter/material.dart' hide Element;
-import 'package:html/dom.dart' show Document, Element;
-import 'package:html/parser.dart' as htmlParser;
+import 'package:collection/collection.dart';
 
+import '../../models/naver/blog_search_items.dart';
 import '../../models/naver/crawl_naver_blog_model.dart';
 import '../../models/naver/img_search_model.dart';
 import '../../models/naver/search_model.dart';
@@ -27,7 +26,9 @@ class BlogGenerationService {
             properties: {
               'title': Schema.string(
                   description: "글의 제목을 나타냅니다. 핵심 주제를 간결하게 표현하는 것이 중요합니다."),
-              'blogMobileLink': Schema.string(),
+              'blogMobileLink': Schema.string(
+                  description: "해당 글을 모바일 환경에서 확인 할 수 있는 url을 나타냅니다.",
+              ),
               'postdate': Schema.string(),
               'tag': Schema.string(
                   description: "태그는 글의 주제나 특징을 나타내는 단어로 작성해야 하며, 단어 간 띄어쓰기를 허용하지 않습니다. 태그는 쉼표(,)로 구분해야 합니다."
@@ -77,13 +78,14 @@ class BlogGenerationService {
       }),
     );
 
-    // 검색 결과를 업데이트
-    for (int i = 0; i < _baseResult.items.length; i++) {
-      _baseResult.items[i].thumnail = _imgSearchResponse[i]?.items.firstOrNull?.link;
-    }
+    final List<BlogSearchItems> updatedItems = _baseResult.items
+        .mapIndexed((int i, BlogSearchItems item) => item.copyWith(
+      thumnail: _imgSearchResponse[i]?.items.firstOrNull?.link,
+    )).toList();
 
-    return _baseResult;
+    return _baseResult.copyWith(items: updatedItems);
   }
+
 
   Future<VertexSearchModel?> generateContentFromBlog(BlogSearchItems item) async {
     final BlogCrawlerService _crawler = BlogCrawlerService();

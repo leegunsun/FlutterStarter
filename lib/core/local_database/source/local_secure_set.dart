@@ -6,4 +6,8 @@ class _LocalSecureSourceSet extends LocalSecureSource {
     await LocalSecureStorage.write(key: EnvironmentConfig.constants.SEARCH_HISTORY, value: value);
   }
 
+  Future<void> searchLastInputHistory ({required List<String> value}) async {
+    await LocalSecureStorage.write(key: EnvironmentConfig.constants.SEARCH_HISTORY, value: value);
+  }
+
 }

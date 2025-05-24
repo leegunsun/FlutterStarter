@@ -13,7 +13,7 @@ class BlogCrawlerService {
 
   Future<CrawlNaverBlogModel?> fetchBlogContent(String? url) async {
     if (url == null) {
-      throw Exception("URL이 null입니다.");
+      return null;
     }
 
     try {

@@ -2,10 +2,10 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:dateapp/presentation/viewmodel/provider/search/search_blog.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../core/models/naver/search_model.dart';
+
 import '../../core/models/vertex/vertex_search_model.dart';
 import '../../core/service/crawl/blog_generation_service.dart';
 
@@ -40,10 +40,9 @@ class AiParserRepository {
   VertexSearchModel _mapDoc(QueryDocumentSnapshot<Map<String, dynamic>> doc) {
     final raw = Map<String, dynamic>.from(doc.data());
     // 태그 합치기
-    final tags = List<String>.from(raw['tag'] as List<dynamic>);
+    final tags = List<String>.from((raw['tag'] as Map<String, dynamic>)['tag'] as List<dynamic>);
     // 크롤 콘텐츠 구조 복원
-    final crawlList = (raw['crawlContent'] as Map<String, dynamic>)['crawlContent']
-    as List<dynamic>;
+    final crawlList = (raw['crawlContent'] as Map<String, dynamic>)['crawlContent'] as List<dynamic>;
     final processed = VertexSearchModel.fromJson({
       ...raw,
       'tag': tags.join(','),
@@ -60,14 +59,6 @@ class AiParserRepository {
   }
 }
 
-
-/// 블로그 검색만 담당
-final blogSearchProvider = FutureProvider.autoDispose<List<BlogSearchItems>>((ref) async {
-  final svc = ref.read(blogSvcProvider);
-  final query = ref.read(queryTextProvider).text.trim().replaceAll(' ', '+');
-  final result = await svc.searchBlogs(query);
-  return result.items.where((e) => e.isNaverBlog).toList();
-});
 
 /// 랜덤 도큐먼트만 담당
 final randomDocsProvider = FutureProvider.autoDispose<List<VertexSearchModel>>((ref) {
@@ -112,7 +103,7 @@ class CombinedNotifier extends AutoDisposeAsyncNotifier<List<VertexSearchModel>>
   }
 }
 
-final combinedProvider = AsyncNotifierProvider.autoDispose<CombinedNotifier, List<VertexSearchModel>>(
+final AutoDisposeAsyncNotifierProvider<CombinedNotifier, List<VertexSearchModel>> combinedProvider = AsyncNotifierProvider.autoDispose<CombinedNotifier, List<VertexSearchModel>>(
       () => CombinedNotifier(),
 );
 
@@ -123,4 +114,4 @@ final aiRepoProvider = Provider<AiParserRepository>(
 final blogSvcProvider = Provider<BlogGenerationService>(
       (ref) => BlogGenerationService(),
 );
-final StateProvider<TextEditingController> queryTextProvider = StateProvider<TextEditingController>((ref) => TextEditingController(text : '문정역 맛집'));
+

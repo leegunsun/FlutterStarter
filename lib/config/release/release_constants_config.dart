@@ -5,6 +5,7 @@ abstract class ConstantsConfig {
   static final _instance = kDebugMode ? _DebugConstantsConfig() : _ReleaseConstantsConfig();
 
   String get SEARCH_HISTORY;
+  String get SEARCH_LAST_INPUT_HISTORY;
   String get THIS_APP_NAME;
   String get EASY_LOCAL_ASSET;
   String get ASSETS_ENV;
@@ -17,6 +18,9 @@ class _ReleaseConstantsConfig extends ConstantsConfig {
 
   @override
   String get SEARCH_HISTORY => "search_history";
+
+  @override
+  String get SEARCH_LAST_INPUT_HISTORY => "search_last_input_history";
 
   @override
   String get THIS_APP_NAME => "com.ddate.dateapp";

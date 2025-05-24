@@ -5,6 +5,8 @@ import 'package:dateapp/core/local_database/source/local_secure_source.dart';
 import 'package:dateapp/core/local_database/local_secure_storage.dart';
 import 'package:flutter/material.dart';
 
+import '../../../../config/environment_config.dart';
+
 class SearchTabView0 extends StatefulWidget {
   const SearchTabView0({super.key});
 
@@ -36,9 +38,9 @@ class _SearchTabView0State extends State<SearchTabView0> with SingleTickerProvid
 
   Future<void> loadSearchHistory () async {
     await LocalSecureSource.set.searchInputHistory(value: ["one", "two", "three"]);
-    List<String?> _getSearchData = await LocalSecureSource.get.searchInputHistory();
-    _getSearchHistory.addAll(_getSearchData);
-    setState(() {});
+    // Map<String, dynamic>? _getSearchData = await LocalSecureSource.get.getSecureItem(EnvironmentConfig.constants.SEARCH_HISTORY);
+    // _getSearchHistory.addAll(_getSearchData);
+    // setState(() {});
   }
 
   void _toggle () {

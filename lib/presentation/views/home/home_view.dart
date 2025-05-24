@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 
+
 import '../../../core/models/vertex/vertex_search_model.dart';
 import '../../viewmodel/home_view_model.dart';
 import '../../widgets/custom_appbar.dart';
@@ -43,6 +44,7 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
     await _remoteConfig.setDefaults(const {
       "home_sub_title": "👋 좋아요 ",
       "close_server": "false",
+      "suggest_list": "맛집', '데이트 코스', '음식점 추천",
     });
     await _remoteConfig.fetchAndActivate();
     if(mounted) {
@@ -60,8 +62,6 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
   Widget build(BuildContext context) {
     // 2) Riverpod에서 제공하는 AsyncValue로 콘텐츠 로딩 상태 구독
     final AsyncValue<List<VertexSearchModel>> aiListAsync = ref.watch(combinedProvider);
-    // 3) 검색어 상태 구독
-    final TextEditingController query = ref.watch(queryTextProvider);
 
     return aiListAsync.when(
       loading: () => PopScope(
@@ -73,7 +73,7 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
       error: (err, st) => Scaffold(
         body: Center(child: Text('오류 발생: $err')),
       ),
-      data: (aiItems) => PopScope(
+      data: (List<VertexSearchModel> aiItems) => PopScope(
         canPop: false,
         child: Scaffold(
           floatingActionButton: FloatingActionButton(
