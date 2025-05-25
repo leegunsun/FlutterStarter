@@ -54,7 +54,6 @@ class _SearchTabView0State extends ConsumerState<SearchTabView0> with SingleTick
 
   @override
   Widget build(BuildContext context) {
-    final AsyncValue<TextEditingController> tc = ref.read(queryTextControllerProvider);
 
     return SingleChildScrollView(
       child: Column(
@@ -75,7 +74,9 @@ class _SearchTabView0State extends ConsumerState<SearchTabView0> with SingleTick
               itemBuilder: (BuildContext context, int index) {
                 return GestureDetector(
                   onTap: () {
-                    tc.value?.text = widget.getSearchHistory[index];
+                    ref.read(queryTextControllerProvider.notifier).updateQuery(
+                      widget.getSearchHistory[index],
+                    );
                   },
                   child: Center(
                     child: Container(

@@ -81,6 +81,7 @@ class BlogGenerationService {
     final List<BlogSearchItems> updatedItems = _baseResult.items
         .mapIndexed((int i, BlogSearchItems item) => item.copyWith(
       thumnail: _imgSearchResponse[i]?.items.firstOrNull?.link,
+      blogMobileLink : item.blogMobileLink ?? item.link,
     )).toList();
 
     return _baseResult.copyWith(items: updatedItems);

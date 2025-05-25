@@ -19,7 +19,7 @@ class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final searchText = ref.watch(queryTextControllerProvider);
+    final AsyncValue<String> searchText = ref.watch(queryTextControllerProvider);
 
     return Container(
       color: barColor,
@@ -41,17 +41,11 @@ class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
                         .when(
                       loading: () => '로딩중',
                       error: (err, stack) => '오류: $err',
-                      data: (TextEditingController controller) => controller.text,),
+                      data: (String controller) => controller),
                       style: TextStyle(fontSize: 20, color: Colors.white, fontWeight: FontWeight.w500),),
                   ],
                 ),
                 Spacer(),
-                IconButton(onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => SearchView()),
-                  );
-                }, icon: Icon(Icons.search, color: Colors.white, size: 30,))
               ],
             ),
           ),

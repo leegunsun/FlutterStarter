@@ -30,6 +30,7 @@ class _SearchViewState extends ConsumerState<SearchView> with SingleTickerProvid
   final TextStyle _textStyle = TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 20);
   final ValueNotifier<bool> isFocused = ValueNotifier<bool>(false);
   final List<String> _getSearchHistory = [];
+  final TextEditingController textEditingController = TextEditingController();
 
 
   @override
@@ -59,13 +60,13 @@ class _SearchViewState extends ConsumerState<SearchView> with SingleTickerProvid
     }
   }
 
-  void setSearchHistory (AsyncValue<TextEditingController> controllerAsync) {
+  void setSearchHistory (AsyncValue<String> controllerAsync) {
 
-    TextEditingController tc = controllerAsync.maybeWhen(
+    String tc = controllerAsync.maybeWhen(
         data: (e) => e,
-        orElse: () => TextEditingController());
+        orElse: () => "검색");
 
-    _getSearchHistory.add(tc.text);
+    _getSearchHistory.add(tc);
     LocalSecureSource.set.searchInputHistory(value: _getSearchHistory);
   }
 
@@ -76,7 +77,6 @@ class _SearchViewState extends ConsumerState<SearchView> with SingleTickerProvid
     for (FocusNode scope in _focusScope) {
       scope.dispose();
     }
-    _focusScope[0].dispose();
     isFocused.dispose();
     _tabController.dispose();
     super.dispose();
@@ -85,7 +85,7 @@ class _SearchViewState extends ConsumerState<SearchView> with SingleTickerProvid
 
   @override
   Widget build(BuildContext context) {
-    final AsyncValue<TextEditingController> controllerAsync = ref.watch(queryTextControllerProvider);
+    final AsyncValue<String> controllerAsync = ref.watch(queryTextControllerProvider);
     
     
     return Scaffold(
@@ -105,7 +105,7 @@ class _SearchViewState extends ConsumerState<SearchView> with SingleTickerProvid
                   // snap: true,
                   elevation: 0,
                   backgroundColor: Colors.white, // 투명도 없는 배경색 지정
-                  title: NewWidget(focusScope: _focusScope[0]),
+                  title: NewWidget(focusScope: _focusScope[0], textEditingController: textEditingController,),
                   actions: [
                     IconButton(onPressed: () async {
                       ref.read(blogSearchProvider.notifier).refresh();
@@ -161,7 +161,7 @@ class _SearchViewState extends ConsumerState<SearchView> with SingleTickerProvid
                       // snap: true,
                       elevation: 0,
                       backgroundColor: Colors.white, // 투명도 없는 배경색 지정
-                      title: NewWidget(focusScope: _focusScope[1]),
+                      title: NewWidget(focusScope: _focusScope[1], textEditingController: textEditingController,),
                       actions: [
                         IconButton(onPressed: () {
                         }, icon: Icon(Icons.star))
@@ -181,30 +181,36 @@ class _SearchViewState extends ConsumerState<SearchView> with SingleTickerProvid
 class NewWidget extends ConsumerWidget {
   const NewWidget({
     super.key,
-    required this.focusScope
+    required this.focusScope,
+    required this.textEditingController,
   });
 
   final FocusNode focusScope;
+  final TextEditingController textEditingController;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final controllerAsync = ref.watch(queryTextControllerProvider);
+    final AsyncValue<String> controllerAsync = ref.watch(queryTextControllerProvider);
 
     return controllerAsync.when(
       loading: () => const Text('로딩 중...'),
       error: (e, s) => const Text('오류 발생: 입력창을 사용할 수 없습니다.'),
-      data: (controller) => TextFormField(
-        focusNode: focusScope,
-        controller: controller,
-        onTap: () {
+      data: (String controller) {
+        textEditingController.text = controller;
 
-        },
-        onTapOutside: (_) => focusScope.unfocus(),
-        decoration: const InputDecoration(
-          border: InputBorder.none,
-          hintText: '검색어를 입력하세요',
-        ),
-      ),
+        return TextFormField(
+          focusNode: focusScope,
+          controller: textEditingController,
+          onTap: () {
+
+          },
+          onTapOutside: (_) => focusScope.unfocus(),
+          decoration: const InputDecoration(
+            border: InputBorder.none,
+            hintText: '검색어를 입력하세요',
+          ),
+        );
+      },
     );
   }
 
