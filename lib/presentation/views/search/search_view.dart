@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../config/environment_config.dart';
 import '../../../core/base/controller/widget_textcontroller_base.dart';
+import '../../../core/local_database/source/local_secure_source.dart';
 import '../../viewmodel/home_view_model.dart';
 import '../../viewmodel/provider/search/search_blog.dart';
 import '../../viewmodel/provider/search/search_common.dart';
 import 'detail/search_tab_view_0.dart';
 
-class SearchView<T extends BaseWidgetTextController> extends ConsumerStatefulWidget {
-  // final T controller;
+class SearchView extends ConsumerStatefulWidget {
+
   const SearchView({
     super.key,
     // required this.controller,
@@ -19,29 +21,63 @@ class SearchView<T extends BaseWidgetTextController> extends ConsumerStatefulWid
 }
 
 class _SearchViewState extends ConsumerState<SearchView> with SingleTickerProviderStateMixin {
+
+
   late TabController _tabController;
+  late final List<FocusNode> _focusScope;
+
+
+  final TextStyle _textStyle = TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 20);
+  final ValueNotifier<bool> isFocused = ValueNotifier<bool>(false);
+  final List<String> _getSearchHistory = [];
+
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    loadSearchHistory();
+    _focusScope = List.generate(2, (e) => FocusNode());
+    
     _tabController = TabController(length: 2, vsync: this);
     // FocusNode의 상태 변경을 감지하여 ValueNotifier를 업데이트
-    _focusScope1.addListener(() {
-      _isFocused.value = _focusScope1.hasFocus;
+    _focusScope[0].addListener(() {
+      isFocused.value = _focusScope[0].hasFocus;
     });
   }
 
-  final TextStyle _textStyle = TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 20);
-  final ValueNotifier<bool> _isFocused = ValueNotifier<bool>(false);
-  final FocusNode _focusScope1 = FocusNode();
-  final FocusNode _focusScope2 = FocusNode();
+
+  Future<void> loadSearchHistory () async {
+
+    await LocalSecureSource
+        .get
+        .getSecureItem(EnvironmentConfig.constants.SEARCH_HISTORY)
+        .then((List<dynamic> items) => _getSearchHistory.addAll(items.take(40).map((e) => e.toString())));
+
+    if(mounted) {
+      setState(() {});
+    }
+  }
+
+  void setSearchHistory (AsyncValue<TextEditingController> controllerAsync) {
+
+    TextEditingController tc = controllerAsync.maybeWhen(
+        data: (e) => e,
+        orElse: () => TextEditingController());
+
+    _getSearchHistory.add(tc.text);
+    LocalSecureSource.set.searchInputHistory(value: _getSearchHistory);
+  }
+
 
   @override
   void dispose() {
-    _focusScope1.dispose();
-    _focusScope2.dispose();
-    _isFocused.dispose();
+
+    for (FocusNode scope in _focusScope) {
+      scope.dispose();
+    }
+    _focusScope[0].dispose();
+    isFocused.dispose();
     _tabController.dispose();
     super.dispose();
   }
@@ -49,6 +85,9 @@ class _SearchViewState extends ConsumerState<SearchView> with SingleTickerProvid
 
   @override
   Widget build(BuildContext context) {
+    final AsyncValue<TextEditingController> controllerAsync = ref.watch(queryTextControllerProvider);
+    
+    
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: FocusScope(
@@ -66,10 +105,12 @@ class _SearchViewState extends ConsumerState<SearchView> with SingleTickerProvid
                   // snap: true,
                   elevation: 0,
                   backgroundColor: Colors.white, // 투명도 없는 배경색 지정
-                  title: NewWidget(focusScope: _focusScope1),
+                  title: NewWidget(focusScope: _focusScope[0]),
                   actions: [
-                    IconButton(onPressed: () {
+                    IconButton(onPressed: () async {
                       ref.read(blogSearchProvider.notifier).refresh();
+
+                      setSearchHistory(controllerAsync);
                     }, icon: Icon(Icons.star))
                   ],
                 ),
@@ -83,7 +124,7 @@ class _SearchViewState extends ConsumerState<SearchView> with SingleTickerProvid
                 controller: _tabController,
                 viewportFraction: 1,
                 children: [
-                  SearchTabView0(),
+                  SearchTabView0(getSearchHistory: _getSearchHistory,),
 
                   // ListView(
                   //   shrinkWrap: true,
@@ -101,7 +142,7 @@ class _SearchViewState extends ConsumerState<SearchView> with SingleTickerProvid
               ),
             ),
             ValueListenableBuilder<bool>(
-              valueListenable: _isFocused,
+              valueListenable: isFocused,
               builder: (BuildContext context, bool value, Widget? child) {
                 return Visibility(
                     visible: value,
@@ -120,7 +161,7 @@ class _SearchViewState extends ConsumerState<SearchView> with SingleTickerProvid
                       // snap: true,
                       elevation: 0,
                       backgroundColor: Colors.white, // 투명도 없는 배경색 지정
-                      title: NewWidget(focusScope: _focusScope2),
+                      title: NewWidget(focusScope: _focusScope[1]),
                       actions: [
                         IconButton(onPressed: () {
                         }, icon: Icon(Icons.star))
@@ -140,28 +181,33 @@ class _SearchViewState extends ConsumerState<SearchView> with SingleTickerProvid
 class NewWidget extends ConsumerWidget {
   const NewWidget({
     super.key,
-    required FocusNode focusScope
-  }) : _focusScope = focusScope;
+    required this.focusScope
+  });
 
-  final FocusNode _focusScope;
+  final FocusNode focusScope;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final a = ref.watch(queryTextControllerProvider);
+    final controllerAsync = ref.watch(queryTextControllerProvider);
 
-    return TextFormField(
-      focusNode: _focusScope,
-      controller: a.whenOrNull(),
-      onTap: () {},
-      onTapOutside: (value) {
-        _focusScope.unfocus();
-      },
-      decoration: InputDecoration(
+    return controllerAsync.when(
+      loading: () => const Text('로딩 중...'),
+      error: (e, s) => const Text('오류 발생: 입력창을 사용할 수 없습니다.'),
+      data: (controller) => TextFormField(
+        focusNode: focusScope,
+        controller: controller,
+        onTap: () {
+
+        },
+        onTapOutside: (_) => focusScope.unfocus(),
+        decoration: const InputDecoration(
           border: InputBorder.none,
-          hintText: '검색어를 입력하세요'
+          hintText: '검색어를 입력하세요',
+        ),
       ),
     );
   }
+
 }
 
 

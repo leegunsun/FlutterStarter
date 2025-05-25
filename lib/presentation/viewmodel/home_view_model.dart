@@ -6,6 +6,7 @@ import 'package:dateapp/presentation/viewmodel/provider/search/search_blog.dart'
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 
+import '../../core/models/naver/blog_search_items.dart';
 import '../../core/models/vertex/vertex_search_model.dart';
 import '../../core/service/crawl/blog_generation_service.dart';
 
@@ -61,8 +62,8 @@ class AiParserRepository {
 
 
 /// 랜덤 도큐먼트만 담당
-final randomDocsProvider = FutureProvider.autoDispose<List<VertexSearchModel>>((ref) {
-  final repo = ref.read(aiRepoProvider);
+final AutoDisposeFutureProvider<List<VertexSearchModel>> randomDocsProvider = FutureProvider.autoDispose<List<VertexSearchModel>>((ref) {
+  final AiParserRepository repo = ref.read(aiRepoProvider);
   return repo.fetchRandomDocs(limit: 5);
 });
 
@@ -71,9 +72,9 @@ class CombinedNotifier extends AutoDisposeAsyncNotifier<List<VertexSearchModel>>
   @override
   Future<List<VertexSearchModel>> build() async {
     // 병렬로 블로그 검색과 랜덤 문서 조회
-    final blogItems = await ref.watch(blogSearchProvider.future);
-    final repo = ref.read(aiRepoProvider);
-    final svc = ref.read(blogSvcProvider);
+    final List<BlogSearchItems> blogItems = await ref.watch(blogSearchProvider.future);
+    final AiParserRepository repo = ref.read(aiRepoProvider);
+    final BlogGenerationService svc = ref.read(blogSvcProvider);
 
     // AI 컨텐츠 생성 (랜덤 2개)
     final picks = blogItems..shuffle();
@@ -108,10 +109,10 @@ final AutoDisposeAsyncNotifierProvider<CombinedNotifier, List<VertexSearchModel>
 );
 
 // 기존 Providers
-final aiRepoProvider = Provider<AiParserRepository>(
+final Provider<AiParserRepository> aiRepoProvider = Provider<AiParserRepository>(
       (ref) => AiParserRepository(FirebaseFirestore.instance),
 );
-final blogSvcProvider = Provider<BlogGenerationService>(
+final Provider<BlogGenerationService> blogSvcProvider = Provider<BlogGenerationService>(
       (ref) => BlogGenerationService(),
 );
 

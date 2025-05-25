@@ -70,12 +70,12 @@ class BlogGenerationService {
     // 기본 블로그 검색 수행
     NaverApiBlogSearchModel _baseResult = await _naverAPI.blogSearch.getBlogSearch(query: query);
 
-    // 이미지 검색 요청을 병렬 처리
     List<ImgSearchModel?> _imgSearchResponse = await Future.wait(
-      _baseResult.items.map((searchItem) {
-        String formattedQuery = removeHtmlTags(searchItem.title).replaceAll(" ", "+");
-        return _naverAPI.blogSearch.getBlogImgSearch(query: formattedQuery);
-      }),
+      _baseResult.items.map((searchItem) =>
+          _naverAPI
+              .blogSearch
+              .getBlogImgSearch(query: removeHtmlTags(searchItem.title).replaceAll(" ", "+"))
+      ),
     );
 
     final List<BlogSearchItems> updatedItems = _baseResult.items

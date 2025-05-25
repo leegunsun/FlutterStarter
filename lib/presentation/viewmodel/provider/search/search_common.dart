@@ -10,15 +10,20 @@ import '../../../../core/local_database/source/local_secure_source.dart';
 
 
 class QueryTextControllerNotifier extends AutoDisposeAsyncNotifier<TextEditingController> {
+  QueryTextControllerNotifier();
 
   @override
-  Future<TextEditingController> build() async {
-      String? data = await LocalSecureSource.get.getSecureItem(EnvironmentConfig.constants.SEARCH_LAST_INPUT_HISTORY);
-      final controller = TextEditingController(text: data ?? '');
-      return controller;
-  }
+  Future<TextEditingController> build() =>
+      LocalSecureSource
+          .get
+          .getSecureItem(EnvironmentConfig.constants.SEARCH_LAST_INPUT_HISTORY)
+          .then((List<dynamic> value) => TextEditingController(
+        text: (value.first is String)
+            ? value.first as String
+            : "검색",
+      ));
 
 }
 
-final queryTextControllerProvider =
+final AutoDisposeAsyncNotifierProvider<QueryTextControllerNotifier, TextEditingController> queryTextControllerProvider =
 AsyncNotifierProvider.autoDispose<QueryTextControllerNotifier, TextEditingController>(QueryTextControllerNotifier.new);

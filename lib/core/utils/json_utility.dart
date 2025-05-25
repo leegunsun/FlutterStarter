@@ -21,7 +21,7 @@ class JsonUtils {
     return null;
   }
 
-  static Map<String, dynamic>? decodeFromJson ({required String? value}) {
+  static Map<String, dynamic> decodeFromJson ({required String? value}) {
     try {
 
       if(value == null) {
@@ -32,7 +32,7 @@ class JsonUtils {
       return _jsonDecode;
     } catch (e) {
       print(e);
+      rethrow;
     }
-    return null;
   }
 }

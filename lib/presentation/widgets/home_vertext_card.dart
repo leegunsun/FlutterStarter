@@ -20,7 +20,7 @@ class VertexCarousel extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
 
-    final controller = ref.watch(combinedProvider);
+    final AsyncValue<List<VertexSearchModel>> controller = ref.watch(combinedProvider);
 
     return ConstrainedBox(
       constraints: BoxConstraints(
@@ -38,13 +38,9 @@ class VertexCarousel extends ConsumerWidget {
             return SizedBox.shrink();
           }
 
-          final List<CrawlContent?> _crawlContent = response.crawlContent.where((CrawlContent? ele) {
-           final result = ele?.contentType == ContentType.image;
-           // if(result) {
-           //   precacheImage(NetworkImage(ele?.contentValue ?? ""), context);
-           // }
-           return result;
-          }).toList();
+          final List<CrawlContent?> _crawlContent = response.crawlContent
+              .where((CrawlContent? ele) => ele?.contentType == ContentType.image)
+              .toList();
 
           return SizedBox(
             width: MediaQuery.of(context).size.width,

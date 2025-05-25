@@ -1,13 +1,16 @@
 import 'package:dateapp/core/local_database/source/local_secure_source.dart';
 import 'package:dateapp/presentation/viewmodel/provider/search/search_common.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/models/naver/blog_search_items.dart';
+import '../../../../core/models/naver/search_model.dart';
+import '../../../../core/service/crawl/blog_generation_service.dart';
 import '../../home_view_model.dart';
 
 /// 블로그 검색만 담당
-final blogSearchProvider = AsyncNotifierProvider.autoDispose<BlogSearchNotifier, List<BlogSearchItems>>(() => BlogSearchNotifier());
+final AutoDisposeAsyncNotifierProvider<BlogSearchNotifier, List<BlogSearchItems>> blogSearchProvider = AsyncNotifierProvider.autoDispose<BlogSearchNotifier, List<BlogSearchItems>>(() => BlogSearchNotifier());
 
 
 class BlogSearchNotifier extends AutoDisposeAsyncNotifier<List<BlogSearchItems>> {
@@ -16,18 +19,22 @@ class BlogSearchNotifier extends AutoDisposeAsyncNotifier<List<BlogSearchItems>>
   
   @override
   Future<List<BlogSearchItems>> build() async {
-    final svc = ref.read(blogSvcProvider);
-    final query = ref.watch(queryTextControllerProvider);
+    final BlogGenerationService svc = ref.read(blogSvcProvider);
+    final AsyncValue<TextEditingController> query = ref.watch(queryTextControllerProvider);
 
-    final rawQuery = query.whenOrNull() ?? '';
-    final refinedQuery = (restaurantKeywords.any(rawQuery.contains)
+    final rawQuery = query.maybeMap(
+      data: (AsyncData<TextEditingController> e) => e.value.text,
+      orElse: () => "",
+    );
+
+    final String refinedQuery = (restaurantKeywords.any(rawQuery.contains)
         ? rawQuery
         : '$rawQuery 맛집')
         .replaceAll(' ', '+');
 
-    LocalSecureSource.set.searchLastInputHistory(value: [refinedQuery]);
+    LocalSecureSource.set.searchLastInputHistory(value: [rawQuery]);
     
-    final result = await svc.searchBlogs(refinedQuery);
+    final NaverApiBlogSearchModel result = await svc.searchBlogs(refinedQuery);
     return result.items.where((e) => e.isNaverBlog).toList();
   }
 

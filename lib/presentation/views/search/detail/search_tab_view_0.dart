@@ -4,20 +4,22 @@ import 'dart:convert';
 import 'package:dateapp/core/local_database/source/local_secure_source.dart';
 import 'package:dateapp/core/local_database/local_secure_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../config/environment_config.dart';
+import '../../../viewmodel/provider/search/search_common.dart';
 
-class SearchTabView0 extends StatefulWidget {
-  const SearchTabView0({super.key});
+class SearchTabView0 extends ConsumerStatefulWidget {
+  final List<String> getSearchHistory;
+  const SearchTabView0({super.key, required this.getSearchHistory});
 
   @override
-  State<SearchTabView0> createState() => _SearchTabView0State();
+  ConsumerState<SearchTabView0> createState() => _SearchTabView0State();
 }
 
-class _SearchTabView0State extends State<SearchTabView0> with SingleTickerProviderStateMixin {
+class _SearchTabView0State extends ConsumerState<SearchTabView0> with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<double> _animation;
-  List<String?> _getSearchHistory = [];
   bool _isOpen = false;
   bool b = false;
 
@@ -31,17 +33,10 @@ class _SearchTabView0State extends State<SearchTabView0> with SingleTickerProvid
   void initState() {
     // TODO: implement initState
     super.initState();
-    loadSearchHistory();
     _animationController = AnimationController(vsync: this, duration: Duration(milliseconds: 300));
     _animation = Tween<double>(begin: 0, end: 1).animate(_animationController..duration = Duration(milliseconds: 40));
   }
 
-  Future<void> loadSearchHistory () async {
-    await LocalSecureSource.set.searchInputHistory(value: ["one", "two", "three"]);
-    // Map<String, dynamic>? _getSearchData = await LocalSecureSource.get.getSecureItem(EnvironmentConfig.constants.SEARCH_HISTORY);
-    // _getSearchHistory.addAll(_getSearchData);
-    // setState(() {});
-  }
 
   void _toggle () {
     _isOpen = !_isOpen;
@@ -55,11 +50,12 @@ class _SearchTabView0State extends State<SearchTabView0> with SingleTickerProvid
       _animationController.reverse();
     }
   }
-  List<String> items = ['item1', 'item2', 'item3'];
 
 
   @override
   Widget build(BuildContext context) {
+    final AsyncValue<TextEditingController> tc = ref.read(queryTextControllerProvider);
+
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -75,23 +71,27 @@ class _SearchTabView0State extends State<SearchTabView0> with SingleTickerProvid
             height: 40, // 내부 ListView의 높이를 명확하게 지정
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
-              itemCount: _getSearchHistory.length,
+              itemCount: widget.getSearchHistory.length,
               itemBuilder: (BuildContext context, int index) {
-                return Center(
-                  child: Container(
-                    width: 40,
-                    height: 30,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      border: Border.all(color: Colors.black),
+                return GestureDetector(
+                  onTap: () {
+                    tc.value?.text = widget.getSearchHistory[index];
+                  },
+                  child: Center(
+                    child: Container(
+                      width: 40,
+                      height: 30,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(color: Colors.black),
+                      ),
+                      child: Center(child: Text(widget.getSearchHistory[index])),
                     ),
-                    child: Center(child: Text("${_getSearchHistory[index]}")),
                   ),
                 );
               },
             ),
           ),
-          Text("최근 검색어"),
           Column(
             children: [
               Row(

@@ -8,8 +8,8 @@ import '../viewmodel/provider/search/search_common.dart';
 import '../views/search/search_view.dart';
 
 
-class CustomAppBar<T extends BaseWidgetTextController> extends ConsumerWidget implements PreferredSizeWidget {
-  // final T controller;
+class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
+
   final Color barColor;
   const CustomAppBar({
     super.key,
@@ -37,14 +37,19 @@ class CustomAppBar<T extends BaseWidgetTextController> extends ConsumerWidget im
                 Row(
                   children: [
                     const SizedBox(width: 20,),
-                    Text(searchText.whenOrNull(), style: TextStyle(fontSize: 20, color: Colors.white, fontWeight: FontWeight.w500),),
+                    Text(searchText
+                        .when(
+                      loading: () => '로딩중',
+                      error: (err, stack) => '오류: $err',
+                      data: (TextEditingController controller) => controller.text,),
+                      style: TextStyle(fontSize: 20, color: Colors.white, fontWeight: FontWeight.w500),),
                   ],
                 ),
                 Spacer(),
                 IconButton(onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => SearchView<T>()),
+                    MaterialPageRoute(builder: (context) => SearchView()),
                   );
                 }, icon: Icon(Icons.search, color: Colors.white, size: 30,))
               ],
