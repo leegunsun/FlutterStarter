@@ -25,6 +25,7 @@ import 'package:easy_localization/easy_localization.dart';
 part 'core/service/fcm/fcm_service.dart';
 
 void main() async {
+
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   await EnvironmentConfig.init(); // env 등록
@@ -107,6 +108,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+
     return ScreenUtilInit(
       child: ProviderScope(
         child: MaterialApp.router(
