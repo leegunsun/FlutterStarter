@@ -1,0 +1,20 @@
+flutter_native_splash:
+  color: "#ffffff" # 배경색
+  image: assets/30b572a9-3624-45d8-9b7a-0a12bf40b1a2.png # 스플래시 이미지
+  color_dark: "#042a49" # 다크 모드 배경색
+  image_dark: assets/splash-invert.png # 다크 모드 이미지
+
+  android_12:
+    image: assets/30b572a9-3624-45d8-9b7a-0a12bf40b1a2.png
+    color: "#ffffff"
+    icon_background_color: "#ffffff"
+    image_dark: assets/android12splash-invert.png
+    color_dark: "#042a49"
+    icon_background_color_dark: "#eeeeee"
+
+  fullscreen: true
+  ios_content_mode: center
+  android_gravity: center
+  web_image_mode: contain
+
+  # dart run flutter_native_splash:create --path=flutter_native_splash.yaml

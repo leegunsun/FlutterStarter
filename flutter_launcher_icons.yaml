@@ -1,14 +1,44 @@
-# flutter pub run flutter_launcher_icons
+# flutter_launcher_icons.yaml
 flutter_launcher_icons:
-  #  image_path: "assets/images/icon-128x128.png"
-  image_path_android: "assets/andimg.png"
-  image_path_ios: "assets/iosimg.png"
-  android: true # can specify file name here e.g. "ic_launcher"
-  ios: true # can specify file name here e.g. "My-Launcher-Icon"
-  adaptive_icon_background: "#2A1C6A" # only available for Android 8.0 devices and above
-  adaptive_icon_foreground: "assets/andimg.png" # only available for Android 8.0 devices and above
-  adaptive_icon_foreground_inset: 16 # only available for Android 8.0 devices and above
-  #  adaptive_icon_monochrome: "assets/images/icon-monochrome-432x432.png" # only available for Android 13 devices and above
-  min_sdk_android: 21 # android min sdk min:16, default 21
+
+  # 공통 아이콘 이미지 경로 (플랫폼별 이미지 없을 경우 사용됨)
+  image_path: "assets/icon/icon.png"
+
+  # Android 설정
+  android: true
+  image_path_android: "assets/30b572a9-3624-45d8-9b7a-0a12bf40b1a2.png"
+  min_sdk_android: 21
+#  adaptive_icon_background: "#2A1C6A" # only available for Android 8.0 devices and above 또는 "assets/icon/adaptive_bg.png"
+#  adaptive_icon_foreground: "assets/30b572a9-3624-45d8-9b7a-0a12bf40b1a2.png" # only available for Android 8.0 devices and above
+#  adaptive_icon_foreground_inset: 16 # only available for Android 8.0 devices and above
+#  adaptive_icon_monochrome: "assets/icon/adaptive_monochrome.png"
+
+  # iOS 설정
+  ios: true
+  image_path_ios: "assets/30b572a9-3624-45d8-9b7a-0a12bf40b1a2.png"
   remove_alpha_ios: true
   background_color_ios: "#ffffff"
+#  image_path_ios_dark_transparent: "assets/icon/ios_dark.png"
+#  image_path_ios_tinted_grayscale: "assets/icon/ios_tinted.png"
+  desaturate_tinted_to_grayscale_ios: true
+
+#  # Web 설정
+#  web:
+#    generate: true
+#    image_path: "assets/icon/web_icon.png"
+#    background_color: "#ffffff"
+#    theme_color: "#000000"
+#
+#  # Windows 설정
+#  windows:
+#    generate: true
+#    image_path: "assets/icon/windows_icon.png"
+#    icon_size: 256
+#
+#  # macOS 설정
+#  macos:
+#    generate: true
+#    image_path: "assets/icon/macos_icon.png"
+
+
+# flutter pub run flutter_launcher_icons
