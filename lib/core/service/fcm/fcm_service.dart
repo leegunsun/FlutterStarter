@@ -3,11 +3,7 @@ part of '../../../main.dart';
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  await setupFlutterNotifications();
-  showFlutterNotification(message);
-  // If you're going to use other Firebase services in the background, such as Firestore,
-  // make sure you call `initializeApp` before using other Firebase services.
-  print('Handling a background message ${message.messageId}');
+
 }
 
 /// Create a [AndroidNotificationChannel] for heads up notifications
@@ -50,8 +46,8 @@ Future<void> setupFlutterNotifications() async {
 
 void showFlutterNotification(RemoteMessage message) {
   RemoteNotification? notification = message.notification;
-  AndroidNotification? android = message.notification?.android;
-  if (notification != null && android != null && !kIsWeb) {
+  // AndroidNotification? android = message.notification?.android;
+  if (notification != null && !kIsWeb) {
     flutterLocalNotificationsPlugin.show(
       notification.hashCode,
       notification.title,

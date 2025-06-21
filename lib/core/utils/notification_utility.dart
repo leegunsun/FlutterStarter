@@ -1,6 +1,9 @@
 
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+
+import '../navigation/navigation_manager.dart';
 
 class NotificationUtility {
 
@@ -10,7 +13,7 @@ class NotificationUtility {
     'high_importance_channel', // id
     'High Importance Notifications', // title.
     description: 'This channel is used for alert notifications.', // description
-    importance: Importance.max,
+    importance: Importance.high,
   );
 
   Future<void> initMessaging() async {
@@ -37,7 +40,7 @@ class NotificationUtility {
 
     FirebaseMessaging.onMessage.listen((message) {
       if (message != null) {
-        if (message.notification != null) {
+        if (message.data != null) {
           flutterLocalNotificationsPlugin.show(
               hashCode,
               message.notification!.title,
@@ -54,8 +57,16 @@ class NotificationUtility {
         }
       }
     });
+
     FirebaseMessaging.onMessageOpenedApp.listen((event) {
       print("onMessageOpenedApp : $event");
+      ScaffoldMessenger.of(NavigationManager.navigatorKey.currentContext!).showSnackBar( SnackBar(content: Text("onMessageOpenedApp --> ${event.toMap().toString()}")),);
+    });
+
+    FirebaseMessaging.instance.getInitialMessage().then((message) {
+      if (message != null) {
+        ScaffoldMessenger.of(NavigationManager.navigatorKey.currentContext!).showSnackBar( SnackBar(content: Text("getInitialMessage --> ${message.toMap().toString()}")),);
+      }
     });
 
   }

@@ -1,0 +1,2 @@
+C:/Users/zkvpt/Desktop/dateapp/android/app/.cxx/Debug/b1r3w4d4/armeabi-v7a/CMakeFiles/edit_cache.dir
+C:/Users/zkvpt/Desktop/dateapp/android/app/.cxx/Debug/b1r3w4d4/armeabi-v7a/CMakeFiles/rebuild_cache.dir
