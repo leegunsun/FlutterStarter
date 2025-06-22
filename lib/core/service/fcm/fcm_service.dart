@@ -4,6 +4,25 @@ part of '../../../main.dart';
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
+  final firestore = FirebaseFirestore.instance;
+
+  final String userData = await LocalSecureSource
+      .get
+      .getSecureItem(EnvironmentConfig.constants.SEARCH_LAST_INPUT_HISTORY)
+      .then((List<dynamic> value) => (value.first is String)
+      ? value.first as String
+      : "검색");
+
+  final doc = {
+    "title": message.notification?.title ?? '',
+    "body": message.notification?.body ?? '',
+    "data": message.data,
+    "search" : userData,
+    "timestamp": FieldValue.serverTimestamp(),
+  };
+
+  await firestore.collection('notifications').add(doc);
+
 }
 
 /// Create a [AndroidNotificationChannel] for heads up notifications
@@ -60,6 +79,12 @@ void showFlutterNotification(RemoteMessage message) {
           // TODO add a proper drawable resource to android, for now using
           //      one that already exists in example app.
           icon: '@mipmap/ic_launcher',
+        ),
+        iOS: DarwinNotificationDetails(
+          presentAlert: true,
+          presentBadge: true,
+          presentSound: true,
+          sound: 'default',
         ),
       ),
     );

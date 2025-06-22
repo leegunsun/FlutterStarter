@@ -6,6 +6,17 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import '../navigation/navigation_manager.dart';
 
 class NotificationUtility {
+  String topPic = "your-topic";
+
+  Future<void> subscribeToNewsTopic() async {
+    await FirebaseMessaging.instance.subscribeToTopic(topPic);
+    print("✅ '$topPic' 토픽에 구독되었습니다.");
+  }
+
+  Future<void> unsubscribeFromNewsTopic() async {
+    await FirebaseMessaging.instance.unsubscribeFromTopic(topPic);
+    print("❌ '$topPic' 토픽에서 구독 해제되었습니다.");
+  }
 
   final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
@@ -17,6 +28,8 @@ class NotificationUtility {
   );
 
   Future<void> initMessaging() async {
+
+    subscribeToNewsTopic();
 
     await flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
         ?.createNotificationChannel(channel);
@@ -51,7 +64,13 @@ class NotificationUtility {
                   channel.name,
                   channelDescription: channel.description,
                   icon: '@mipmap/ic_launcher',
-                  // other properties...
+                ),
+                iOS: DarwinNotificationDetails( // ← iOS용 설정
+                  presentAlert: true,
+                  presentBadge: true,
+                  presentSound: true,
+                  sound: 'default',
+                  subtitle: message.notification?.body ?? '',
                 ),
               ));
         }
