@@ -1,4 +1,6 @@
 
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dateapp/core/service/fcm/fcm_get_token_service.dart';
 import 'package:dateapp/config/environment_config.dart';
@@ -26,27 +28,34 @@ import 'package:easy_localization/easy_localization.dart';
 
 part 'core/service/fcm/fcm_service.dart';
 
-void main() async {
+void main() {
+  runZonedGuarded(
+        () async {
+          WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+          FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+          await EnvironmentConfig.init(); // env 등록
+          await EasyLocalization.ensureInitialized(); // 국제화
+          await AppsflyerService.init(); // 디퍼드 딥링킹
+          await Firebase.initializeApp(
+            options: DefaultFirebaseOptions.currentPlatform,
+          );
+          FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
-  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
-  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
-  await EnvironmentConfig.init(); // env 등록
-  await EasyLocalization.ensureInitialized(); // 국제화
-  try {
-    await AppsflyerService.init(); // 디퍼드 딥링킹
-  } catch (e) {
-    print(e);
-  }
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
-  runApp(EasyLocalization(
-      supportedLocales: [Locale('en', 'US'), Locale('ko', "KR")],
-      fallbackLocale: const Locale('en', 'US'),
-      path: EnvironmentConfig.constants.EASY_LOCAL_ASSET,
-      child: const MyApp())
+          FlutterError.onError = (FlutterErrorDetails details) {
+            FlutterError.presentError(details); // 콘솔 출력
+            FirebaseCrashlytics.instance.recordFlutterFatalError(details);
+          };
+
+          runApp(EasyLocalization(
+              supportedLocales: [Locale('en', 'US'), Locale('ko', "KR")],
+              fallbackLocale: const Locale('en', 'US'),
+              path: EnvironmentConfig.constants.EASY_LOCAL_ASSET,
+              child: const MyApp())
+          );
+    },
+        (error, stackTrace) async {
+          await FirebaseCrashlytics.instance.recordError(error, stackTrace);
+    },
   );
 }
 

@@ -1,4 +1,3 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -53,7 +52,7 @@ class NavigationManager {
         branches: [
           /// ✅ 각 탭을 `StatefulShellBranch`로 설정하여 상태 유지
           StatefulShellBranch(
-            navigatorKey: GlobalKey<NavigatorState>(), // 네비게이터 키 설정
+            // navigatorKey: GlobalKey<NavigatorState>(), // 네비게이터 키 설정
             routes: [
               GoRoute(
                 path: '/',
@@ -63,7 +62,7 @@ class NavigationManager {
             ],
           ),
           StatefulShellBranch(
-            navigatorKey: GlobalKey<NavigatorState>(),
+            // navigatorKey: GlobalKey<NavigatorState>(),
             routes: [
               GoRoute(
                 path: '/settings',
@@ -73,7 +72,7 @@ class NavigationManager {
             ],
           ),
           StatefulShellBranch(
-            navigatorKey: GlobalKey<NavigatorState>(),
+            // navigatorKey: GlobalKey<NavigatorState>(),
             routes: [
               GoRoute(
                 path: '/server-down',
