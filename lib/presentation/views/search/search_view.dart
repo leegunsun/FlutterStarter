@@ -30,7 +30,7 @@ class _SearchViewState extends ConsumerState<SearchView> with SingleTickerProvid
   final TextStyle _textStyle = TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 20);
   final ValueNotifier<bool> isFocused = ValueNotifier<bool>(false);
   final List<String> _getSearchHistory = [];
-  final TextEditingController textEditingController = TextEditingController();
+
 
 
   @override
@@ -60,13 +60,13 @@ class _SearchViewState extends ConsumerState<SearchView> with SingleTickerProvid
     }
   }
 
-  void setSearchHistory (AsyncValue<String> controllerAsync) {
+  void setSearchHistory (String? controllerAsync) {
 
-    String tc = controllerAsync.maybeWhen(
-        data: (e) => e,
-        orElse: () => "검색");
+    if(controllerAsync == null) {
+      return;
+    }
 
-    _getSearchHistory.add(tc);
+    _getSearchHistory.add(controllerAsync);
     LocalSecureSource.set.searchInputHistory(value: _getSearchHistory);
   }
 
@@ -85,9 +85,8 @@ class _SearchViewState extends ConsumerState<SearchView> with SingleTickerProvid
 
   @override
   Widget build(BuildContext context) {
-    final AsyncValue<String> controllerAsync = ref.watch(queryTextControllerProvider);
-    
-    
+    final TextEditingController controllerAsync = ref.watch(queryTextControllerProvider).value ?? TextEditingController();
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: FocusScope(
@@ -105,12 +104,12 @@ class _SearchViewState extends ConsumerState<SearchView> with SingleTickerProvid
                   // snap: true,
                   elevation: 0,
                   backgroundColor: Colors.white, // 투명도 없는 배경색 지정
-                  title: NewWidget(focusScope: _focusScope[0], textEditingController: textEditingController,),
+                  title: NewWidget(focusScope: _focusScope[0], textEditingController: controllerAsync),
                   actions: [
                     IconButton(onPressed: () async {
                       ref.read(blogSearchProvider.notifier).refresh();
 
-                      setSearchHistory(controllerAsync);
+                      setSearchHistory(controllerAsync.value?.text);
                     }, icon: Icon(Icons.star))
                   ],
                 ),
@@ -161,7 +160,7 @@ class _SearchViewState extends ConsumerState<SearchView> with SingleTickerProvid
                       // snap: true,
                       elevation: 0,
                       backgroundColor: Colors.white, // 투명도 없는 배경색 지정
-                      title: NewWidget(focusScope: _focusScope[1], textEditingController: textEditingController,),
+                      title: NewWidget(focusScope: _focusScope[1], textEditingController: controllerAsync,),
                       actions: [
                         IconButton(onPressed: () {
                         }, icon: Icon(Icons.star))
@@ -178,7 +177,7 @@ class _SearchViewState extends ConsumerState<SearchView> with SingleTickerProvid
   }
 }
 
-class NewWidget extends ConsumerWidget {
+class NewWidget extends StatelessWidget {
   const NewWidget({
     super.key,
     required this.focusScope,
@@ -189,16 +188,9 @@ class NewWidget extends ConsumerWidget {
   final TextEditingController textEditingController;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final AsyncValue<String> controllerAsync = ref.watch(queryTextControllerProvider);
+  Widget build(BuildContext context) {
 
-    return controllerAsync.when(
-      loading: () => const Text('로딩 중...'),
-      error: (e, s) => const Text('오류 발생: 입력창을 사용할 수 없습니다.'),
-      data: (String controller) {
-        textEditingController.text = controller;
-
-        return TextFormField(
+    return TextFormField(
           focusNode: focusScope,
           controller: textEditingController,
           onTap: () {
@@ -210,10 +202,7 @@ class NewWidget extends ConsumerWidget {
             hintText: '검색어를 입력하세요',
           ),
         );
-      },
-    );
   }
-
 }
 
 
@@ -259,3 +248,4 @@ class _PersistentTabBar extends SliverPersistentHeaderDelegate {
   @override
   bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) => false;
 }
+

@@ -27,7 +27,7 @@ import 'firebase_options.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 part 'core/service/fcm/fcm_service.dart';
-123
+
 void main() {
   runZonedGuarded(
         () async {

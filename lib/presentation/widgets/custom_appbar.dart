@@ -19,7 +19,7 @@ class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final AsyncValue<String> searchText = ref.watch(queryTextControllerProvider);
+    final AsyncValue<TextEditingController> searchText = ref.watch(queryTextControllerProvider);
 
     return Container(
       color: barColor,
@@ -41,7 +41,7 @@ class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
                         .when(
                       loading: () => '로딩중',
                       error: (err, stack) => '오류: $err',
-                      data: (String controller) => controller),
+                      data: (TextEditingController controller) => controller.text),
                       style: TextStyle(fontSize: 20, color: Colors.white, fontWeight: FontWeight.w500),),
                   ],
                 ),

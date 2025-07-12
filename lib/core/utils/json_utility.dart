@@ -21,11 +21,11 @@ class JsonUtils {
     return null;
   }
 
-  static Map<String, dynamic> decodeFromJson ({required String? value}) {
+  static Map<String, dynamic> decodeFromJson ({required String? value, required String keyName}) {
     try {
 
       if(value == null) {
-        throw Exception("디코드할 값이 null입니다.");
+        return {keyName : []};
       }
 
       Map<String, dynamic> _jsonDecode = jsonDecode(value);

@@ -74,9 +74,9 @@ class _SearchTabView0State extends ConsumerState<SearchTabView0> with SingleTick
               itemBuilder: (BuildContext context, int index) {
                 return GestureDetector(
                   onTap: () {
-                    ref.read(queryTextControllerProvider.notifier).updateQuery(
-                      widget.getSearchHistory[index],
-                    );
+                    final AsyncValue<TextEditingController> controllerAsync = ref.read(queryTextControllerProvider);
+
+                    controllerAsync.value?.text = widget.getSearchHistory[index];
                   },
                   child: Center(
                     child: Container(
