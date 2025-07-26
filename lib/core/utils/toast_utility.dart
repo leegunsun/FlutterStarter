@@ -2,8 +2,7 @@ import 'dart:collection';
 
 import 'package:flutter/material.dart';
 import '../navigation/navigation_manager.dart';
-
-part '../../presentation/widgets/custom_toast.dart';
+import '../../presentation/widgets/common/dialogs/custom_toast.dart';
 
 class ToastManager {
   static final GlobalKey<NavigatorState> navigatorKey = NavigationManager.navigatorKey;
@@ -37,7 +36,7 @@ class ToastManager {
     final message = _messageQueue.removeFirst();
 
     // ✅ 매번 새로운 GlobalKey 생성
-    final GlobalKey<_AnimatedOverlayEntryState> animatedOverlayKey = GlobalKey<_AnimatedOverlayEntryState>();
+    final GlobalKey<AnimatedOverlayEntryState> animatedOverlayKey = GlobalKey<AnimatedOverlayEntryState>();
 
     _overlayEntry = OverlayEntry(
       builder: (context) => Positioned(

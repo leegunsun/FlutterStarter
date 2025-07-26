@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mkdir:*)",
+      "Bash(cmd /c \"mkdir \"\"C:\\Users\\zkvpt\\Desktop\\dateapp\\lib\\presentation\\widgets\\common\\buttons\"\"\")",
+      "Bash(powershell:*)",
+      "Bash(mv:*)",
+      "Bash(move:*)",
+      "Bash(del \"C:\\Users\\zkvpt\\Desktop\\dateapp\\lib\\presentation\\widgets\\custom_title.dart\")",
+      "Bash(rm:*)",
+      "Bash(cleanup_temp.bat)",
+      "Bash(flutter analyze:*)",
+      "Bash(find:*)"
+    ],
+    "deny": []
+  }
+}

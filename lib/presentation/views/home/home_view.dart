@@ -7,11 +7,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/models/vertex/vertex_search_model.dart';
 import '../../viewmodel/home_view_model.dart';
-import '../../widgets/custom_appbar.dart';
-import '../../widgets/custom_search.dart';
-import '../../widgets/custom_title.dart';
-import '../../widgets/home_naver_card.dart';
-import '../../widgets/home_vertext_card.dart';
+import 'package:dateapp/presentation/widgets/widgets.dart';
 import '../chat/chat_view.dart';
 
 
