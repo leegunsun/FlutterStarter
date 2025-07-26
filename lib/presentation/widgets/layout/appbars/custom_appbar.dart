@@ -1,11 +1,9 @@
-
 import 'package:dateapp/presentation/viewmodel/home_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../core/base/controller/widget_textcontroller_base.dart';
-import '../viewmodel/provider/search/search_common.dart';
-import '../views/search/search_view.dart';
+import '../../../viewmodel/provider/search/search_common.dart';
+
 
 
 class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {

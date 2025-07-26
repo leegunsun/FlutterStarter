@@ -42,7 +42,7 @@ class CustomSearchBar extends StatelessWidget {
         //     success: (value) {
         //       String _getData = jsonEncode(value);
         //       Map<String, dynamic> _result = jsonDecode(_getData);
-        //       print("[success] runtimeType ${value.runtimeType} : $value");
+        //       print("[success] runtimeType ${value.runtimeType} : $value"];
         //     },
         //     error: (value) {
         //       String _getData = jsonEncode(value);

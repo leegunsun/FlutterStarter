@@ -5,13 +5,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../core/created_enum/content_type.dart';
-import '../../core/models/naver/crawl_naver_blog_model.dart';
-import '../../core/models/vertex/vertex_search_model.dart';
-import '../viewmodel/home_view_model.dart';
+import '../../../../core/created_enum/content_type.dart';
+import '../../../../core/models/naver/crawl_naver_blog_model.dart';
+import '../../../../core/models/vertex/vertex_search_model.dart';
+import '../../../viewmodel/home_view_model.dart';
 
-import '../../core/theme/custom_theme_color.dart';
-import '../views/home/detail/detailcard_view.dart';
+import '../../../../core/theme/custom_theme_color.dart';
+import '../../../views/home/detail/detailcard_view.dart';
 
 class VertexCarousel extends ConsumerWidget {
 
