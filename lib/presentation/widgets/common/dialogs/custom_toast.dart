@@ -1,4 +1,4 @@
-part of '../../core/utils/toast_utility.dart';
+import 'package:flutter/material.dart';
 
 class AnimatedOverlayEntry extends StatefulWidget {
   final Widget child;
@@ -11,10 +11,10 @@ class AnimatedOverlayEntry extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _AnimatedOverlayEntryState createState() => _AnimatedOverlayEntryState();
+  AnimatedOverlayEntryState createState() => AnimatedOverlayEntryState();
 }
 
-class _AnimatedOverlayEntryState extends State<AnimatedOverlayEntry>
+class AnimatedOverlayEntryState extends State<AnimatedOverlayEntry>
     with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
   late final Animation<double> _animation;

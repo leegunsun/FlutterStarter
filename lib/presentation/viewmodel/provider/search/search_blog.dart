@@ -20,10 +20,10 @@ class BlogSearchNotifier extends AutoDisposeAsyncNotifier<List<BlogSearchItems>>
   @override
   Future<List<BlogSearchItems>> build() async {
     final BlogGenerationService svc = ref.read(blogSvcProvider);
-    final AsyncValue<String> query = ref.watch(queryTextControllerProvider);
+    final AsyncValue<TextEditingController> query = ref.watch(queryTextControllerProvider);
 
     final rawQuery = query.maybeMap(
-      data: (AsyncData<String> e) => e.value,
+      data: (AsyncData<TextEditingController> e) => e.value.text,
       orElse: () => "",
     );
 

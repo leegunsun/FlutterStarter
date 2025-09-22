@@ -7,6 +7,7 @@ import '../../../core/local_database/source/local_secure_source.dart';
 import '../../viewmodel/home_view_model.dart';
 import '../../viewmodel/provider/search/search_blog.dart';
 import '../../viewmodel/provider/search/search_common.dart';
+import '../../widgets/feature/search/NewWidget.dart';
 import 'detail/search_tab_view_0.dart';
 
 class SearchView extends ConsumerStatefulWidget {
@@ -30,7 +31,6 @@ class _SearchViewState extends ConsumerState<SearchView> with SingleTickerProvid
   final TextStyle _textStyle = TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 20);
   final ValueNotifier<bool> isFocused = ValueNotifier<bool>(false);
   final List<String> _getSearchHistory = [];
-  final TextEditingController textEditingController = TextEditingController();
 
 
   @override
@@ -50,23 +50,27 @@ class _SearchViewState extends ConsumerState<SearchView> with SingleTickerProvid
 
   Future<void> loadSearchHistory () async {
 
-    await LocalSecureSource
+   List<dynamic> itemList = await LocalSecureSource
         .get
-        .getSecureItem(EnvironmentConfig.constants.SEARCH_HISTORY)
-        .then((List<dynamic> items) => _getSearchHistory.addAll(items.take(40).map((e) => e.toString())));
+        .getSecureItem(EnvironmentConfig.constants.SEARCH_HISTORY);
+
+   _getSearchHistory.addAll(itemList.take(40)
+       .whereType<String>()
+       .where((e) => e.isNotEmpty));
+
 
     if(mounted) {
       setState(() {});
     }
   }
 
-  void setSearchHistory (AsyncValue<String> controllerAsync) {
+  void setSearchHistory (String? controllerAsync) {
 
-    String tc = controllerAsync.maybeWhen(
-        data: (e) => e,
-        orElse: () => "검색");
+    if(controllerAsync == null || controllerAsync.isEmpty) {
+      return;
+    }
 
-    _getSearchHistory.add(tc);
+    _getSearchHistory.add(controllerAsync);
     LocalSecureSource.set.searchInputHistory(value: _getSearchHistory);
   }
 
@@ -85,9 +89,8 @@ class _SearchViewState extends ConsumerState<SearchView> with SingleTickerProvid
 
   @override
   Widget build(BuildContext context) {
-    final AsyncValue<String> controllerAsync = ref.watch(queryTextControllerProvider);
-    
-    
+    final TextEditingController controllerAsync = ref.watch(queryTextControllerProvider).value ?? TextEditingController();
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: FocusScope(
@@ -98,24 +101,21 @@ class _SearchViewState extends ConsumerState<SearchView> with SingleTickerProvid
               headerSliverBuilder: (context, innerBoxIsScrolled) => [
                 SliverAppBar(
                   pinned: true,
-                  // forceElevated: true,
                   scrolledUnderElevation: 0,
                   shadowColor: Colors.transparent,
-                  // floating: true,
-                  // snap: true,
                   elevation: 0,
-                  backgroundColor: Colors.white, // 투명도 없는 배경색 지정
-                  title: NewWidget(focusScope: _focusScope[0], textEditingController: textEditingController,),
+                  backgroundColor: Colors.white,
+                  title: NewWidget(focusScope: _focusScope[0], textEditingController: controllerAsync),
                   actions: [
                     IconButton(onPressed: () async {
                       ref.read(blogSearchProvider.notifier).refresh();
 
-                      setSearchHistory(controllerAsync);
+                      setSearchHistory(controllerAsync.value?.text);
                     }, icon: Icon(Icons.star))
                   ],
                 ),
                 SliverPersistentHeader(
-                  pinned: true,
+                  floating: true,
                   delegate: _PersistentTabBar(_tabController, _textStyle),
                 ),
               ],
@@ -161,7 +161,7 @@ class _SearchViewState extends ConsumerState<SearchView> with SingleTickerProvid
                       // snap: true,
                       elevation: 0,
                       backgroundColor: Colors.white, // 투명도 없는 배경색 지정
-                      title: NewWidget(focusScope: _focusScope[1], textEditingController: textEditingController,),
+                      title: NewWidget(focusScope: _focusScope[1], textEditingController: controllerAsync,),
                       actions: [
                         IconButton(onPressed: () {
                         }, icon: Icon(Icons.star))
@@ -177,50 +177,6 @@ class _SearchViewState extends ConsumerState<SearchView> with SingleTickerProvid
     );
   }
 }
-
-class NewWidget extends ConsumerWidget {
-  const NewWidget({
-    super.key,
-    required this.focusScope,
-    required this.textEditingController,
-  });
-
-  final FocusNode focusScope;
-  final TextEditingController textEditingController;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final AsyncValue<String> controllerAsync = ref.watch(queryTextControllerProvider);
-
-    return controllerAsync.when(
-      loading: () => const Text('로딩 중...'),
-      error: (e, s) => const Text('오류 발생: 입력창을 사용할 수 없습니다.'),
-      data: (String controller) {
-
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          if (textEditingController.text != controller) {
-            textEditingController.text = controller;
-          }
-        });
-
-        return TextFormField(
-          focusNode: focusScope,
-          controller: textEditingController,
-          onTap: () {
-
-          },
-          onTapOutside: (_) => focusScope.unfocus(),
-          decoration: const InputDecoration(
-            border: InputBorder.none,
-            hintText: '검색어를 입력하세요',
-          ),
-        );
-      },
-    );
-  }
-
-}
-
 
 class _PersistentTabBar extends SliverPersistentHeaderDelegate {
 
@@ -264,3 +220,4 @@ class _PersistentTabBar extends SliverPersistentHeaderDelegate {
   @override
   bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) => false;
 }
+
