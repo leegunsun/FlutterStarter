@@ -196,7 +196,12 @@ class NewWidget extends ConsumerWidget {
       loading: () => const Text('로딩 중...'),
       error: (e, s) => const Text('오류 발생: 입력창을 사용할 수 없습니다.'),
       data: (String controller) {
-        textEditingController.text = controller;
+
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (textEditingController.text != controller) {
+            textEditingController.text = controller;
+          }
+        });
 
         return TextFormField(
           focusNode: focusScope,

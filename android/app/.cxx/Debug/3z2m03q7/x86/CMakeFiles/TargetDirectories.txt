@@ -1,0 +1,2 @@
+/Users/igeonseon/Downloads/mytest/FlutterStarter/android/app/.cxx/Debug/3z2m03q7/x86/CMakeFiles/edit_cache.dir
+/Users/igeonseon/Downloads/mytest/FlutterStarter/android/app/.cxx/Debug/3z2m03q7/x86/CMakeFiles/rebuild_cache.dir
