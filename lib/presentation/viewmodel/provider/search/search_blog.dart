@@ -10,10 +10,10 @@ import '../../../../core/service/crawl/blog_generation_service.dart';
 import '../../home_view_model.dart';
 
 /// 블로그 검색만 담당
-final AutoDisposeAsyncNotifierProvider<BlogSearchNotifier, List<BlogSearchItems>> blogSearchProvider = AsyncNotifierProvider.autoDispose<BlogSearchNotifier, List<BlogSearchItems>>(() => BlogSearchNotifier());
+final AsyncNotifierProvider<BlogSearchNotifier, List<BlogSearchItems>> blogSearchProvider = AsyncNotifierProvider.autoDispose<BlogSearchNotifier, List<BlogSearchItems>>(() => BlogSearchNotifier());
 
 
-class BlogSearchNotifier extends AutoDisposeAsyncNotifier<List<BlogSearchItems>> {
+class BlogSearchNotifier extends AsyncNotifier<List<BlogSearchItems>> {
   List<String> restaurantKeywords = FirebaseRemoteConfig.instance.getString("suggest_list").split(",");
   
   
