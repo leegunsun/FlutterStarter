@@ -9,7 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/local_database/source/local_secure_source.dart';
 
 
-class QueryTextControllerNotifier extends AutoDisposeAsyncNotifier<TextEditingController> {
+class QueryTextControllerNotifier extends AsyncNotifier<TextEditingController> {
   QueryTextControllerNotifier();
 
   @override
@@ -22,5 +22,5 @@ class QueryTextControllerNotifier extends AutoDisposeAsyncNotifier<TextEditingCo
           : TextEditingController(text: "검색"));
 }
 
-final AutoDisposeAsyncNotifierProvider<QueryTextControllerNotifier, TextEditingController> queryTextControllerProvider =
+final AsyncNotifierProvider<QueryTextControllerNotifier, TextEditingController> queryTextControllerProvider =
 AsyncNotifierProvider.autoDispose<QueryTextControllerNotifier, TextEditingController>(() => QueryTextControllerNotifier());

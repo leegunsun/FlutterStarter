@@ -127,13 +127,13 @@ class AiParserRepository {
 
 
 /// 랜덤 도큐먼트만 담당
-final AutoDisposeFutureProvider<List<VertexSearchModel>> randomDocsProvider = FutureProvider.autoDispose<List<VertexSearchModel>>((ref) {
+final FutureProvider<List<VertexSearchModel>> randomDocsProvider = FutureProvider.autoDispose<List<VertexSearchModel>>((ref) {
   final AiParserRepository repo = ref.read(aiRepoProvider);
   return repo.fetchRandomDocs(limit: 5);
 });
 
 /// 최종 결합 + 저장
-class CombinedNotifier extends AutoDisposeAsyncNotifier<List<VertexSearchModel>> {
+class CombinedNotifier extends AsyncNotifier<List<VertexSearchModel>> {
   @override
   Future<List<VertexSearchModel>> build() async {
     // 병렬로 블로그 검색과 랜덤 문서 조회
@@ -170,7 +170,7 @@ class CombinedNotifier extends AutoDisposeAsyncNotifier<List<VertexSearchModel>>
   }
 }
 
-final AutoDisposeAsyncNotifierProvider<CombinedNotifier, List<VertexSearchModel>> combinedProvider = AsyncNotifierProvider.autoDispose<CombinedNotifier, List<VertexSearchModel>>(
+final AsyncNotifierProvider<CombinedNotifier, List<VertexSearchModel>> combinedProvider = AsyncNotifierProvider.autoDispose<CombinedNotifier, List<VertexSearchModel>>(
       () => CombinedNotifier(),
 );
 
