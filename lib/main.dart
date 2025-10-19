@@ -46,11 +46,13 @@ void main() {
             FirebaseCrashlytics.instance.recordFlutterFatalError(details);
           };
 
-          runApp(EasyLocalization(
-              supportedLocales: [Locale('en', 'US'), Locale('ko', "KR")],
-              fallbackLocale: const Locale('en', 'US'),
-              path: EnvironmentConfig.constants.EASY_LOCAL_ASSET,
-              child: const MyApp())
+          runApp(ProviderScope(
+            child: EasyLocalization(
+                supportedLocales: [Locale('en', 'US'), Locale('ko', "KR")],
+                fallbackLocale: const Locale('en', 'US'),
+                path: EnvironmentConfig.constants.EASY_LOCAL_ASSET,
+                child: const MyApp()),
+          )
           );
     },
         (error, stackTrace) async {
@@ -108,6 +110,7 @@ class _MyAppState extends State<MyApp> {
           _deepLinkData = deepLinkData;
       },
     );
+    final ImageConfiguration config = createLocalImageConfiguration(context, size: Size(200, 200));
     FlutterNativeSplash.remove();
     FcmTokenManager.init();
     AppStateCheckUtility.init();
@@ -121,27 +124,25 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
 
     return ScreenUtilInit(
-      child: ProviderScope(
-        child: MaterialApp.router(
-          localizationsDelegates: context.localizationDelegates,
-          supportedLocales: context.supportedLocales,
-          routerConfig: NavigationManager.router,
-          locale: context.locale,
-          title: 'Flutter Demo',
-          theme: ThemeData(
-            pageTransitionsTheme: const PageTransitionsTheme(
-              builders: {
-                TargetPlatform.iOS: FadeForwardsPageTransitionsBuilder(),
-                TargetPlatform.android: FadeForwardsPageTransitionsBuilder(),
-              },
-            ),
-            scaffoldBackgroundColor: Colors.purple[50],
-            appBarTheme: AppBarTheme(
-              backgroundColor: Colors.deepPurple,
-            ),
-            colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-            useMaterial3: true,
+      child: MaterialApp.router(
+        localizationsDelegates: context.localizationDelegates,
+        supportedLocales: context.supportedLocales,
+        routerConfig: NavigationManager.router,
+        locale: context.locale,
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          pageTransitionsTheme: const PageTransitionsTheme(
+            builders: {
+              TargetPlatform.iOS: FadeForwardsPageTransitionsBuilder(),
+              TargetPlatform.android: FadeForwardsPageTransitionsBuilder(),
+            },
           ),
+          scaffoldBackgroundColor: Colors.purple[50],
+          appBarTheme: AppBarTheme(
+            backgroundColor: Colors.deepPurple,
+          ),
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          useMaterial3: true,
         ),
       ),
     );

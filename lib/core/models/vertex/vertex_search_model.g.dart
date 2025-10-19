@@ -10,12 +10,15 @@ VertexSearchModel _$VertexSearchModelFromJson(Map<String, dynamic> json) =>
     VertexSearchModel(
       title: VertexSearchModel.validateNonEmptyString(json['title'] as String?),
       blogMobileLink: json['blogMobileLink'] as String?,
-      postdate:
-          VertexSearchModel.validateNonEmptyString(json['postdate'] as String?),
-      location:
-          VertexSearchModel.validateNonEmptyString(json['location'] as String?),
+      postdate: VertexSearchModel.validateNonEmptyString(
+        json['postdate'] as String?,
+      ),
+      location: VertexSearchModel.validateNonEmptyString(
+        json['location'] as String?,
+      ),
       recommend: VertexSearchModel.validateNonEmptyString(
-          json['recommend'] as String?),
+        json['recommend'] as String?,
+      ),
       desc: VertexSearchModel.validateNonEmptyString(json['desc'] as String?),
       category: $enumDecode(_$BlogCategoryEnumMap, json['category']),
       tag: json['tag'] == null
@@ -24,22 +27,23 @@ VertexSearchModel _$VertexSearchModelFromJson(Map<String, dynamic> json) =>
       crawlContent: json['crawlContent'] == null
           ? const []
           : VertexSearchModel._crawlContentFromJson(
-              json['crawlContent'] as List<Map<String, dynamic>?>),
+              json['crawlContent'] as List<Map<String, dynamic>?>,
+            ),
     );
 
-Map<String, dynamic> _$VertexSearchModelToJson(VertexSearchModel instance) =>
-    <String, dynamic>{
-      'title': VertexSearchModel.identityFunction(instance.title),
-      'blogMobileLink': instance.blogMobileLink,
-      'postdate': VertexSearchModel.identityFunction(instance.postdate),
-      'crawlContent':
-          VertexSearchModel._crawlContentToJson(instance.crawlContent),
-      'location': VertexSearchModel.identityFunction(instance.location),
-      'recommend': VertexSearchModel.identityFunction(instance.recommend),
-      'tag': VertexSearchModel._crawlTagToJson(instance.tag),
-      'desc': VertexSearchModel.identityFunction(instance.desc),
-      'category': _$BlogCategoryEnumMap[instance.category]!,
-    };
+Map<String, dynamic> _$VertexSearchModelToJson(
+  VertexSearchModel instance,
+) => <String, dynamic>{
+  'title': VertexSearchModel.identityFunction(instance.title),
+  'blogMobileLink': instance.blogMobileLink,
+  'postdate': VertexSearchModel.identityFunction(instance.postdate),
+  'crawlContent': VertexSearchModel._crawlContentToJson(instance.crawlContent),
+  'location': VertexSearchModel.identityFunction(instance.location),
+  'recommend': VertexSearchModel.identityFunction(instance.recommend),
+  'tag': VertexSearchModel._crawlTagToJson(instance.tag),
+  'desc': VertexSearchModel.identityFunction(instance.desc),
+  'category': _$BlogCategoryEnumMap[instance.category]!,
+};
 
 const _$BlogCategoryEnumMap = {
   BlogCategory.FOOD: 'FOOD',

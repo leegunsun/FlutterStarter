@@ -15,7 +15,6 @@ part 'search_model.g.dart';
 @Freezed()
 abstract class NaverApiBlogSearchModel with _$NaverApiBlogSearchModel {
 
- @JsonSerializable(explicitToJson: true)
  const factory NaverApiBlogSearchModel({
    required String lastBuildDate,
    required num total,
@@ -26,3 +25,4 @@ abstract class NaverApiBlogSearchModel with _$NaverApiBlogSearchModel {
 
  factory NaverApiBlogSearchModel.fromJson (Map<String,dynamic> json) => _$NaverApiBlogSearchModelFromJson(json);
 }
+

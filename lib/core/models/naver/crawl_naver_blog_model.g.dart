@@ -15,16 +15,16 @@ CrawlNaverBlogModel _$CrawlNaverBlogModelFromJson(Map<String, dynamic> json) =>
     );
 
 Map<String, dynamic> _$CrawlNaverBlogModelToJson(
-        CrawlNaverBlogModel instance) =>
-    <String, dynamic>{
-      'imgContents': instance.imgContents.map((e) => e.toJson()).toList(),
-      'desc': instance.desc,
-    };
+  CrawlNaverBlogModel instance,
+) => <String, dynamic>{
+  'imgContents': instance.imgContents.map((e) => e.toJson()).toList(),
+  'desc': instance.desc,
+};
 
 CrawlContent _$CrawlContentFromJson(Map<String, dynamic> json) => CrawlContent(
-      contentType: $enumDecode(_$ContentTypeEnumMap, json['contentType']),
-      contentValue: json['contentValue'] as String,
-    );
+  contentType: $enumDecode(_$ContentTypeEnumMap, json['contentType']),
+  contentValue: json['contentValue'] as String,
+);
 
 Map<String, dynamic> _$CrawlContentToJson(CrawlContent instance) =>
     <String, dynamic>{
