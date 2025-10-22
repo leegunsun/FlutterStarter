@@ -2,29 +2,23 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dateapp/core/service/fcm/fcm_get_token_service.dart';
 import 'package:dateapp/config/environment_config.dart';
 import 'package:dateapp/core/service/onelink/appsflyer_service.dart';
-
+import 'package:dateapp/presentation/app.dart';
+import 'package:dateapp/presentation/viewmodel/provider/app/app_provider.dart';
+import 'package:dateapp/presentation/viewmodel/provider/app/conbin_provider.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
-
 import 'package:flutter/material.dart';
-
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'core/local_database/source/local_secure_source.dart';
-import 'core/navigation/navigation_manager.dart';
-import 'core/utils/appstate_utility.dart';
-import 'core/utils/notification_utility.dart';
 import 'firebase_options.dart';
-
-import 'package:easy_localization/easy_localization.dart';
 
 part 'core/service/fcm/fcm_service.dart';
 
@@ -88,62 +82,18 @@ void showCustomToast(BuildContext context, String message) {
   Future.delayed(Duration(seconds: 2), () => overlayEntry.remove()); // 2초 후 제거
 }
 
-class MyApp extends StatefulWidget {
+class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
   @override
-  State<MyApp> createState() => _MyAppState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
 
-class _MyAppState extends State<MyApp> {
+    ref.listen(appProviderProvider, (prev, next) {
+      next.whenData((_) {
+        FlutterNativeSplash.remove();
+      });
+    });
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    NotificationUtility().initMessaging();
-    AppsflyerService.afStart(
-      onGcdUpdate: (gcd) {
-          _gcd = gcd;
-      },
-      onDeepLinkUpdate: (deepLinkData) {
-          _deepLinkData = deepLinkData;
-      },
-    );
-    FlutterNativeSplash.remove();
-    FcmTokenManager.init();
-    AppStateCheckUtility.init();
-  }
-
-  Map _deepLinkData = {};
-  Map _gcd = {};
-  bool isLoggedIn = false;
-
-  @override
-  Widget build(BuildContext context) {
-
-    return ScreenUtilInit(
-      child: MaterialApp.router(
-        localizationsDelegates: context.localizationDelegates,
-        supportedLocales: context.supportedLocales,
-        routerConfig: NavigationManager.router,
-        locale: context.locale,
-        title: 'Flutter Demo',
-        theme: ThemeData(
-          pageTransitionsTheme: const PageTransitionsTheme(
-            builders: {
-              TargetPlatform.iOS: FadeForwardsPageTransitionsBuilder(),
-              TargetPlatform.android: FadeForwardsPageTransitionsBuilder(),
-            },
-          ),
-          scaffoldBackgroundColor: Colors.purple[50],
-          appBarTheme: AppBarTheme(
-            backgroundColor: Colors.deepPurple,
-          ),
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-          useMaterial3: true,
-        ),
-      ),
-    );
+    return const App();
   }
 }

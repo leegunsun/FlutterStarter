@@ -132,48 +132,6 @@ final FutureProvider<List<VertexSearchModel>> randomDocsProvider = FutureProvide
   return repo.fetchRandomDocs(limit: 5);
 });
 
-/// 최종 결합 + 저장
-class CombinedNotifier extends AsyncNotifier<List<VertexSearchModel>> {
-  @override
-  Future<List<VertexSearchModel>> build() async {
-    // 병렬로 블로그 검색과 랜덤 문서 조회
-    final List<BlogSearchItems> blogItems = await ref.watch(blogSearchProvider.future);
-    final AiParserRepository repo = ref.read(aiRepoProvider);
-    final BlogGenerationService svc = ref.read(blogSvcProvider);
-
-    // AI 컨텐츠 생성 (랜덤 2개)
-    final picks = blogItems..shuffle();
-    final aiGenerated = await Future.wait(
-      picks.take(2).map(svc.generateContentFromBlog),
-    );
-
-    // Firestore 랜덤 문서
-    final randomDocs = await ref.watch(randomDocsProvider.future);
-
-    // 결합 및 저장
-    final List<VertexSearchModel> combined = [...aiGenerated.whereType<VertexSearchModel>(), ...randomDocs];
-    for (VertexSearchModel model in combined) {
-      await repo.saveModel(model);
-    }
-    return combined;
-  }
-
-
-  Future<void> refresh() async {
-    state = const AsyncLoading();
-    try {
-      final result = await build();
-      state = AsyncData(result);
-    } catch (e, s) {
-      state = AsyncError(e, s);
-    }
-  }
-}
-
-final AsyncNotifierProvider<CombinedNotifier, List<VertexSearchModel>> combinedProvider = AsyncNotifierProvider.autoDispose<CombinedNotifier, List<VertexSearchModel>>(
-      () => CombinedNotifier(),
-);
-
 // 기존 Providers
 final Provider<AiParserRepository> aiRepoProvider = Provider<AiParserRepository>(
       (ref) => AiParserRepository(FirebaseFirestore.instance),
