@@ -1,9 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../config/environment_config.dart';
-import '../../presentation/viewmodel/home_view_model.dart';
 import '../../presentation/views/common/navigation/navigation_error_view.dart';
 import '../../presentation/views/home/home_view.dart';
 import '../../presentation/views/search/search_view.dart';
@@ -16,7 +14,7 @@ class NavigationManager {
 
   static final GoRouter router = GoRouter(
     navigatorKey: navigatorKey,
-    initialLocation: "/",
+    initialLocation: AppRoutes.home.path,
     errorBuilder: (BuildContext context, GoRouterState state) {
       return NavigationErrorView();
     },
@@ -55,7 +53,7 @@ class NavigationManager {
             // navigatorKey: GlobalKey<NavigatorState>(), // 네비게이터 키 설정
             routes: [
               GoRoute(
-                path: '/',
+                path: AppRoutes.home.path,
                 name: AppRoutes.home.name,
                 builder: (context, state) => const MyHomePage(title: "Home"),
               ),
@@ -65,7 +63,7 @@ class NavigationManager {
             // navigatorKey: GlobalKey<NavigatorState>(),
             routes: [
               GoRoute(
-                path: '/settings',
+                path: AppRoutes.setting.path,
                 name: AppRoutes.setting.name,
                 builder: (context, state) => const SettingView(),
               ),
@@ -75,7 +73,7 @@ class NavigationManager {
             // navigatorKey: GlobalKey<NavigatorState>(),
             routes: [
               GoRoute(
-                path: '/server-down',
+                path: AppRoutes.serverDown.path,
                 name: AppRoutes.serverDown.name,
                 builder: (context, state) => ServerDown(),
               ),
@@ -84,7 +82,7 @@ class NavigationManager {
         ],
       ),
       GoRoute(
-        path: '/search',
+        path: AppRoutes.search.path,
         name: AppRoutes.search.name,
         builder: (context, state) {
           return SearchView();

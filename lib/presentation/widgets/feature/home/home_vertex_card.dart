@@ -21,7 +21,7 @@ class VertexCarousel extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
 
-    final AsyncValue<List<VertexSearchModel>> controller = ref.watch(combinedProvider);
+    final AsyncValue<List<VertexSearchModel>> provider = ref.watch(combinedProvider);
 
     return ConstrainedBox(
       constraints: BoxConstraints(
@@ -32,9 +32,9 @@ class VertexCarousel extends ConsumerWidget {
         controller: PageController(viewportFraction: 0.9),
         scrollDirection: Axis.horizontal,
         // physics: NeverScrollableScrollPhysics(),
-        itemCount: controller.value?.length,
+        itemCount: provider.value?.length,
         itemBuilder: (context, index) {
-          final VertexSearchModel? response = controller.value?[index];
+          final VertexSearchModel? response = provider.value?[index];
           if(response == null) {
             return SizedBox.shrink();
           }
@@ -125,11 +125,30 @@ class VertexCarousel extends ConsumerWidget {
                                       padding: index + 1 == _crawlContent.length ? EdgeInsets.zero : const EdgeInsets.only(right: 10), // 이미지 사이 간격 추가
                                       child: ClipRRect(
                                         borderRadius: BorderRadius.circular(10),
-                                        child: Image.network(
-                                          imgUrl,
-                                          fit: BoxFit.cover,
-                                          width: parentWidth, // 부모 컨테이너의 너비만큼 설정
-                                        ),
+                                          child: Image.network(
+                                            imgUrl,
+                                            fit: BoxFit.cover,
+                                            width: parentWidth,
+                                            // loadingBuilder: (context, child, loadingProgress) {
+                                            //   if (loadingProgress == null) {
+                                            //     // 로딩 완료 = 캐시에서 즉시 로드됨
+                                            //     print('✓ 이미지 즉시 표시 (캐시됨): ${imgUrl.substring(0, 50)}');
+                                            //     return child;
+                                            //   }
+                                            //
+                                            //   // 이 부분이 실행되면 네트워크에서 다운로드 중
+                                            //   final progress = loadingProgress.expectedTotalBytes != null
+                                            //       ? loadingProgress.cumulativeBytesLoaded /
+                                            //       loadingProgress.expectedTotalBytes!
+                                            //       : null;
+                                            //
+                                            //   print('⏳ 네트워크 다운로드 중: $progress');
+                                            //
+                                            //   return Center(
+                                            //     child: CircularProgressIndicator(value: progress),
+                                            //   );
+                                            // },
+                                          )
                                       ),
                                     );
                                 });
