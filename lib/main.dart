@@ -110,7 +110,6 @@ class _MyAppState extends State<MyApp> {
           _deepLinkData = deepLinkData;
       },
     );
-    final ImageConfiguration config = createLocalImageConfiguration(context, size: Size(200, 200));
     FlutterNativeSplash.remove();
     FcmTokenManager.init();
     AppStateCheckUtility.init();
