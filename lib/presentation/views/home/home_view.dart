@@ -58,82 +58,66 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    // 2) Riverpod에서 제공하는 AsyncValue로 콘텐츠 로딩 상태 구독
     final AsyncValue<List<VertexSearchModel>> aiListAsync = ref.watch(combinedProvider);
 
-    return aiListAsync.when(
-      loading: () => PopScope(
-        canPop: false,
-        child: Scaffold(
-          body: Center(child: CircularProgressIndicator()),
+    // 뒤로가기 제어를 위해 PopScope 또는 WillPopScope를 상위에 둔다.
+    return PopScope(
+      canPop: false, // 필요시 동적으로 제어
+      child: Scaffold(
+        appBar: CustomAppBar(),
+        floatingActionButton: aiListAsync.when(
+          loading: () => null, // 로딩 시 FAB 숨기기
+          error: (_, __) => null, // 오류 시 숨기기 또는 다른 FAB
+          data: (items) {
+            // 조건에 따라 FAB을 보이게 할 수 있다.
+            return FloatingActionButton(
+              heroTag: 'fab_chat_unique', // 고유 태그 사용
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (_) => ChatScreen()));
+              },
+              child: const Icon(Icons.chat),
+            );
+          },
         ),
-      ),
-      error: (err, st) => Scaffold(
-        body: Center(child: Text('오류 발생: $err')),
-      ),
-      data: (List<VertexSearchModel> aiItems) => PopScope(
-        canPop: false,
-        child: Scaffold(
-          floatingActionButton: FloatingActionButton(
-            heroTag: 'fab_chat',
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => ChatScreen()),
-              );
-            },
-            child: const Icon(Icons.chat),
-          ),
-          appBar: CustomAppBar(
-            // 필요에 따라 Riverpod ref.read(...)로 상태 전달
-          ),
-          body: CustomScrollView(
-            slivers: [
-              // 4) CustomSearchBar를 StateProvider와 연동
-              SliverToBoxAdapter(
-                child: CustomSearchBar(
-                  // initialText: query,
-                  // onChanged: (val) =>
-                  // ref.read(queryTextProvider.notifier).state = val,
-                  // onSubmitted: (_) =>
-                  //     ref.read(combinedProvider.notifier).refresh(),
-                ),
-              ),
-              SliverToBoxAdapter(
-                child: Stack(
-                  children: [
-                    Container(
-                      height: MediaQuery.of(context).size.height / 3,
-                      decoration: const BoxDecoration(
-                        color: Colors.deepPurple,
-                        borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(50),
-                          bottomRight: Radius.circular(50),
+        body: aiListAsync.when(
+          loading: () => const Center(child: CircularProgressIndicator()),
+          error: (err, st) => Center(child: Text('오류 발생: $err')),
+          data: (List<VertexSearchModel> aiItems) {
+            return CustomScrollView(
+              slivers: [
+                SliverToBoxAdapter(child: CustomSearchBar()),
+                SliverToBoxAdapter(
+                  child: Stack(
+                    children: [
+                      Container(
+                        height: MediaQuery.of(context).size.height / 3,
+                        decoration: const BoxDecoration(
+                          color: Colors.deepPurple,
+                          borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(50),
+                            bottomRight: Radius.circular(50),
+                          ),
                         ),
                       ),
-                    ),
-                    Column(
-                      children: [
-                        const CustomTitle(title: "✨AI 추천 "),
-                        // 5) Riverpod으로 받은 aiItems 전달
-                        VertexCarousel(),
-                      ],
-                    ),
-                  ],
+                      Column(
+                        children: [
+                          const CustomTitle(title: "✨AI 추천 "),
+                          VertexCarousel(), // aiItems 전달
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              const SliverToBoxAdapter(child: SizedBox(height: 40)),
-              SliverToBoxAdapter(
-                child: CustomTitle.bottom(
-                  title: _remoteConfig.getString('home_sub_title'),
+                const SliverToBoxAdapter(child: SizedBox(height: 40)),
+                SliverToBoxAdapter(
+                  child: CustomTitle.bottom(
+                    title: _remoteConfig.getString('home_sub_title'),
+                  ),
                 ),
-              ),
-              // 6) 블로그 카드도 FutureProvider로 구독
-              SliverListNaverCard(
-
-              ),
-            ],
-          ),
+                SliverListNaverCard(),
+              ],
+            );
+          },
         ),
       ),
     );

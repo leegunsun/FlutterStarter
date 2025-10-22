@@ -8,7 +8,7 @@ import '../../../../core/utils/notification_utility.dart';
 part 'app_provider.g.dart';
 
 @Riverpod()
-Future<void> appProvider(Ref ref) async {
+Future<void> appStartUp(Ref ref) async {
   NotificationUtility().initMessaging();
   FcmTokenManager.init();
   AppStateCheckUtility.init();

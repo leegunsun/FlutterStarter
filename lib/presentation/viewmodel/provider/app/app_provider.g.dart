@@ -9,25 +9,25 @@ part of 'app_provider.dart';
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
 
-@ProviderFor(appProvider)
-const appProviderProvider = AppProviderProvider._();
+@ProviderFor(appStartUp)
+const appStartUpProvider = AppStartUpProvider._();
 
-final class AppProviderProvider
+final class AppStartUpProvider
     extends $FunctionalProvider<AsyncValue<void>, void, FutureOr<void>>
     with $FutureModifier<void>, $FutureProvider<void> {
-  const AppProviderProvider._()
+  const AppStartUpProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
-        name: r'appProviderProvider',
+        name: r'appStartUpProvider',
         isAutoDispose: true,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
 
   @override
-  String debugGetCreateSourceHash() => _$appProviderHash();
+  String debugGetCreateSourceHash() => _$appStartUpHash();
 
   @$internal
   @override
@@ -36,8 +36,8 @@ final class AppProviderProvider
 
   @override
   FutureOr<void> create(Ref ref) {
-    return appProvider(ref);
+    return appStartUp(ref);
   }
 }
 
-String _$appProviderHash() => r'a8454bf979b5e2e58bca282c1ddfa02b610de74f';
+String _$appStartUpHash() => r'699b8a7a1dc8a253629cd55270ebb78750ebce1a';

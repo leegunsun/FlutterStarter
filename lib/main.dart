@@ -55,40 +55,13 @@ void main() {
   );
 }
 
-void showCustomToast(BuildContext context, String message) {
-  final overlay = Overlay.of(context);
-  final overlayEntry = OverlayEntry(
-    builder: (context) => Positioned(
-      bottom: 50.0, // 위치 조정
-      left: MediaQuery.of(context).size.width * 0.2,
-      child: Material(
-        color: Colors.transparent,
-        child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-          decoration: BoxDecoration(
-            color: Colors.black87,
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Text(
-            message,
-            style: TextStyle(color: Colors.white, fontSize: 16),
-          ),
-        ),
-      ),
-    ),
-  );
-
-  overlay.insert(overlayEntry);
-  Future.delayed(Duration(seconds: 2), () => overlayEntry.remove()); // 2초 후 제거
-}
-
 class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
 
-    ref.listen(appProviderProvider, (prev, next) {
+    ref.listen(appStartUpProvider, (prev, next) {
       next.whenData((_) {
         FlutterNativeSplash.remove();
       });
