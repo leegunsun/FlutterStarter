@@ -54,7 +54,7 @@ abstract class ApiBase {
         bool? _closedServer = bool.tryParse(_getFirebaseState);
 
         if (_closedServer != null && _closedServer) {
-          NavigationManager.router.goNamed(AppRoutes.serverDown);
+          NavigationManager.router.goNamed(AppRoutes.serverDown.name);
           return;
         }
 

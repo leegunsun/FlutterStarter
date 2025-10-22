@@ -56,7 +56,7 @@ class NavigationManager {
             routes: [
               GoRoute(
                 path: '/',
-                name: AppRoutes.home,
+                name: AppRoutes.home.name,
                 builder: (context, state) => const MyHomePage(title: "Home"),
               ),
             ],
@@ -66,7 +66,7 @@ class NavigationManager {
             routes: [
               GoRoute(
                 path: '/settings',
-                name: AppRoutes.setting,
+                name: AppRoutes.setting.name,
                 builder: (context, state) => const SettingView(),
               ),
             ],
@@ -76,7 +76,7 @@ class NavigationManager {
             routes: [
               GoRoute(
                 path: '/server-down',
-                name: AppRoutes.serverDown,
+                name: AppRoutes.serverDown.name,
                 builder: (context, state) => ServerDown(),
               ),
             ],
@@ -85,7 +85,7 @@ class NavigationManager {
       ),
       GoRoute(
         path: '/search',
-        name: AppRoutes.search,
+        name: AppRoutes.search.name,
         builder: (context, state) {
           return SearchView();
         },

@@ -9,7 +9,7 @@ part 'app_provider.g.dart';
 
 @Riverpod()
 Future<void> appStartUp(Ref ref) async {
-  NotificationUtility().initMessaging();
   FcmTokenManager.init();
+  NotificationUtility().initMessaging();
   AppStateCheckUtility.init();
 }

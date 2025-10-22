@@ -18,7 +18,6 @@ class EnvironmentConfig {
   static final ConstantsConfig constants = ConstantsConfig._instance;
   static final EnvConfig env = EnvConfig._instance;
   static final ApiConfig api = ApiConfig._instance;
-  static final AppRoutes route = AppRoutes();
 
   static Future<void> init() async {
     try {

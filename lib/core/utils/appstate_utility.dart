@@ -42,7 +42,7 @@ class AppStateCheckUtility {
    required String thisAppVersion}) {
    // 1) 서버 점검 상태가 우선
    if (status.isServerMaintenance) {
-     NavigationManager.router.goNamed(AppRoutes.home);
+     NavigationManager.router.goNamed(AppRoutes.home.name);
      return;
    }
 
@@ -53,7 +53,7 @@ class AppStateCheckUtility {
    if (_isVersionOlder) {
      if (status.isForcedUpdate) {
        // ✅ 강제 업데이트일 경우: '강제 업데이트 화면'으로 이동
-       NavigationManager.router.goNamed(AppRoutes.setting);
+       NavigationManager.router.goNamed(AppRoutes.setting.name);
        return;
      } else {
        // ✅ 버전이 낮지만 강제 업데이트가 아닐 경우: 다이얼로그만 표기함
@@ -71,7 +71,7 @@ class AppStateCheckUtility {
    } else if (Platform.isIOS) {
      _handleAppStatusNavigation(status:status, thisAppVersion: thisAppVersion);
    } else {
-     NavigationManager.router.go(AppRoutes.notFound);
+     NavigationManager.router.go(AppRoutes.notFound.name);
    }
  }
 }

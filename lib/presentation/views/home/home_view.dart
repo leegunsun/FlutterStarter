@@ -1,15 +1,12 @@
-import 'dart:convert';
 import 'package:dateapp/presentation/viewmodel/provider/app/conbin_provider.dart';
+import 'package:dateapp/presentation/widgets/widgets.dart';
+import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:firebase_remote_config/firebase_remote_config.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:go_router/go_router.dart';
 
-
+import '../../../config/environment_config.dart';
 import '../../../core/models/vertex/vertex_search_model.dart';
-import '../../viewmodel/home_view_model.dart';
-import 'package:dateapp/presentation/widgets/widgets.dart';
-import '../chat/chat_view.dart';
 
 
 // 1) ConsumerStatefulWidget으로 변경
@@ -30,8 +27,6 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
     super.initState();
     _remoteConfig = FirebaseRemoteConfig.instance;
     _initRemoteConfig();
-    // 만약 강제 초기 로드가 필요하다면 아래 호출
-    // ref.read(combinedProvider.notifier).refresh();
   }
 
   Future<void> _initRemoteConfig() async {
@@ -73,7 +68,7 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
             return FloatingActionButton(
               heroTag: 'fab_chat_unique', // 고유 태그 사용
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (_) => ChatScreen()));
+                context.pushNamed(AppRoutes.serverDown.name);
               },
               child: const Icon(Icons.chat),
             );
