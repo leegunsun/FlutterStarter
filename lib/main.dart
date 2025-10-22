@@ -63,7 +63,10 @@ class MyApp extends ConsumerWidget {
 
     ref.listen(appStartUpProvider, (prev, next) {
       next.whenData((_) {
-        FlutterNativeSplash.remove();
+        Future.microtask(() async {
+          await ref.read(combinedProvider.future);
+          FlutterNativeSplash.remove();
+        });
       });
     });
 
