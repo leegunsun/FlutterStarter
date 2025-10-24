@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../navigation/navigation_manager.dart';
+import '../../app/routes/navigation_manager.dart';
 
 class DialogUtility {
 

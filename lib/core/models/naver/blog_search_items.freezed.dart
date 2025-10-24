@@ -213,8 +213,8 @@ return $default(_that.title,_that.link,_that.thumnail,_that.blogMobileLink,_that
 }
 
 /// @nodoc
+@JsonSerializable()
 
-@JsonSerializable(explicitToJson: true)
 class _BlogSearchItems implements BlogSearchItems {
   const _BlogSearchItems({required this.title, required this.link, this.thumnail, this.blogMobileLink, required this.description, required this.bloggername, required this.bloggerlink, required this.postdate});
   factory _BlogSearchItems.fromJson(Map<String, dynamic> json) => _$BlogSearchItemsFromJson(json);

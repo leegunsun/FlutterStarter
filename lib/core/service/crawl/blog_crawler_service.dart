@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:html/dom.dart' show Document, Element, Node;
 import 'package:html/parser.dart' as htmlParser;
 
-import '../../created_enum/content_type.dart';
+import '../../enum/content_type.dart';
 import '../../models/naver/crawl_naver_blog_model.dart';
 
 

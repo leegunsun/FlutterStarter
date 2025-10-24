@@ -2,10 +2,10 @@
 
 import 'dart:async';
 
-import 'package:dateapp/config/environment_config.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../app/config/environment_config.dart';
 import '../../../../core/local_database/source/local_secure_source.dart';
 
 

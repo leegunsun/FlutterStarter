@@ -6,7 +6,6 @@ part 'blog_search_items.g.dart';
 @freezed
 abstract class BlogSearchItems with _$BlogSearchItems {
 
-  @JsonSerializable(explicitToJson: true)
   const factory BlogSearchItems({
     required String title,
     required String link,

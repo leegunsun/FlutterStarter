@@ -1,4 +1,4 @@
-import 'package:dateapp/core/navigation/navigation_manager.dart';
+import 'package:dateapp/app/routes/navigation_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 

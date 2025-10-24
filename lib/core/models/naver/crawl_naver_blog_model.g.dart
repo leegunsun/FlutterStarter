@@ -6,8 +6,8 @@ part of 'crawl_naver_blog_model.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-CrawlNaverBlogModel _$CrawlNaverBlogModelFromJson(Map<String, dynamic> json) =>
-    CrawlNaverBlogModel(
+_CrawlNaverBlogModel _$CrawlNaverBlogModelFromJson(Map<String, dynamic> json) =>
+    _CrawlNaverBlogModel(
       imgContents: (json['imgContents'] as List<dynamic>)
           .map((e) => CrawlContent.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -15,18 +15,19 @@ CrawlNaverBlogModel _$CrawlNaverBlogModelFromJson(Map<String, dynamic> json) =>
     );
 
 Map<String, dynamic> _$CrawlNaverBlogModelToJson(
-  CrawlNaverBlogModel instance,
+  _CrawlNaverBlogModel instance,
 ) => <String, dynamic>{
-  'imgContents': instance.imgContents.map((e) => e.toJson()).toList(),
+  'imgContents': instance.imgContents,
   'desc': instance.desc,
 };
 
-CrawlContent _$CrawlContentFromJson(Map<String, dynamic> json) => CrawlContent(
-  contentType: $enumDecode(_$ContentTypeEnumMap, json['contentType']),
-  contentValue: json['contentValue'] as String,
-);
+_CrawlContent _$CrawlContentFromJson(Map<String, dynamic> json) =>
+    _CrawlContent(
+      contentType: $enumDecode(_$ContentTypeEnumMap, json['contentType']),
+      contentValue: json['contentValue'] as String,
+    );
 
-Map<String, dynamic> _$CrawlContentToJson(CrawlContent instance) =>
+Map<String, dynamic> _$CrawlContentToJson(_CrawlContent instance) =>
     <String, dynamic>{
       'contentType': _$ContentTypeEnumMap[instance.contentType]!,
       'contentValue': instance.contentValue,

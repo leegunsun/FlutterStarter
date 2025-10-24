@@ -1,6 +1,6 @@
 library;
 
-import '../../../config/environment_config.dart';
+import '../../../app/config/environment_config.dart';
 import '../local_secure_storage.dart';
 
 part 'local_secure_get.dart';

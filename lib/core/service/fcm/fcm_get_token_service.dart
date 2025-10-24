@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dateapp/config/environment_config.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 
+import '../../../app/config/environment_config.dart';
 import '../../utils/permission_hand_utility.dart';
 
 class FcmTokenManager {

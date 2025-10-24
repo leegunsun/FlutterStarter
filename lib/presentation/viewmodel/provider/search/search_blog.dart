@@ -7,7 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/models/naver/blog_search_items.dart';
 import '../../../../core/models/naver/search_model.dart';
 import '../../../../core/service/crawl/blog_generation_service.dart';
-import '../../home_view_model.dart';
+import '../../../feature/home/viewmodel/home_view_model.dart';
 
 /// 블로그 검색만 담당
 final AsyncNotifierProvider<BlogSearchNotifier, List<BlogSearchItems>> blogSearchProvider = AsyncNotifierProvider.autoDispose<BlogSearchNotifier, List<BlogSearchItems>>(() => BlogSearchNotifier());

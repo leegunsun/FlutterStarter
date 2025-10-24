@@ -1,11 +1,9 @@
-import 'package:flutter/widgets.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../../core/models/naver/blog_search_items.dart';
-import '../../../../core/models/vertex/vertex_search_model.dart';
+import '../../../feature/home/model/vertex_search_model.dart';
 import '../../../../core/service/crawl/blog_generation_service.dart';
-import '../../home_view_model.dart';
+import '../../../feature/home/viewmodel/home_view_model.dart';
 import '../search/search_blog.dart';
 
 part 'conbin_provider.g.dart';

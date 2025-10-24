@@ -1,4 +1,4 @@
-part of '../../../main.dart';
+part of '../../../app/main.dart';
 
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {

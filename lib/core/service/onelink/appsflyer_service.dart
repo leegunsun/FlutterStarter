@@ -2,9 +2,10 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:appsflyer_sdk/appsflyer_sdk.dart';
-import 'package:dateapp/config/environment_config.dart';
 import 'package:dateapp/core/service/fcm/fcm_get_token_service.dart';
 import 'package:flutter/services.dart';
+
+import '../../../app/config/environment_config.dart';
 
 class AppsflyerService {
 

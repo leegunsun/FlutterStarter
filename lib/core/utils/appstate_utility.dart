@@ -1,12 +1,12 @@
 import 'dart:io';
 import 'dart:math';
 
-import 'package:dateapp/config/environment_config.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
+import '../../app/routes/navigation_routes.dart';
 import '../api/status/status_api.dart';
 import '../models/appstate/appstate_model.dart';
-import '../navigation/navigation_manager.dart';
+import '../../app/routes/navigation_manager.dart';
 import 'dialog_utility.dart';
 
 class AppStateCheckUtility {

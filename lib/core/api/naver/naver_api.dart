@@ -1,7 +1,7 @@
 
-import 'package:dateapp/config/environment_config.dart';
 import 'package:dio/dio.dart';
 
+import '../../../app/config/environment_config.dart';
 import '../../base/api/api_base.dart';
 import 'repositories/blog_search.dart';
 

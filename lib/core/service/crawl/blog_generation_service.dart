@@ -9,7 +9,7 @@ import '../../models/naver/crawl_naver_blog_model.dart';
 import '../../models/naver/img_search_model.dart';
 import '../../models/naver/search_model.dart';
 import '../../api/naver/naver_api.dart';
-import '../../models/vertex/vertex_search_model.dart';
+import '../../../presentation/feature/home/model/vertex_search_model.dart';
 import 'blog_crawler_service.dart';
 
 class BlogGenerationService {
