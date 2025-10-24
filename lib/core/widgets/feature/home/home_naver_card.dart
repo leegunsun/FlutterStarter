@@ -6,7 +6,7 @@ import '../../../../core/models/naver/blog_search_items.dart';
 import '../../../../core/utils/html_stripper_utility.dart';
 import '../../../../core/theme/custom_theme_color.dart';
 import '../../../../presentation/common/webview/view/base_webview.dart';
-import '../../../../presentation/viewmodel/provider/search/search_blog.dart';
+import '../../../../presentation/feature/search/notifiers/search_blog.dart';
 
 class SliverListNaverCard extends ConsumerStatefulWidget {
 

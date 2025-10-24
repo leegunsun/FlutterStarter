@@ -3,14 +3,16 @@
 import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../../app/config/environment_config.dart';
 import '../../../../core/local_database/source/local_secure_source.dart';
 
+part 'search_common.g.dart';
 
-class QueryTextControllerNotifier extends AsyncNotifier<TextEditingController> {
-  QueryTextControllerNotifier();
+@Riverpod()
+class QueryTextController extends _$QueryTextController {
+  QueryTextController();
 
   @override
   Future<TextEditingController> build() =>
@@ -21,6 +23,3 @@ class QueryTextControllerNotifier extends AsyncNotifier<TextEditingController> {
           ? TextEditingController(text: value.first as String)
           : TextEditingController(text: "검색"));
 }
-
-final AsyncNotifierProvider<QueryTextControllerNotifier, TextEditingController> queryTextControllerProvider =
-AsyncNotifierProvider.autoDispose<QueryTextControllerNotifier, TextEditingController>(() => QueryTextControllerNotifier());

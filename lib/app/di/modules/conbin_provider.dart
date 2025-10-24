@@ -1,10 +1,10 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../../../core/models/naver/blog_search_items.dart';
-import '../../../feature/home/model/vertex_search_model.dart';
-import '../../../../core/service/crawl/blog_generation_service.dart';
-import '../../../feature/home/viewmodel/home_view_model.dart';
-import '../search/search_blog.dart';
+import '../../../core/models/naver/blog_search_items.dart';
+import '../../../presentation/feature/home/model/vertex_search_model.dart';
+import '../../../core/service/crawl/blog_generation_service.dart';
+import '../../../presentation/feature/home/notifiers/home_view_model.dart';
+import '../../../presentation/feature/search/notifiers/search_blog.dart';
 
 part 'conbin_provider.g.dart';
 

@@ -3,7 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../viewmodel/provider/search/search_common.dart';
+import '../notifiers/search_common.dart';
+
 
 class SearchTabView0 extends ConsumerStatefulWidget {
   final List<String> getSearchHistory;

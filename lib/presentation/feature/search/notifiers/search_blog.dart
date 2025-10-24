@@ -1,21 +1,19 @@
 import 'package:dateapp/core/local_database/source/local_secure_source.dart';
-import 'package:dateapp/presentation/viewmodel/provider/search/search_common.dart';
+import 'package:dateapp/presentation/feature/search/notifiers/search_common.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter/material.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../../core/models/naver/blog_search_items.dart';
 import '../../../../core/models/naver/search_model.dart';
 import '../../../../core/service/crawl/blog_generation_service.dart';
-import '../../../feature/home/viewmodel/home_view_model.dart';
+import '../../home/notifiers/home_view_model.dart';
 
-/// 블로그 검색만 담당
-final AsyncNotifierProvider<BlogSearchNotifier, List<BlogSearchItems>> blogSearchProvider = AsyncNotifierProvider.autoDispose<BlogSearchNotifier, List<BlogSearchItems>>(() => BlogSearchNotifier());
+part 'search_blog.g.dart';
 
-
-class BlogSearchNotifier extends AsyncNotifier<List<BlogSearchItems>> {
+@Riverpod()
+class BlogSearch extends _$BlogSearch {
   List<String> restaurantKeywords = FirebaseRemoteConfig.instance.getString("suggest_list").split(",");
-  
   
   @override
   Future<List<BlogSearchItems>> build() async {

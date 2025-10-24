@@ -1,4 +1,4 @@
-import 'package:dateapp/presentation/feature/home/viewmodel/home_view_model.dart';
+import 'package:dateapp/presentation/feature/home/notifiers/home_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 

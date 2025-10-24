@@ -4,8 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../app/config/environment_config.dart';
 import '../../../../core/local_database/source/local_secure_source.dart';
 import '../../../../core/widgets/feature/search/NewWidget.dart';
-import '../../../viewmodel/provider/search/search_blog.dart';
-import '../../../viewmodel/provider/search/search_common.dart';
+import '../notifiers/search_blog.dart';
+import '../notifiers/search_common.dart';
 import 'search_tab_view_0.dart';
 
 class SearchView extends ConsumerStatefulWidget {

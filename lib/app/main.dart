@@ -15,8 +15,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../core/local_database/source/local_secure_source.dart';
 import '../firebase_options.dart';
-import '../presentation/viewmodel/provider/app/app_provider.dart';
-import '../presentation/viewmodel/provider/app/conbin_provider.dart';
+import 'di/injector.dart';
+import 'di/modules/conbin_provider.dart';
 import 'app.dart';
 import 'config/environment_config.dart';
 
