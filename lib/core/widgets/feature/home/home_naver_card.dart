@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../core/models/naver/blog_search_items.dart';
+import '../../../../presentation/feature/home/model/blog_search_items.dart';
 import '../../../../core/utils/html_stripper_utility.dart';
 import '../../../../core/theme/custom_theme_color.dart';
 import '../../../../presentation/common/webview/view/base_webview.dart';

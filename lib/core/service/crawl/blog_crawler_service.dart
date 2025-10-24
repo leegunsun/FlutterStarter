@@ -2,8 +2,8 @@ import 'package:dio/dio.dart';
 import 'package:html/dom.dart' show Document, Element, Node;
 import 'package:html/parser.dart' as htmlParser;
 
-import '../../enum/content_type.dart';
-import '../../models/naver/crawl_naver_blog_model.dart';
+import '../../../presentation/feature/home/enum/content_type.dart';
+import '../../../presentation/feature/home/model/crawl_naver_blog_model.dart';
 
 
 class BlogCrawlerService {
@@ -26,7 +26,6 @@ class BlogCrawlerService {
     }
     return null;
   }
-
 
   CrawlNaverBlogModel? _parseHtml(String html) {
     // HTML 파싱 및 콘텐츠 영역 선택
@@ -70,13 +69,12 @@ class BlogCrawlerService {
 
     // 추출된 텍스트들을 하나의 정리된 문자열로 결합
     String cleanedText = textContents
-        .where((item) => item.contentType == ContentType.text)
-        .map((item) => item.contentValue)
+        .where((CrawlContent item) => item.contentType == ContentType.text)
+        .map((CrawlContent item) => item.contentValue)
         .join(' ')
         .replaceAll(RegExp(r'\s+'), ' ')
         .trim();
 
     return CrawlNaverBlogModel(imgContents: imgContents, desc: cleanedText);
   }
-
 }

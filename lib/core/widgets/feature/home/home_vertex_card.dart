@@ -6,10 +6,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../core/models/naver/crawl_naver_blog_model.dart';
+import '../../../../presentation/feature/home/model/crawl_naver_blog_model.dart';
 import '../../../../presentation/feature/home/model/vertex_search_model.dart';
 import '../../../../presentation/feature/home/view/detailcard_view.dart';
-import '../../../enum/content_type.dart';
+import '../../../../presentation/feature/home/enum/content_type.dart';
 
 import '../../../../core/theme/custom_theme_color.dart';
 

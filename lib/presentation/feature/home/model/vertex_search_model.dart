@@ -1,9 +1,11 @@
+import 'package:dateapp/core/api/naver_api.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-import '../../../../core/enum/blog_category.dart';
-import '../../../../core/models/naver/crawl_naver_blog_model.dart';
+import '../enum/blog_category.dart';
+import 'crawl_naver_blog_model.dart';
 
 part 'vertex_search_model.g.dart';
+
 
 @JsonSerializable(explicitToJson: true)
 class VertexSearchModel {

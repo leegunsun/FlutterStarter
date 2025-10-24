@@ -17,7 +17,7 @@ export 'common/dialogs/custom_toast.dart';
 // =============================================================================
 
 // AppBar Components
-export 'layout/appbars/custom_appbar.dart';
+export '../layout/appbars/custom_appbar.dart';
 
 // =============================================================================
 // FEATURE WIDGETS

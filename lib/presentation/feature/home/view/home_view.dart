@@ -5,11 +5,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../app/routes/navigation_routes.dart';
+import '../../../../core/layout/appbars/custom_appbar.dart';
 import '../../../../core/widgets/common/text/custom_title.dart';
 import '../../../../core/widgets/feature/home/home_naver_card.dart';
 import '../../../../core/widgets/feature/home/home_vertex_card.dart';
 import '../../../../core/widgets/feature/search/custom_search.dart';
-import '../../../../core/widgets/layout/appbars/custom_appbar.dart';
 import '../model/vertex_search_model.dart';
 
 

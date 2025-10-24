@@ -4,8 +4,8 @@ import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/material.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../../../core/models/naver/blog_search_items.dart';
-import '../../../../core/models/naver/search_model.dart';
+import '../../home/model/blog_search_items.dart';
+import '../../home/model/search_model.dart';
 import '../../../../core/service/crawl/blog_generation_service.dart';
 import '../../home/notifiers/home_view_model.dart';
 

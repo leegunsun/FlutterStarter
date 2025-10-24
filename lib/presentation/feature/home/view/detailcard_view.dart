@@ -2,8 +2,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../core/enum/content_type.dart';
-import '../../../../core/models/naver/crawl_naver_blog_model.dart';
+import '../enum/content_type.dart';
+import '../model/crawl_naver_blog_model.dart';
 import '../../../common/webview/view/base_webview.dart';
 import '../model/vertex_search_model.dart';
 

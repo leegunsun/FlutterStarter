@@ -33,7 +33,7 @@ final class CombinedProvider
   Combined create() => Combined();
 }
 
-String _$combinedHash() => r'4fb9eaf0f0e9937d618ff6511a444eadcd5dea50';
+String _$combinedHash() => r'56099bb3fcd3a73b90cf3283d2e62b1012c4f9d9';
 
 abstract class _$Combined extends $AsyncNotifier<List<VertexSearchModel>> {
   FutureOr<List<VertexSearchModel>> build();

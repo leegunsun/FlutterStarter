@@ -3,16 +3,26 @@ import 'dart:convert';
 
 import 'package:firebase_vertexai/firebase_vertexai.dart';
 import 'package:collection/collection.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../models/naver/blog_search_items.dart';
-import '../../models/naver/crawl_naver_blog_model.dart';
-import '../../models/naver/img_search_model.dart';
-import '../../models/naver/search_model.dart';
-import '../../api/naver/naver_api.dart';
+import '../../../presentation/feature/home/model/blog_search_items.dart';
+import '../../../presentation/feature/home/model/crawl_naver_blog_model.dart';
+import '../../../presentation/feature/home/model/img_search_model.dart';
+import '../../../presentation/feature/home/model/search_model.dart';
+import '../../api/naver_api.dart';
 import '../../../presentation/feature/home/model/vertex_search_model.dart';
 import 'blog_crawler_service.dart';
 
+part 'blog_generation_service.g.dart';
+
+@riverpod
+BlogGenerationService blogSvc(Ref ref) {
+  return BlogGenerationService._();
+}
+
 class BlogGenerationService {
+  BlogGenerationService._();
 
   final NaverAPI _naverAPI = NaverAPI();
 

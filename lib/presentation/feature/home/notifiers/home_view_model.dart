@@ -2,14 +2,9 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../../../core/service/crawl/blog_generation_service.dart';
 import '../model/vertex_search_model.dart';
 
-part 'home_view_model.g.dart'; // .g.dart 파일 자동 생성
-
-// 1) Repository
 class AiParserRepository {
   final FirebaseFirestore _firestore;
 
@@ -103,24 +98,4 @@ class AiParserRepository {
 
     print('🎯 모든 문서 처리 완료. 최종 업데이트 수: $updatedTotal');
   }
-}
-
-/// Repository Provider
-@riverpod
-AiParserRepository aiRepo(Ref ref) {
-
-  return AiParserRepository(FirebaseFirestore.instance);
-}
-
-/// BlogGenerationService Provider
-@riverpod
-BlogGenerationService blogSvc(Ref ref) {
-  return BlogGenerationService();
-}
-
-/// 랜덤 도큐먼트 FutureProvider
-@riverpod
-Future<List<VertexSearchModel>> randomDocs(Ref ref) async {
-  final repo = ref.read(aiRepoProvider);
-  return repo.fetchRandomDocs(limit: 5);
 }

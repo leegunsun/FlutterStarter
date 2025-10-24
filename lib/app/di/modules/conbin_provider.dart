@@ -1,6 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../../core/models/naver/blog_search_items.dart';
+import '../../../presentation/feature/home/model/blog_search_items.dart';
 import '../../../presentation/feature/home/model/vertex_search_model.dart';
 import '../../../core/service/crawl/blog_generation_service.dart';
 import '../../../presentation/feature/home/notifiers/home_view_model.dart';
@@ -10,11 +11,14 @@ part 'conbin_provider.g.dart';
 
 @Riverpod(keepAlive: true)
 class Combined extends _$Combined {
+
+  final AiParserRepository repository = AiParserRepository(FirebaseFirestore.instance);
+
   @override
   Future<List<VertexSearchModel>> build() async {
+
     // 병렬로 블로그 검색과 랜덤 문서 조회
     final List<BlogSearchItems> blogItems = await ref.watch(blogSearchProvider.future);
-    final AiParserRepository repo = ref.read(aiRepoProvider);
     final BlogGenerationService svc = ref.read(blogSvcProvider);
 
     // AI 컨텐츠 생성 (랜덤 2개)
@@ -24,12 +28,12 @@ class Combined extends _$Combined {
     );
 
     // Firestore 랜덤 문서
-    final randomDocs = await ref.watch(randomDocsProvider.future);
+    final List<VertexSearchModel> randomDocs = await repository.fetchRandomDocs(limit: 5);
 
     // 결합 및 저장
     final List<VertexSearchModel> combined = [...aiGenerated.whereType<VertexSearchModel>(), ...randomDocs];
     for (VertexSearchModel model in combined) {
-      await repo.saveModel(model);
+      await repository.saveModel(model);
     }
     return combined;
   }
