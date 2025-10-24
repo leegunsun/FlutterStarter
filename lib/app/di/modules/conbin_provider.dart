@@ -1,11 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../../presentation/feature/home/model/blog_search_items.dart';
-import '../../../presentation/feature/home/model/vertex_search_model.dart';
-import '../../../core/service/crawl/blog_generation_service.dart';
-import '../../../presentation/feature/home/notifiers/home_view_model.dart';
-import '../../../presentation/feature/search/notifiers/search_blog.dart';
+import '../../../core/services/crawl/blog_generation_service.dart';
+import '../../../data/models/blog_search_items.dart';
+import '../../../data/models/vertex_search_model.dart';
 
 part 'conbin_provider.g.dart';
 

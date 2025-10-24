@@ -2,7 +2,7 @@ import 'dart:collection';
 
 import 'package:flutter/material.dart';
 import '../../app/routes/navigation_manager.dart';
-import '../widgets/common/dialogs/custom_toast.dart';
+import '../widgets/dialogs/custom_toast.dart';
 
 class ToastManager {
   static final GlobalKey<NavigatorState> navigatorKey = NavigationManager.navigatorKey;

@@ -3,11 +3,9 @@ import 'package:dateapp/app/routes/navigation_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../presentation/feature/home/view/home_view.dart';
-import '../../presentation/feature/search/view/search_view.dart';
-import '../../presentation/feature/server_state/view/down_view.dart';
-import '../../presentation/feature/server_state/view/navigation_error_view.dart';
-import '../../presentation/feature/setttings/view/setting_view.dart';
+import '../../presentation/features/server_state/view/down_view.dart';
+import '../../presentation/features/server_state/view/navigation_error_view.dart';
+import '../../presentation/features/settings/setting_view.dart';
 
 class NavigationManager {
 

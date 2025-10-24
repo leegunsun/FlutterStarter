@@ -4,9 +4,9 @@ import 'dart:math';
 import 'package:package_info_plus/package_info_plus.dart';
 
 import '../../app/routes/navigation_routes.dart';
-import '../api/status_api.dart';
-import '../api/model/appstate_model.dart';
 import '../../app/routes/navigation_manager.dart';
+import '../../data/datasources/remote/model/appstate_model.dart';
+import '../../data/datasources/remote/status_api.dart';
 import 'dialog_utility.dart';
 
 class AppStateCheckUtility {

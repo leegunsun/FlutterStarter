@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../core/services/onelink/appsflyer_service.dart';
 import 'routes/navigation_manager.dart';
-import '../core/service/onelink/appsflyer_service.dart';
 
 class App extends ConsumerStatefulWidget {
   const App({super.key});
