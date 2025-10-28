@@ -3,8 +3,8 @@ import 'package:dio/dio.dart';
 import 'package:firebase_performance/firebase_performance.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 
-import '../../app/routes/navigation_manager.dart';
-import '../../app/routes/navigation_routes.dart';
+import '../../../app/routes/navigation_manager.dart';
+import '../../../app/routes/navigation_routes.dart';
 
 /// API 서비스의 공통 부모 클래스
 abstract class ApiBase {

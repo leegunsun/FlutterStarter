@@ -10,7 +10,7 @@ import '../../../presentation/feature/home/model/blog_search_items.dart';
 import '../../../presentation/feature/home/model/crawl_naver_blog_model.dart';
 import '../../../presentation/feature/home/model/img_search_model.dart';
 import '../../../presentation/feature/home/model/search_model.dart';
-import '../../api/naver_api.dart';
+import '../../../data/remote/network/naver_api.dart';
 import '../../../presentation/feature/home/model/vertex_search_model.dart';
 import 'blog_crawler_service.dart';
 

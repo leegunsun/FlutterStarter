@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../enum/content_type.dart';
+import '../model/blog_crawl_content.dart';
 import '../model/crawl_naver_blog_model.dart';
 import '../../../common/webview/view/base_webview.dart';
 import '../model/vertex_search_model.dart';

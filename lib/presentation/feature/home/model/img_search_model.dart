@@ -1,48 +1,19 @@
+import 'package:dateapp/presentation/feature/home/model/search_item_dto.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:json_annotation/json_annotation.dart';
 
+part 'img_search_model.freezed.dart';
 part 'img_search_model.g.dart';
 
-@JsonSerializable(explicitToJson: true)
-class ImgSearchModel {
-  final String lastBuildDate;
-  final num total;
-  final num start;
-  final num display;
-  final List<SearchItemDto> items;
+@freezed
+abstract class ImgSearchModel with _$ImgSearchModel {
 
-  const ImgSearchModel(
-      {required this.lastBuildDate,
-      required this.total,
-      required this.start,
-      required this.display,
-      required this.items});
+  const factory ImgSearchModel(
+      {required String lastBuildDate,
+      required num total,
+      required num start,
+      required num display,
+      required List<SearchItemDto> items}) = _ImgSearchModel;
 
   factory ImgSearchModel.fromJson(Map<String, dynamic> json) => _$ImgSearchModelFromJson(json);
-  Map<String, dynamic> toJson() => _$ImgSearchModelToJson(this);
-}
-
-/// title : "웹진 인벤 : 어른입맛 테스트 - 오픈이슈갤러리 어른입맛 테스트"
-/// link : "https://upload3.inven.co.kr/upload/2024/01/22/bbs/i16545266120.jpg?MW=800"
-/// thumbnail : "https://search.pstatic.net/sunny/?type=b150&src=https://upload3.inven.co.kr/upload/2024/01/22/bbs/i16545266120.jpg?MW=800"
-/// sizeheight : "800"
-/// sizewidth : "800"
-
-@JsonSerializable()
-class SearchItemDto {
-  final String title;
-  final String link;
-  final String thumbnail;
-  final String sizeheight;
-  final String sizewidth;
-
-  const SearchItemDto({
-    required this.title,
-    required this.link,
-    required this.thumbnail,
-    required this.sizeheight,
-    required this.sizewidth,
-  });
-
-  factory SearchItemDto.fromJson(Map<String, dynamic> json) => _$SearchItemDtoFromJson(json);
-  Map<String, dynamic> toJson() => _$SearchItemDtoToJson(this);
 }

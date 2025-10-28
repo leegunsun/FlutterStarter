@@ -1,4 +1,5 @@
 import 'package:dateapp/core/theme/custom_theme_color.dart';
+import 'package:dateapp/core/widgets/common/ad/ad_banner.dart';
 import 'package:flutter/material.dart';
 
 class ServerDown extends StatefulWidget {
@@ -104,7 +105,8 @@ class _ServerDownState extends State<ServerDown>
           Text(
             "서버 점검 중입니다.",
             style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
-          )
+          ),
+          BannerAdWidget()
         ],
       ),
     );

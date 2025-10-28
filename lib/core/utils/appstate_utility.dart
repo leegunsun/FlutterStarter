@@ -4,8 +4,8 @@ import 'dart:math';
 import 'package:package_info_plus/package_info_plus.dart';
 
 import '../../app/routes/navigation_routes.dart';
-import '../api/status_api.dart';
-import '../api/model/appstate_model.dart';
+import '../../data/remote/network/status_api.dart';
+import '../../data/remote/network/model/appstate_model.dart';
 import '../../app/routes/navigation_manager.dart';
 import 'dialog_utility.dart';
 

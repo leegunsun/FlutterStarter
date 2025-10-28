@@ -6,7 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../../app/config/environment_config.dart';
-import '../../../../core/local_database/source/local_secure_source.dart';
+import '../../../../data/local/source/local_secure_source.dart';
 
 part 'search_common.g.dart';
 

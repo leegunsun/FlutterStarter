@@ -12,8 +12,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
-import '../core/local_database/source/local_secure_source.dart';
+import '../data/local/source/local_secure_source.dart';
 import '../firebase_options.dart';
 import 'di/injector.dart';
 import 'di/modules/conbin_provider.dart';
@@ -26,6 +27,7 @@ void main() {
   runZonedGuarded(
         () async {
           WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+          await MobileAds.instance.initialize();
           FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
           await EnvironmentConfig.init(); // env 등록
           await EasyLocalization.ensureInitialized(); // 국제화

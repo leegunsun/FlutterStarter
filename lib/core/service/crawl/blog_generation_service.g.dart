@@ -54,4 +54,4 @@ final class BlogSvcProvider
   }
 }
 
-String _$blogSvcHash() => r'165b3a3b42c8f040342fa781b5818c97feac4b81';
+String _$blogSvcHash() => r'004b40268bf6058d1ef346abc68cad7a08ea5102';

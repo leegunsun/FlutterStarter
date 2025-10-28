@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../app/config/environment_config.dart';
-import '../../../../core/local_database/source/local_secure_source.dart';
+import '../../../../data/local/source/local_secure_source.dart';
 import '../../../../core/widgets/feature/search/NewWidget.dart';
 import '../notifiers/search_blog.dart';
 import '../notifiers/search_common.dart';

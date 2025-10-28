@@ -1,7 +1,8 @@
-import 'package:dateapp/core/api/naver_api.dart';
+import 'package:dateapp/data/remote/network/naver_api.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 import '../enum/blog_category.dart';
+import 'blog_crawl_content.dart';
 import 'crawl_naver_blog_model.dart';
 
 part 'vertex_search_model.g.dart';

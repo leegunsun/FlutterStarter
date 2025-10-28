@@ -1,5 +1,5 @@
-import 'package:dateapp/core/api/api_base.dart';
-import 'package:dateapp/core/api/model/appstate_model.dart';
+import 'package:dateapp/data/remote/network/api_base.dart';
+import 'package:dateapp/data/remote/network/model/appstate_model.dart';
 import 'package:dio/dio.dart';
 
 class StatusApi extends ApiBase {

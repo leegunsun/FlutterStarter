@@ -1,8 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
-import '../model/img_search_model.dart';
-import '../model/search_model.dart';
+import '../../../presentation/feature/home/model/img_search_model.dart';
+import '../../../presentation/feature/home/model/search_model.dart';
 
 
 part 'blog_search.g.dart';

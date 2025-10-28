@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../presentation/feature/home/model/blog_crawl_content.dart';
 import '../../../../presentation/feature/home/model/crawl_naver_blog_model.dart';
 import '../../../../presentation/feature/home/model/vertex_search_model.dart';
 import '../../../../presentation/feature/home/view/detailcard_view.dart';

@@ -1,8 +1,8 @@
 
 import 'package:dio/dio.dart';
 
-import '../../app/config/environment_config.dart';
-import '../../presentation/feature/home/repositories/blog_search.dart';
+import '../../../app/config/environment_config.dart';
+import '../repository/blog_search.dart';
 import 'api_base.dart';
 
 

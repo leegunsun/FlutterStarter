@@ -3,6 +3,7 @@ import 'package:html/dom.dart' show Document, Element, Node;
 import 'package:html/parser.dart' as htmlParser;
 
 import '../../../presentation/feature/home/enum/content_type.dart';
+import '../../../presentation/feature/home/model/blog_crawl_content.dart';
 import '../../../presentation/feature/home/model/crawl_naver_blog_model.dart';
 
 
