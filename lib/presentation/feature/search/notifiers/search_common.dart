@@ -10,7 +10,7 @@ import '../../../../data/local/source/local_secure_source.dart';
 
 part 'search_common.g.dart';
 
-@Riverpod()
+@Riverpod(keepAlive: true)
 class QueryTextController extends _$QueryTextController {
   QueryTextController();
 

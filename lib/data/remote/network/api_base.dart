@@ -81,7 +81,9 @@ abstract class ApiBase {
         try {
           if (metric != null) {
             metric.httpResponseCode = err.response?.statusCode ?? 500;
-            metric.putAttribute('error', err.response?.data);
+            // Convert error data to string to avoid type mismatch
+            final errorData = err.response?.data;
+            metric.putAttribute('error', errorData?.toString() ?? 'Unknown error');
           }
         } catch (e) {
           print(e);
@@ -92,6 +94,9 @@ abstract class ApiBase {
         }
 
         print('Error: ${err.message}');
+        print('Error Response Data: ${err.response?.data}');
+        print('Error Status Code: ${err.response?.statusCode}');
+        print('Request Headers: ${err.requestOptions.headers}');
         return handler.next(err);
       },
     ));

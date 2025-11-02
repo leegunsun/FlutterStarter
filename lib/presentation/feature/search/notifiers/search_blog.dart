@@ -21,17 +21,28 @@ class BlogSearch extends _$BlogSearch {
     final AsyncValue<TextEditingController> query = ref.watch(queryTextControllerProvider);
 
     final rawQuery = query.maybeMap(
-      data: (AsyncData<TextEditingController> e) => e.value.text,
+      data: (AsyncData<TextEditingController> e) => e.value.text.trim(),
       orElse: () => "",
     );
 
-    final String refinedQuery = (restaurantKeywords.any(rawQuery.contains)
+    // Return empty list if query is empty
+    if (rawQuery.isEmpty) {
+      print('Search query is empty, returning empty list');
+      return [];
+    }
+
+    // Build refined query and ensure it's properly formatted
+    final String baseQuery = restaurantKeywords.any(rawQuery.contains)
         ? rawQuery
-        : '$rawQuery 맛집')
-        .replaceAll(' ', '+');
+        : '$rawQuery 맛집';
+
+    final String refinedQuery = baseQuery.trim().replaceAll(' ', '+');
+
+    print('Raw query: $rawQuery');
+    print('Refined query: $refinedQuery');
 
     LocalSecureSource.set.searchLastInputHistory(value: [rawQuery]);
-    
+
     final NaverApiBlogSearchModel result = await svc.searchBlogs(refinedQuery);
     return result.items.where((e) => e.isNaverBlog).toList();
   }

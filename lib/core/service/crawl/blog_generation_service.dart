@@ -77,6 +77,13 @@ class BlogGenerationService {
   }
 
   Future<NaverApiBlogSearchModel> searchBlogs(String query) async {
+    // Validate query is not empty
+    if (query.trim().isEmpty) {
+      throw ArgumentError('Query cannot be empty');
+    }
+
+    print('Searching blogs with query: $query');
+
     // 기본 블로그 검색 수행
     NaverApiBlogSearchModel _baseResult = await _naverAPI.blogSearch.getBlogSearch(query: query);
 

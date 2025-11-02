@@ -12,8 +12,8 @@ abstract class BlogSearchRestClient {
   factory BlogSearchRestClient(Dio dio, {String? baseUrl}) = _BlogSearchRestClient;
 
   @GET("v1/search/blog.json")
-  Future<NaverApiBlogSearchModel> getBlogSearch({@Query("query") String? query, @Query("display") int display = 3});
+  Future<NaverApiBlogSearchModel> getBlogSearch({@Query("query") required String query, @Query("display") int display = 3});
 
   @GET("v1/search/image")
-  Future<ImgSearchModel> getBlogImgSearch({@Query("query") String? query, @Query("display") int display = 1});
+  Future<ImgSearchModel> getBlogImgSearch({@Query("query") required String query, @Query("display") int display = 1});
 }

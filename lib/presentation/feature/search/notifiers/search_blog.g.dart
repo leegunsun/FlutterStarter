@@ -33,7 +33,7 @@ final class BlogSearchProvider
   BlogSearch create() => BlogSearch();
 }
 
-String _$blogSearchHash() => r'3fa578302d0aa34e21938f800039cfa276c50170';
+String _$blogSearchHash() => r'f80fc52cd0e085dfec6f1b156d6216ea0b006f48';
 
 abstract class _$BlogSearch extends $AsyncNotifier<List<BlogSearchItems>> {
   FutureOr<List<BlogSearchItems>> build();

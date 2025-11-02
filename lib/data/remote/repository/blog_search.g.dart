@@ -19,7 +19,7 @@ class _BlogSearchRestClient implements BlogSearchRestClient {
 
   @override
   Future<NaverApiBlogSearchModel> getBlogSearch({
-    String? query,
+    required String query,
     int display = 3,
   }) async {
     final _extra = <String, dynamic>{};
@@ -27,7 +27,6 @@ class _BlogSearchRestClient implements BlogSearchRestClient {
       r'query': query,
       r'display': display,
     };
-    queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
     final _options = _setStreamType<NaverApiBlogSearchModel>(
@@ -53,7 +52,7 @@ class _BlogSearchRestClient implements BlogSearchRestClient {
 
   @override
   Future<ImgSearchModel> getBlogImgSearch({
-    String? query,
+    required String query,
     int display = 1,
   }) async {
     final _extra = <String, dynamic>{};
@@ -61,7 +60,6 @@ class _BlogSearchRestClient implements BlogSearchRestClient {
       r'query': query,
       r'display': display,
     };
-    queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
     final _options = _setStreamType<ImgSearchModel>(

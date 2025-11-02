@@ -20,7 +20,7 @@ final class QueryTextControllerProvider
         argument: null,
         retry: null,
         name: r'queryTextControllerProvider',
-        isAutoDispose: true,
+        isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
@@ -34,7 +34,7 @@ final class QueryTextControllerProvider
 }
 
 String _$queryTextControllerHash() =>
-    r'199cdada66e91e5c0d73c97ec553a8037b904e28';
+    r'7d86c9b1f555d1388ed02418e9e180387068dbfc';
 
 abstract class _$QueryTextController
     extends $AsyncNotifier<TextEditingController> {
