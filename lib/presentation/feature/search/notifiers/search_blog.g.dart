@@ -20,7 +20,7 @@ final class BlogSearchProvider
         argument: null,
         retry: null,
         name: r'blogSearchProvider',
-        isAutoDispose: true,
+        isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
@@ -33,7 +33,7 @@ final class BlogSearchProvider
   BlogSearch create() => BlogSearch();
 }
 
-String _$blogSearchHash() => r'8ef5b643d88ade1596150ccc90525da3354d9d29';
+String _$blogSearchHash() => r'3fa578302d0aa34e21938f800039cfa276c50170';
 
 abstract class _$BlogSearch extends $AsyncNotifier<List<BlogSearchItems>> {
   FutureOr<List<BlogSearchItems>> build();

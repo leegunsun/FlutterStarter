@@ -11,7 +11,7 @@ import '../../home/notifiers/home_view_model.dart';
 
 part 'search_blog.g.dart';
 
-@Riverpod()
+@Riverpod(keepAlive: true)
 class BlogSearch extends _$BlogSearch {
   List<String> restaurantKeywords = FirebaseRemoteConfig.instance.getString("suggest_list").split(",");
   

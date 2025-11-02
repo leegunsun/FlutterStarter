@@ -26,7 +26,7 @@ final class BlogSvcProvider
         argument: null,
         retry: null,
         name: r'blogSvcProvider',
-        isAutoDispose: true,
+        isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
@@ -54,4 +54,4 @@ final class BlogSvcProvider
   }
 }
 
-String _$blogSvcHash() => r'004b40268bf6058d1ef346abc68cad7a08ea5102';
+String _$blogSvcHash() => r'4f393783a24169ab1500b18ef782725c3b9dd6ec';

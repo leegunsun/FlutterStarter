@@ -16,7 +16,7 @@ import 'blog_crawler_service.dart';
 
 part 'blog_generation_service.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 BlogGenerationService blogSvc(Ref ref) {
   return BlogGenerationService._();
 }
